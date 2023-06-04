@@ -1,16 +1,18 @@
-# academic_system
+# Sistem Akademik STMIK Dharma Putra
 
-A new Flutter project.
+Proyek Skripsi - Clairence
 
-## Getting Started
+## Deskripsi
 
-This project is a starting point for a Flutter application.
+Teknologi yang digunakan untuk perancangan sistem informasi akademik STMIK Dharma Putra:
 
-A few resources to get you started if this is your first Flutter project:
-
+- Front-end: Flutter (Platform Android & Web)
+- Back-end: PHP Native
+- Database: MySQL
+<!-- 
 - [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+samples, guidance on mobile development, and a full API reference. -->
