@@ -1,4 +1,4 @@
-# Sistem Akademik STMIK Dharma Putra
+# Sistem Informasi Akademik STMIK Dharma Putra
 
 Proyek Skripsi - Clairence
 
