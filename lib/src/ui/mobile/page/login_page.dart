@@ -172,7 +172,7 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
                 BlocListener<AuthBloc, AuthState>(
                   listener: (context, state) {
                     if (state is AuthLoading) {
-                      print("loading");
+                      // TODO: Make loading animation
                     } else if (state is AuthSuccess) {
                       Navigator.pushReplacement(
                         context,
@@ -183,7 +183,7 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
                         ),
                       );
                     } else if (state is LoginFailed) {
-                      print(state.message);
+                      // TODO: Make login failed dialog information
                     }
                   },
                   child: MobileSignInButton(

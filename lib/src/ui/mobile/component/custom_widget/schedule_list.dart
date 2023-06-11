@@ -109,7 +109,7 @@ class _ScheduleListState extends State<ScheduleList> {
             } else if (state is ScheduleEmpty) {
               return const NoSchedule();
             } else if (state is ScheduleRequestFailed) {
-              print(state.message);
+              // TODO: Make schedule request failed dialog
             }
             return const NoSchedule();
           },

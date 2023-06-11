@@ -77,4 +77,31 @@ class UserRepository {
     }
     return null;
   }
+
+  Future<List<Lecturer>> getLecturer() async {
+    String? jwt = await SecureStorage.getToken('jwt');
+
+    Uri url = Uri.parse("$apiUrl/lecturers");
+
+    var response = await get(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $jwt',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List jsonResponse = jsonDecode(response.body);
+      return jsonResponse
+          .map((lecturer) => Lecturer.createFromJson(lecturer))
+          .toList();
+    } else if (response.statusCode == 401) {
+      return await JWTRefresher.refreshToken(response)
+          ? await getLecturer()
+          : [];
+    }
+
+    return [];
+  }
 }

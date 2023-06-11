@@ -1,6 +1,7 @@
 import 'package:academic_system/src/constant/api_url.dart';
 import 'package:academic_system/src/helper/jwt_refresher.dart';
 import 'package:academic_system/src/helper/secure_storage.dart';
+import 'package:academic_system/src/model/new_schedule.dart';
 import 'package:academic_system/src/model/schedule.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
@@ -126,5 +127,78 @@ class ScheduleRepository {
     }
 
     return [];
+  }
+
+  Future<String> createNewSchedule(NewSchedule newSchedule) async {
+    Uri url = Uri.parse('$apiUrl/create/schedule');
+
+    var response = await post(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${await SecureStorage.getToken('jwt')}',
+      },
+      body: {
+        'new_schedule': jsonEncode(newSchedule),
+      },
+    );
+
+    if (response.statusCode == 401) {
+      return await JWTRefresher.refreshToken(response)
+          ? await createNewSchedule(newSchedule)
+          : 'session expired';
+    }
+
+    return jsonDecode(response.body)["message"];
+  }
+
+  Future<String> updateSchedule(NewSchedule newSchedule) async {
+    Uri url = Uri.parse('$apiUrl/update/schedule');
+
+    var response = await post(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${await SecureStorage.getToken('jwt')}',
+      },
+      body: {
+        'new_schedule': jsonEncode(newSchedule),
+      },
+    );
+
+    if (response.statusCode == 401) {
+      return await JWTRefresher.refreshToken(response)
+          ? await updateSchedule(newSchedule)
+          : 'session expired';
+    }
+
+    return jsonDecode(response.body)["message"];
+  }
+
+  Future<String> deleteSchedule(List<String> id) async {
+    // Map<String, dynamic> listOfId = {
+    //   'schedule_id': id,
+    // };
+
+    Uri url = Uri.parse('$apiUrl/delete/schedule');
+
+    var response = await post(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${await SecureStorage.getToken('jwt')}',
+      },
+      body: {
+        'schedule_id': jsonEncode(id),
+      },
+    );
+
+    if (response.statusCode == 401) {
+      return await JWTRefresher.refreshToken(response)
+          ? await deleteSchedule(id)
+          : 'session expired';
+    }
+
+    return jsonDecode(response.body)["message"];
   }
 }

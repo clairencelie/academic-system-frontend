@@ -1,6 +1,10 @@
 import 'package:academic_system/app.dart';
 import 'package:academic_system/src/bloc/auth/auth_bloc.dart';
+import 'package:academic_system/src/bloc/mata_kuliah/mata_kuliah_bloc.dart';
 import 'package:academic_system/src/bloc/schedule/schedule_bloc.dart';
+import 'package:academic_system/src/bloc/schedule_management/schedule_management_bloc.dart';
+import 'package:academic_system/src/bloc/user/user_bloc.dart';
+import 'package:academic_system/src/repository/mata_kuliah_repository.dart';
 import 'package:academic_system/src/repository/schedule_repository.dart';
 import 'package:academic_system/src/repository/user_repository.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +27,9 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => ScheduleRepository(),
         ),
+        RepositoryProvider(
+          create: (context) => MataKuliahRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -32,9 +39,23 @@ class MyApp extends StatelessWidget {
             ),
           ),
           BlocProvider(
+            create: (context) => UserBloc(
+              repository: RepositoryProvider.of<UserRepository>(context),
+            ),
+          ),
+          BlocProvider(
             create: (context) => ScheduleBloc(
                 repository: RepositoryProvider.of<ScheduleRepository>(context)),
-          )
+          ),
+          BlocProvider(
+            create: (context) => ScheduleManagementBloc(
+                repository: RepositoryProvider.of<ScheduleRepository>(context)),
+          ),
+          BlocProvider(
+            create: (context) => MataKuliahBloc(
+              repository: RepositoryProvider.of<MataKuliahRepository>(context),
+            ),
+          ),
         ],
         child: const App(),
       ),

@@ -4,6 +4,7 @@ class LearningSubject {
   final String name;
   final String credit;
   final String grade;
+  final String type;
 
   const LearningSubject({
     required this.id,
@@ -11,6 +12,7 @@ class LearningSubject {
     required this.name,
     required this.credit,
     required this.grade,
+    required this.type,
   });
 
   factory LearningSubject.createFromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class LearningSubject {
       name: json['name'],
       credit: json['credit'].toString(),
       grade: json['grade'],
+      type: json['type'],
     );
   }
 }

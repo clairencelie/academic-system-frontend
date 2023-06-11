@@ -220,7 +220,7 @@ class _WebLoginPageState extends State<WebLoginPage> {
                       child: BlocListener<AuthBloc, AuthState>(
                         listener: (context, state) {
                           if (state is AuthLoading) {
-                            // print("loading");
+                            // TODO: Make loading animation
                           } else if (state is AuthSuccess) {
                             Navigator.pushReplacement(
                               context,
@@ -231,7 +231,7 @@ class _WebLoginPageState extends State<WebLoginPage> {
                               ),
                             );
                           } else if (state is LoginFailed) {
-                            print(state.message);
+                            // TODO: Make login failed dialog information
                           }
                         },
                         child: WebSignInButton(
