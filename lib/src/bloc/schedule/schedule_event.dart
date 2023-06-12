@@ -45,3 +45,16 @@ class RequestSchedulesByDay extends ScheduleEvent {
 }
 
 class RequestAllSchedule extends ScheduleEvent {}
+
+class SearchSchedule extends ScheduleEvent {
+  final String keyword;
+  final List<Schedule> schedules;
+
+  const SearchSchedule({
+    required this.keyword,
+    required this.schedules,
+  });
+
+  @override
+  List<Object> get props => [keyword, schedules];
+}

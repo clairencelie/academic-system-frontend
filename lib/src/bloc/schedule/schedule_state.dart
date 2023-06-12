@@ -34,3 +34,14 @@ class ScheduleRequestFailed extends ScheduleState {
   @override
   List<Object> get props => [message];
 }
+
+class SearchScheduleFound extends ScheduleState {
+  final List<Schedule> filteredSchedules;
+
+  const SearchScheduleFound({
+    required this.filteredSchedules,
+  });
+
+  @override
+  List<Object> get props => [filteredSchedules];
+}

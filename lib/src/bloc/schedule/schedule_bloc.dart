@@ -76,5 +76,26 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         emit(ScheduleRequestFailed(message: e.toString()));
       }
     });
+
+    on<SearchSchedule>((event, emit) async {
+      emit(RequestingSchedule());
+
+      if (event.keyword == '') {
+        emit(ScheduleLoaded(schedules: event.schedules));
+        return;
+      }
+
+      RegExp regex = RegExp('.*${event.keyword}*.', caseSensitive: false);
+
+      List<Schedule> filteredSchedules = event.schedules
+          .where((schedule) => regex.hasMatch(schedule.learningSubName))
+          .toList();
+
+      if (filteredSchedules.isNotEmpty) {
+        emit(SearchScheduleFound(filteredSchedules: filteredSchedules));
+      } else if (filteredSchedules.isEmpty) {
+        emit(ScheduleEmpty());
+      }
+    });
   }
 }

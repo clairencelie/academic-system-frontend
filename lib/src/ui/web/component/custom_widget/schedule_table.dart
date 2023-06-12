@@ -17,6 +17,8 @@ class ScheduleTable extends StatefulWidget {
 class _ScheduleTableState extends State<ScheduleTable> {
   TextEditingController searchController = TextEditingController();
 
+  List<Schedule> tempSchedules = [];
+
   bool isEdit = false;
 
   List<String> selectedSchedule = [];
@@ -164,10 +166,12 @@ class _ScheduleTableState extends State<ScheduleTable> {
                       suffixIcon: Icon(Icons.search),
                     ),
                     onSubmitted: (value) {
-                      // TODO: Search schedule by name
-                      // context.read<ScheduleListBloc>().add(
-                      //     GetScheduleListByName(
-                      //         subject: searchController.text));
+                      context.read<ScheduleBloc>().add(
+                            SearchSchedule(
+                              keyword: searchController.text,
+                              schedules: tempSchedules,
+                            ),
+                          );
                     },
                   ),
                 ),
@@ -274,6 +278,7 @@ class _ScheduleTableState extends State<ScheduleTable> {
                   ),
                 );
               } else if (state is ScheduleLoaded) {
+                tempSchedules = state.schedules;
                 return DataTable(
                   border: const TableBorder(
                     verticalInside: BorderSide(
@@ -287,6 +292,21 @@ class _ScheduleTableState extends State<ScheduleTable> {
                   columnSpacing: 15,
                   columns: getColumns(columns),
                   rows: getRows(state.schedules),
+                );
+              } else if (state is SearchScheduleFound) {
+                return DataTable(
+                  border: const TableBorder(
+                    verticalInside: BorderSide(
+                      color: Color.fromARGB(19, 0, 0, 0),
+                    ),
+                  ),
+                  headingRowColor: MaterialStateColor.resolveWith(
+                    (states) => const Color.fromARGB(255, 164, 192, 252),
+                  ),
+                  showCheckboxColumn: isEdit,
+                  columnSpacing: 15,
+                  columns: getColumns(columns),
+                  rows: getRows(state.filteredSchedules),
                 );
               } else if (state is ScheduleEmpty) {
                 return const SizedBox(
