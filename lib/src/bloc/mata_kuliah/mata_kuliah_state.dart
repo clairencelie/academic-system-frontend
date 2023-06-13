@@ -28,3 +28,21 @@ class MataKuliahNotFound extends MataKuliahState {
   @override
   List<Object> get props => [message];
 }
+
+class KRSMatkulFound extends MataKuliahState {
+  final List<LearningSubject> learningSubjects;
+
+  const KRSMatkulFound({required this.learningSubjects});
+
+  @override
+  List<Object> get props => [learningSubjects];
+}
+
+class KRSMatkulNotFound extends MataKuliahState {
+  final String message;
+
+  const KRSMatkulNotFound({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

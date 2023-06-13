@@ -1,9 +1,11 @@
 // import 'package:academic_system/src/model/academic.dart';
 import 'package:academic_system/src/model/academic.dart';
+import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/user.dart';
 import 'package:academic_system/src/ui/web/page/cms.dart';
 import 'package:academic_system/src/ui/web/page/configuration_page.dart';
 import 'package:academic_system/src/ui/web/page/home_page.dart';
+import 'package:academic_system/src/ui/web/page/krs_web.dart';
 import 'package:academic_system/src/ui/web/page/profile_page.dart';
 import 'package:academic_system/src/ui/web/page/schedule_page.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +28,7 @@ class _WebMainPageState extends State<WebMainPage> {
     List<Widget> widgetOptions = <Widget>[
       WebHomePage(user: widget.user),
       WebSchedulePage(user: widget.user),
+      KRSWebPage(user: widget.user as Student),
       WebProfilePage(user: widget.user),
       WebConfigurationPage(user: widget.user),
     ];
@@ -63,6 +66,19 @@ class _WebMainPageState extends State<WebMainPage> {
         ),
         label: Text(
           'Jadwal',
+        ),
+      ),
+      NavigationRailDestination(
+        icon: Icon(
+          Icons.difference_outlined,
+          color: Colors.white,
+        ),
+        selectedIcon: Icon(
+          Icons.difference_rounded,
+          color: Colors.yellow,
+        ),
+        label: Text(
+          'KRS',
         ),
       ),
       NavigationRailDestination(

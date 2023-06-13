@@ -8,3 +8,14 @@ abstract class MataKuliahEvent extends Equatable {
 }
 
 class GetMataKuliah extends MataKuliahEvent {}
+
+class GetKRSMatkul extends MataKuliahEvent {
+  final Student student;
+
+  const GetKRSMatkul({
+    required this.student,
+  });
+
+  @override
+  List<Object> get props => [student];
+}
