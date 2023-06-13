@@ -1,9 +1,11 @@
 import 'package:academic_system/app.dart';
 import 'package:academic_system/src/bloc/auth/auth_bloc.dart';
+import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
 import 'package:academic_system/src/bloc/mata_kuliah/mata_kuliah_bloc.dart';
 import 'package:academic_system/src/bloc/schedule/schedule_bloc.dart';
 import 'package:academic_system/src/bloc/schedule_management/schedule_management_bloc.dart';
 import 'package:academic_system/src/bloc/user/user_bloc.dart';
+import 'package:academic_system/src/repository/krs_repository.dart';
 import 'package:academic_system/src/repository/mata_kuliah_repository.dart';
 import 'package:academic_system/src/repository/schedule_repository.dart';
 import 'package:academic_system/src/repository/user_repository.dart';
@@ -30,6 +32,9 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => MataKuliahRepository(),
         ),
+        RepositoryProvider(
+          create: (context) => KrsRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -54,6 +59,11 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => MataKuliahBloc(
               repository: RepositoryProvider.of<MataKuliahRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => KrsBloc(
+              repository: RepositoryProvider.of<KrsRepository>(context),
             ),
           ),
         ],
