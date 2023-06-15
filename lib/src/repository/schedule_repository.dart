@@ -176,10 +176,6 @@ class ScheduleRepository {
   }
 
   Future<String> deleteSchedule(List<String> id) async {
-    // Map<String, dynamic> listOfId = {
-    //   'schedule_id': id,
-    // };
-
     Uri url = Uri.parse('$apiUrl/delete/schedule');
 
     var response = await post(

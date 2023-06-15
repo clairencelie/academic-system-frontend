@@ -11,11 +11,13 @@ class GetMataKuliah extends MataKuliahEvent {}
 
 class GetKRSMatkul extends MataKuliahEvent {
   final Student student;
+  final KrsSchedule krsSchedule;
 
   const GetKRSMatkul({
     required this.student,
+    required this.krsSchedule,
   });
 
   @override
-  List<Object> get props => [student];
+  List<Object> get props => [student, krsSchedule];
 }

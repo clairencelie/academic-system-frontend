@@ -1,12 +1,15 @@
 import 'package:academic_system/src/model/learning_subject.dart';
+import 'package:academic_system/src/model/student.dart';
 import 'package:flutter/material.dart';
 
 class MatkulPerSemester extends StatefulWidget {
   const MatkulPerSemester({
     Key? key,
+    required this.user,
     required this.semester,
     required this.learningSubIds,
     required this.matkul,
+    required this.maxSks,
     required this.totalSks,
     required this.totalSksIncrement,
     required this.totalSksDecrement,
@@ -14,9 +17,11 @@ class MatkulPerSemester extends StatefulWidget {
     required this.removeLearningSubIds,
   }) : super(key: key);
 
+  final Student user;
   final String semester;
   final List<String> learningSubIds;
   final List<LearningSubject> matkul;
+  final int maxSks;
   final int totalSks;
   final Function(int credit) totalSksIncrement;
   final Function(int credit) totalSksDecrement;
@@ -30,7 +35,10 @@ class MatkulPerSemester extends StatefulWidget {
 class _MatkulPerSemesterState extends State<MatkulPerSemester> {
   @override
   Widget build(BuildContext context) {
+    int userSemester = int.tryParse(widget.user.semester)!;
+    int semester = int.tryParse(widget.semester)!;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(17, 10, 0, 20),
@@ -51,19 +59,50 @@ class _MatkulPerSemesterState extends State<MatkulPerSemester> {
             return Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: ListTile(
-                onTap: () {
-                  setState(() {
-                    if (isSelected) {
-                      widget.removeLearningSubIds(widget.matkul[index].id);
-                      widget.totalSksDecrement(
-                          int.tryParse(widget.matkul[index].credit)!);
-                    } else {
-                      widget.addLearningSubIds(widget.matkul[index].id);
-                      widget.totalSksIncrement(
-                          int.tryParse(widget.matkul[index].credit)!);
-                    }
-                  });
-                },
+                tileColor: (semester <= userSemester)
+                    ? (widget.totalSks +
+                                int.tryParse(widget.matkul[index].credit)!) <=
+                            widget.maxSks
+                        ? Colors.white
+                        : const Color.fromARGB(255, 244, 218, 218)
+                    : const Color.fromARGB(255, 244, 218, 218),
+                onTap: (semester <= (userSemester + 1))
+                    ? (widget.totalSks +
+                                int.tryParse(widget.matkul[index].credit)!) <=
+                            widget.maxSks
+                        ? () {
+                            setState(() {
+                              if (isSelected) {
+                                widget.removeLearningSubIds(
+                                    widget.matkul[index].id);
+                                widget.totalSksDecrement(
+                                    int.tryParse(widget.matkul[index].credit)!);
+                              } else {
+                                widget
+                                    .addLearningSubIds(widget.matkul[index].id);
+                                widget.totalSksIncrement(
+                                    int.tryParse(widget.matkul[index].credit)!);
+                              }
+                            });
+                          }
+                        : isSelected
+                            ? () {
+                                setState(() {
+                                  if (isSelected) {
+                                    widget.removeLearningSubIds(
+                                        widget.matkul[index].id);
+                                    widget.totalSksDecrement(int.tryParse(
+                                        widget.matkul[index].credit)!);
+                                  } else {
+                                    widget.addLearningSubIds(
+                                        widget.matkul[index].id);
+                                    widget.totalSksIncrement(int.tryParse(
+                                        widget.matkul[index].credit)!);
+                                  }
+                                });
+                              }
+                            : null
+                    : null,
                 selected: isSelected,
                 trailing: isSelected
                     ? const Icon(Icons.check_box_rounded)

@@ -25,10 +25,17 @@ class _WebMainPageState extends State<WebMainPage> {
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgetOptions = <Widget>[
+    List<Widget> studentOptions = <Widget>[
       WebHomePage(user: widget.user),
       WebSchedulePage(user: widget.user),
-      KRSWebPage(user: widget.user as Student),
+      KRSWebPage(user: widget.user),
+      WebProfilePage(user: widget.user),
+      WebConfigurationPage(user: widget.user),
+    ];
+
+    List<Widget> lecturerOptions = <Widget>[
+      WebHomePage(user: widget.user),
+      WebSchedulePage(user: widget.user),
       WebProfilePage(user: widget.user),
       WebConfigurationPage(user: widget.user),
     ];
@@ -41,7 +48,7 @@ class _WebMainPageState extends State<WebMainPage> {
       const CMSPage(),
     ];
 
-    const List<NavigationRailDestination> normalUser = [
+    const List<NavigationRailDestination> studentNavigation = [
       NavigationRailDestination(
         icon: Icon(
           Icons.home,
@@ -79,6 +86,61 @@ class _WebMainPageState extends State<WebMainPage> {
         ),
         label: Text(
           'KRS',
+        ),
+      ),
+      NavigationRailDestination(
+        icon: Icon(
+          Icons.person_outline_outlined,
+          color: Colors.white,
+        ),
+        selectedIcon: Icon(
+          Icons.person,
+          color: Colors.yellow,
+        ),
+        label: Text(
+          'Profil',
+        ),
+      ),
+      NavigationRailDestination(
+        icon: Icon(
+          Icons.settings_applications_outlined,
+          color: Colors.white,
+        ),
+        selectedIcon: Icon(
+          Icons.settings_applications_rounded,
+          color: Colors.yellow,
+        ),
+        label: Text(
+          'Pengaturan',
+        ),
+      ),
+    ];
+
+    const List<NavigationRailDestination> lecturerNavigation = [
+      NavigationRailDestination(
+        icon: Icon(
+          Icons.home,
+          color: Colors.white,
+        ),
+        selectedIcon: Icon(
+          Icons.home,
+          color: Colors.yellow,
+        ),
+        label: Text(
+          'Beranda',
+        ),
+      ),
+      NavigationRailDestination(
+        icon: Icon(
+          Icons.schedule,
+          color: Colors.white,
+        ),
+        selectedIcon: Icon(
+          Icons.schedule,
+          color: Colors.yellow,
+        ),
+        label: Text(
+          'Jadwal',
         ),
       ),
       NavigationRailDestination(
@@ -195,15 +257,20 @@ class _WebMainPageState extends State<WebMainPage> {
               color: Colors.amber,
             ),
             backgroundColor: const Color.fromARGB(255, 0, 32, 96),
-            destinations:
-                widget.user is Academic ? academicNavigation : normalUser,
+            destinations: widget.user is Academic
+                ? academicNavigation
+                : widget.user is Student
+                    ? studentNavigation
+                    : lecturerNavigation,
           ),
           const VerticalDivider(thickness: 1, width: 1),
           // This is the main content.
           Expanded(
             child: widget.user is Academic
                 ? academicOptions[_selectedIndex]
-                : widgetOptions[_selectedIndex],
+                : widget.user is Student
+                    ? studentOptions[_selectedIndex]
+                    : lecturerOptions[_selectedIndex],
           )
         ],
       ),

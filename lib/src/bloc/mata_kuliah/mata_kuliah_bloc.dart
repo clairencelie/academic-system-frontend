@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:academic_system/src/model/learning_subject.dart';
 import 'package:academic_system/src/model/student.dart';
+import 'package:academic_system/src/model/krs_schedule.dart';
 
 part 'mata_kuliah_event.dart';
 part 'mata_kuliah_state.dart';
@@ -40,7 +41,7 @@ class MataKuliahBloc extends Bloc<MataKuliahEvent, MataKuliahState> {
         if (event.student.major == 'Sistem Informasi') {
           List<LearningSubject> systemInformationSubjects = learningSubjects
               .where((learningSubject) {
-                return ((int.tryParse(event.student.semester)! + 1) % 2 == 0)
+                return (event.krsSchedule.semester == 'genap')
                     ? int.tryParse(learningSubject.grade[1])! % 2 == 0
                     : int.tryParse(learningSubject.grade[1])! % 2 == 1;
               })
@@ -53,7 +54,7 @@ class MataKuliahBloc extends Bloc<MataKuliahEvent, MataKuliahState> {
         } else {
           List<LearningSubject> informationTechnologySubjects = learningSubjects
               .where((learningSubject) {
-                return ((int.tryParse(event.student.semester)! + 1) % 2 == 0)
+                return (event.krsSchedule.semester == 'genap')
                     ? int.tryParse(learningSubject.grade[1])! % 2 == 0
                     : int.tryParse(learningSubject.grade[1])! % 2 == 1;
               })
