@@ -4,6 +4,7 @@ import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/user.dart';
 import 'package:academic_system/src/ui/web/page/cms.dart';
 import 'package:academic_system/src/ui/web/page/configuration_page.dart';
+import 'package:academic_system/src/ui/web/page/dpmk.dart';
 import 'package:academic_system/src/ui/web/page/home_page.dart';
 import 'package:academic_system/src/ui/web/page/krs_web.dart';
 import 'package:academic_system/src/ui/web/page/profile_page.dart';
@@ -35,6 +36,7 @@ class _WebMainPageState extends State<WebMainPage> {
 
     List<Widget> lecturerOptions = <Widget>[
       WebHomePage(user: widget.user),
+      DPMKPage(dosen: widget.user),
       WebSchedulePage(user: widget.user),
       WebProfilePage(user: widget.user),
       WebConfigurationPage(user: widget.user),
@@ -128,6 +130,19 @@ class _WebMainPageState extends State<WebMainPage> {
         ),
         label: Text(
           'Beranda',
+        ),
+      ),
+      NavigationRailDestination(
+        icon: Icon(
+          Icons.people_alt_outlined,
+          color: Colors.white,
+        ),
+        selectedIcon: Icon(
+          Icons.people_alt_rounded,
+          color: Colors.yellow,
+        ),
+        label: Text(
+          'DPMK',
         ),
       ),
       NavigationRailDestination(
@@ -243,6 +258,23 @@ class _WebMainPageState extends State<WebMainPage> {
       body: Row(
         children: [
           NavigationRail(
+            leading: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                image: const DecorationImage(
+                  image: AssetImage('img/logo/logo_nav_web.png'),
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 1,
+                    color: Color.fromARGB(55, 0, 0, 0),
+                    offset: Offset(0, 1),
+                  ),
+                ],
+              ),
+            ),
             selectedIndex: _selectedIndex,
             onDestinationSelected: (int index) {
               setState(() {

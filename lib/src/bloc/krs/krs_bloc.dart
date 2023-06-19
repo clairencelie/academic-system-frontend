@@ -2,6 +2,8 @@ import 'package:academic_system/src/repository/krs_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
+import 'package:academic_system/src/model/kartu_rencana_studi.dart';
+import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
 
 part 'krs_event.dart';
 part 'krs_state.dart';
@@ -13,6 +15,76 @@ class KrsBloc extends Bloc<KrsEvent, KrsState> {
       emit(KrsLoading());
 
       KrsSchedule? krsSchedule = await repository.getKrsSchedule();
+
+      bool isAlreadyFillKrs = false;
+
+      final List<KartuRencanaStudi> krs = await repository.getKrs(event.nim);
+
+      print(krs);
+
+      if (krs.isNotEmpty) {
+        for (var element in krs) {
+          if (element.semester == event.semester) {
+            isAlreadyFillKrs = true;
+          }
+        }
+      }
+
+      if (krsSchedule != null) {
+        if (isAlreadyFillKrs) {
+          emit(AlreadyFillKrs(
+              message:
+                  'Anda telah mengisi KRS untuk Semester ${krsSchedule.semester} Tahun Akademik ${krsSchedule.tahunAkademik}'));
+        } else {
+          emit(KrsScheduleLoaded(krsSchedule: krsSchedule));
+        }
+      } else {
+        emit(KrsScheduleNotFound());
+      }
+    });
+
+    on<GetKrsScheduleForUpdate>((event, emit) async {
+      emit(KrsLoading());
+
+      KrsSchedule? krsSchedule = await repository.getKrsSchedule();
+
+      final List<KartuRencanaStudi> krs = await repository.getKrs(event.nim);
+
+      if (krsSchedule != null) {
+        emit(KrsScheduleLoaded(krsSchedule: krsSchedule));
+      } else {
+        emit(KrsScheduleNotFound());
+      }
+    });
+
+    on<GetKrsLengkap>((event, emit) async {
+      emit(KrsLoading());
+      final List<KartuRencanaStudiLengkap> krsLengkap =
+          await repository.getKrsLengkap(event.nim);
+
+      if (krsLengkap.isNotEmpty) {
+        emit(KrsFound(krsLengkap: krsLengkap));
+      } else {
+        emit(KrsNotFound());
+      }
+    });
+
+    on<GetAllKrs>((event, emit) async {
+      emit(KrsLoading());
+      final List<KartuRencanaStudiLengkap> krsLengkap =
+          await repository.getAllKrs();
+
+      if (krsLengkap.isNotEmpty) {
+        emit(KrsFound(krsLengkap: krsLengkap));
+      } else {
+        emit(KrsNotFound());
+      }
+    });
+
+    on<GetTahunAkademik>((event, emit) async {
+      emit(KrsLoading());
+
+      final KrsSchedule? krsSchedule = await repository.getKrsSchedule();
 
       if (krsSchedule != null) {
         emit(KrsScheduleLoaded(krsSchedule: krsSchedule));

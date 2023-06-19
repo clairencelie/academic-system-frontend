@@ -1,4 +1,6 @@
-class KartuRencanaStudi {
+import 'package:academic_system/src/model/learning_subject.dart';
+
+class KartuRencanaStudiLengkap {
   final String id;
   final String nim;
   final String semester;
@@ -9,8 +11,10 @@ class KartuRencanaStudi {
   final String bebanSksMaks;
   final String waktuPengisian;
   final String tahunAkademik;
+  final String commit;
+  final List<LearningSubject> pilihanMataKuliah;
 
-  KartuRencanaStudi({
+  KartuRencanaStudiLengkap({
     required this.id,
     required this.nim,
     required this.semester,
@@ -21,10 +25,12 @@ class KartuRencanaStudi {
     required this.bebanSksMaks,
     required this.waktuPengisian,
     required this.tahunAkademik,
+    required this.commit,
+    required this.pilihanMataKuliah,
   });
 
-  factory KartuRencanaStudi.createFromJson(Map<String, dynamic> json) {
-    return KartuRencanaStudi(
+  factory KartuRencanaStudiLengkap.createFromJson(Map<String, dynamic> json) {
+    return KartuRencanaStudiLengkap(
       id: json['id'],
       nim: json['nim'],
       semester: json['semester'],
@@ -35,6 +41,10 @@ class KartuRencanaStudi {
       bebanSksMaks: json['beban_sks_maks'],
       waktuPengisian: json['waktu_pengisian'],
       tahunAkademik: json['tahun_akademik'],
+      commit: json['commit'],
+      pilihanMataKuliah: (json['pilihan_mata_kuliah'] as List)
+          .map((pilihanMatkul) => LearningSubject.createFromJson(pilihanMatkul))
+          .toList(),
     );
   }
 

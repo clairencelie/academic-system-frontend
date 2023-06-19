@@ -17,6 +17,8 @@ class KhsBloc extends Bloc<KhsEvent, KhsState> {
           await repository.getTranskrip(event.nim);
 
       if (transkripLengkap != null) {
+        print(transkripLengkap.transkripNilai);
+        print(transkripLengkap.khs);
         emit(TranskripLoaded(transkripLengkap: transkripLengkap));
       } else {
         emit(TranskripFailed());

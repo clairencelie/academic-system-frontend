@@ -1,6 +1,7 @@
 import 'package:academic_system/src/ui/web/component/custom_widget/cms_item.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/schedule_table.dart';
 import 'package:academic_system/src/ui/web/page/create_schedule.dart';
+import 'package:academic_system/src/ui/web/page/krs_management.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -43,10 +44,21 @@ class CMSPage extends StatelessWidget {
                         icons: Icons.post_add_rounded,
                         onTap: () {
                           Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CreateSchedulePage(),
+                            ),
+                          );
+                        },
+                      ),
+                      CMSItem(
+                        title: 'KRS',
+                        icons: Icons.library_books,
+                        onTap: () {
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    const CreateSchedulePage(),
+                                builder: (context) => const KRSManagementPage(),
                               ));
                         },
                       ),

@@ -5,6 +5,7 @@ import 'package:academic_system/src/model/transkrip_lengkap.dart';
 import 'package:academic_system/src/model/user.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/list_matkul_krs.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/student_detail.dart';
+import 'package:academic_system/src/ui/web/page/krs_history.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -22,31 +23,35 @@ class KRSWebPage extends StatefulWidget {
 
 class _KRSWebPageState extends State<KRSWebPage> {
   var now = DateTime.now();
-
-  // bool isSameTimeStart = false;
-  // bool isSameTimeEnd = false;
   bool isAfterTime = true;
   bool isBeforeTime = true;
+  String semester = '';
+  String tahunAkademik = '';
 
   @override
   void initState() {
     super.initState();
-    context.read<KrsBloc>().add(GetKrsSchedule());
+    context.read<KrsBloc>().add(GetKrsSchedule(
+          nim: widget.user.id,
+          semester: (widget.user as Student).semester,
+        ));
     context.read<KhsBloc>().add(GetTranskripEvent(nim: widget.user.id));
   }
 
   @override
   Widget build(BuildContext context) {
     String formattedDateNow = DateFormat('dd-MM-yyyy').format(now);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
           child: BlocBuilder<KhsBloc, KhsState>(
             builder: (context, state) {
               if (state is TranskripLoaded) {
                 TranksripLengkap tranksripLengkap = state.transkripLengkap;
                 return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       'Kartu Rencana Studi',
@@ -58,13 +63,44 @@ class _KRSWebPageState extends State<KRSWebPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    StudentDetail(user: (widget.user as Student)),
+                    StudentDetail(
+                      user: (widget.user as Student),
+                      transkripLengkap: tranksripLengkap,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    (widget.user as Student).semester == '1'
+                        ? const SizedBox()
+                        : TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return KrsHistoryPage(
+                                      student: (widget.user as Student),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                            child: const Text(
+                                'Lihat histori pengisian KRS mu disini'),
+                          ),
                     const SizedBox(
                       height: 20,
                     ),
                     BlocBuilder<KrsBloc, KrsState>(
                       builder: (context, state) {
-                        if (state is KrsScheduleLoaded) {
+                        if (state is AlreadyFillKrs) {
+                          return Center(
+                            child: Text(state.message),
+                          );
+                        } else if (state is KrsScheduleLoaded) {
+                          semester = state.krsSchedule.semester;
+                          tahunAkademik = state.krsSchedule.tahunAkademik;
+
                           isAfterTime = DateFormat('dd-MM-yyyy')
                               .parse(formattedDateNow)
                               .isAfter(DateFormat('dd-MM-yyyy')

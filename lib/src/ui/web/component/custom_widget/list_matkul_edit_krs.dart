@@ -2,37 +2,34 @@ import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
 import 'package:academic_system/src/bloc/krs_management/krs_management_bloc.dart';
 import 'package:academic_system/src/bloc/mata_kuliah/mata_kuliah_bloc.dart';
 import 'package:academic_system/src/helper/date_converter.dart';
-import 'package:academic_system/src/model/kartu_hasil_studi.dart';
+import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
 import 'package:academic_system/src/model/new_kartu_rencana_studi.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/learning_subject.dart';
 import 'package:academic_system/src/model/student.dart';
-import 'package:academic_system/src/model/transkrip_lengkap.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/info_dialog.dart';
-import 'package:academic_system/src/ui/web/component/custom_widget/list_matkul_krs_header.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/matkul_per_semester.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
-class ListMatkulKRS extends StatefulWidget {
-  const ListMatkulKRS({
+class ListMatkulEditKRS extends StatefulWidget {
+  const ListMatkulEditKRS({
     Key? key,
     required this.user,
     required this.krsSchedule,
-    required this.tranksripLengkap,
+    required this.krs,
   }) : super(key: key);
 
   final Student user;
   final KrsSchedule krsSchedule;
   // data transkrip untuk mendapatkan data maks beban sks
-  final TranksripLengkap tranksripLengkap;
+  final KartuRencanaStudiLengkap krs;
 
   @override
-  State<ListMatkulKRS> createState() => _ListMatkulKRSState();
+  State<ListMatkulEditKRS> createState() => _ListMatkulEditKRSState();
 }
 
-class _ListMatkulKRSState extends State<ListMatkulKRS> {
+class _ListMatkulEditKRSState extends State<ListMatkulEditKRS> {
   List<String> learningSubIds = [];
   int totalSks = 0;
 
@@ -65,22 +62,16 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
     super.initState();
     context.read<MataKuliahBloc>().add(
         GetKRSMatkul(student: widget.user, krsSchedule: widget.krsSchedule));
+    learningSubIds =
+        widget.krs.pilihanMataKuliah.map((matkul) => matkul.id).toList();
+    totalSks = int.tryParse(widget.krs.kreditDiambil)!;
   }
 
   @override
   Widget build(BuildContext context) {
     // int maxSks = int.tryParse(widget.user.semester)! <= 4 ? 20 : 24;
-    String maxSksFromTranskrip = widget.tranksripLengkap.khs.isEmpty
-        ? "20"
-        : widget.tranksripLengkap.khs
-            .where((element) =>
-                element.semester ==
-                (int.tryParse(widget.user.semester)! - 1).toString())
-            .toList()[0]
-            .maskSks;
-    int maxSks = int.tryParse(widget.user.semester)! <= 4
-        ? 20
-        : int.tryParse(maxSksFromTranskrip)!;
+
+    int maxSks = int.tryParse(widget.krs.bebanSksMaks)!;
 
     return BlocBuilder<MataKuliahBloc, MataKuliahState>(
       builder: (context, state) {
@@ -101,14 +92,14 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
           );
 
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Pengisian KRS Semester ${widget.krsSchedule.semester} T.A ${widget.krsSchedule.tahunAkademik}',
-                    style: const TextStyle(
+                  const Text(
+                    'Pilihan Mata Kuliah',
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -146,11 +137,27 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
               const SizedBox(
                 height: 10,
               ),
-              Text('Total SKS yang diambil: $totalSks'),
-              Text('Maks SKS yang bisa diambil: $maxSks'),
+              Text(
+                'Total SKS yang diambil: $totalSks',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'Maks SKS yang bisa diambil: $maxSks',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               BlocListener<KrsManagementBloc, KrsManagementState>(
                 listener: (context, state) {
-                  if (state is CreateKrsSuccess) {
+                  // TODO: Ganti statenya listen to UpdateKrsSuccess
+                  if (state is UpdateKrsSuccess) {
                     Navigator.of(context, rootNavigator: true).pop();
 
                     showDialog(
@@ -159,8 +166,12 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                       builder: (context) {
                         return InfoDialog(
                           title: 'Informasi',
-                          body: 'Kartu rencana studi anda berhasil diajukan.',
+                          body: state.message,
                           onClose: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
                             Navigator.pop(context);
                             // Get krs mahasiswa
                             context.read<KrsBloc>().add(GetKrsSchedule(
@@ -171,7 +182,7 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                         );
                       },
                     );
-                  } else if (state is CreateKrsFailed) {
+                  } else if (state is UpdateKrsFailed) {
                     Navigator.of(context, rootNavigator: true).pop();
 
                     showDialog(
@@ -180,7 +191,7 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                       builder: (context) {
                         return InfoDialog(
                           title: 'Informasi',
-                          body: 'Kartu rencana studi anda gagal diajukan.',
+                          body: state.message,
                           onClose: () {
                             Navigator.pop(context);
                           },
@@ -205,6 +216,7 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                 child: ElevatedButton(
                   onPressed: () {
                     // TODO: Show dialog konfirmasi
+                    print(learningSubIds);
                     showDialog(
                       context: context,
                       barrierDismissible: false,
@@ -217,7 +229,7 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                             ),
                           ),
                           content: const Text(
-                            'Pastikan pilihan mata kuliah anda sudah sesuai.\nSetelah KRS diajukan, maka KRS tidak dapat diubah.',
+                            'Pastikan pilihan mata kuliah anda sudah sesuai.',
                           ),
                           actions: [
                             TextButton(
@@ -233,56 +245,23 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                // KartuHasilStudi khsSmtSebelumnya = widget
-                                //     .tranksripLengkap.khs
-                                //     .where((element) =>
-                                //         element.semester ==
-                                //         (int.tryParse(widget.user.semester)! -
-                                //                 1)
-                                //             .toString())
-                                //     .toList()[0];
-
-                                String ips = widget.tranksripLengkap.khs.isEmpty
-                                    ? '0'
-                                    : widget.tranksripLengkap.khs
-                                        .where((element) =>
-                                            element.semester ==
-                                            (int.tryParse(
-                                                        widget.user.semester)! -
-                                                    1)
-                                                .toString())
-                                        .toList()[0]
-                                        .ips;
-
-                                // String bebansSksMaks = widget
-                                //     .tranksripLengkap.khs
-                                //     .where((element) =>
-                                //         element.semester ==
-                                //         (int.tryParse(widget.user.semester)! -
-                                //                 1)
-                                //             .toString())
-                                //     .toList()[0]
-                                //     .maskSks;
-
-                                String date = DateFormat("yyyy-MM-dd")
-                                    .format(DateTime.now());
-
                                 NewKartuRencanaStudi krs = NewKartuRencanaStudi(
                                   nim: widget.user.id,
                                   semester: widget.user.semester,
                                   jurusan: widget.user.major,
-                                  ips: ips,
-                                  ipk: widget
-                                      .tranksripLengkap.transkripNilai.ipk,
+                                  ips: widget.krs.ips,
+                                  ipk: widget.krs.ipk,
                                   kreditDiambil: totalSks.toString(),
-                                  bebanSksMaks: maxSksFromTranskrip,
-                                  waktuPengisian: date,
+                                  bebanSksMaks: maxSks.toString(),
+                                  waktuPengisian: widget.krs.waktuPengisian,
                                   tahunAkademik:
                                       widget.krsSchedule.tahunAkademik,
                                 );
 
+                                //TODO: Call UPDATE KRS
                                 context.read<KrsManagementBloc>().add(
-                                      CreateKrs(
+                                      UpdateKrs(
+                                        idKrs: widget.krs.id,
                                         krs: krs,
                                         mataKuliahDiambil: learningSubIds,
                                       ),
@@ -291,7 +270,7 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                                 Navigator.pop(context);
                               },
                               child: const Text(
-                                'Ajukan KRS',
+                                'Ajukan Perubahan KRS',
                                 style: TextStyle(
                                   color: Color.fromARGB(255, 0, 32, 96),
                                 ),
@@ -302,7 +281,7 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                       },
                     );
                   },
-                  child: const Text('Ajukan KRS'),
+                  child: const Text('Ajukan Perubahan KRS'),
                 ),
               ),
             ],

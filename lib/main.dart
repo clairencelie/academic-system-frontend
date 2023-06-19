@@ -1,7 +1,9 @@
 import 'package:academic_system/app.dart';
 import 'package:academic_system/src/bloc/auth/auth_bloc.dart';
+import 'package:academic_system/src/bloc/dosen/dosen_bloc.dart';
 import 'package:academic_system/src/bloc/khs/khs_bloc.dart';
 import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
+import 'package:academic_system/src/bloc/krs_management/krs_management_bloc.dart';
 import 'package:academic_system/src/bloc/mata_kuliah/mata_kuliah_bloc.dart';
 import 'package:academic_system/src/bloc/schedule/schedule_bloc.dart';
 import 'package:academic_system/src/bloc/schedule_management/schedule_management_bloc.dart';
@@ -9,6 +11,7 @@ import 'package:academic_system/src/bloc/user/user_bloc.dart';
 import 'package:academic_system/src/repository/khs_repository.dart';
 import 'package:academic_system/src/repository/krs_repository.dart';
 import 'package:academic_system/src/repository/mata_kuliah_repository.dart';
+import 'package:academic_system/src/repository/nilai_repository.dart';
 import 'package:academic_system/src/repository/schedule_repository.dart';
 import 'package:academic_system/src/repository/user_repository.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +42,9 @@ class MyApp extends StatelessWidget {
         ),
         RepositoryProvider(
           create: (context) => KhsRepository(),
+        ),
+        RepositoryProvider(
+          create: (context) => NilaiRepository(),
         ),
       ],
       child: MultiBlocProvider(
@@ -72,8 +78,18 @@ class MyApp extends StatelessWidget {
             ),
           ),
           BlocProvider(
+            create: (context) => KrsManagementBloc(
+              repository: RepositoryProvider.of<KrsRepository>(context),
+            ),
+          ),
+          BlocProvider(
             create: (context) => KhsBloc(
               repository: RepositoryProvider.of<KhsRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => DosenBloc(
+              repository: RepositoryProvider.of<NilaiRepository>(context),
             ),
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:academic_system/src/model/learning_subject.dart';
 import 'package:academic_system/src/model/student.dart';
+import 'package:academic_system/src/ui/web/component/custom_widget/list_matkul_krs_header.dart';
 import 'package:flutter/material.dart';
 
 class MatkulPerSemester extends StatefulWidget {
@@ -38,7 +39,7 @@ class _MatkulPerSemesterState extends State<MatkulPerSemester> {
     int userSemester = int.tryParse(widget.user.semester)!;
     int semester = int.tryParse(widget.semester)!;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(17, 10, 0, 20),
@@ -46,11 +47,16 @@ class _MatkulPerSemesterState extends State<MatkulPerSemester> {
             'Semester ${widget.semester}',
             textAlign: TextAlign.start,
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
+        const SizedBox(
+          height: 10,
+        ),
+        const ListMatkulKrsHeader(),
+        const Divider(),
         ListView.builder(
           shrinkWrap: true,
           itemBuilder: (context, index) {
@@ -110,24 +116,26 @@ class _MatkulPerSemesterState extends State<MatkulPerSemester> {
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: 150,
+                    Expanded(
+                      // width: 150,
                       child: Text(widget.matkul[index].id),
                     ),
-                    SizedBox(
-                      width: 300,
+                    Expanded(
+                      flex: 2,
+                      // width: 300,
                       child: Text(widget.matkul[index].name),
                     ),
-                    SizedBox(
-                      width: 50,
+                    // const SizedBox(width: ,),
+                    Expanded(
+                      // width: 100,
                       child: Text(widget.matkul[index].credit),
                     ),
-                    SizedBox(
-                      width: 70,
+                    Expanded(
+                      // width: 100,
                       child: Text(widget.matkul[index].grade),
                     ),
-                    SizedBox(
-                      width: 120,
+                    Expanded(
+                      // width: 120,
                       child: Text(widget.matkul[index].type),
                     ),
                   ],
@@ -136,6 +144,9 @@ class _MatkulPerSemesterState extends State<MatkulPerSemester> {
             );
           },
           itemCount: widget.matkul.length,
+        ),
+        const SizedBox(
+          height: 30,
         ),
       ],
     );

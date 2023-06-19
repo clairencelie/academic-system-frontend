@@ -1,5 +1,4 @@
-class KartuRencanaStudi {
-  final String id;
+class NewKartuRencanaStudi {
   final String nim;
   final String semester;
   final String jurusan;
@@ -10,8 +9,7 @@ class KartuRencanaStudi {
   final String waktuPengisian;
   final String tahunAkademik;
 
-  KartuRencanaStudi({
-    required this.id,
+  NewKartuRencanaStudi({
     required this.nim,
     required this.semester,
     required this.jurusan,
@@ -23,16 +21,15 @@ class KartuRencanaStudi {
     required this.tahunAkademik,
   });
 
-  factory KartuRencanaStudi.createFromJson(Map<String, dynamic> json) {
-    return KartuRencanaStudi(
-      id: json['id'],
+  factory NewKartuRencanaStudi.createFromJson(Map<String, dynamic> json) {
+    return NewKartuRencanaStudi(
       nim: json['nim'],
       semester: json['semester'],
-      jurusan: json['jurusan'],
+      jurusan: json['program_studi'],
       ips: json['ips'],
       ipk: json['ipk'],
       kreditDiambil: json['kredit_diambil'],
-      bebanSksMaks: json['beban_sks_maks'],
+      bebanSksMaks: json['beban_maks_sks'],
       waktuPengisian: json['waktu_pengisian'],
       tahunAkademik: json['tahun_akademik'],
     );

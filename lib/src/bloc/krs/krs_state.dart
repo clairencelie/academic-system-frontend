@@ -23,3 +23,25 @@ class KrsScheduleLoaded extends KrsState {
 }
 
 class KrsScheduleNotFound extends KrsState {}
+
+class AlreadyFillKrs extends KrsState {
+  final String message;
+
+  const AlreadyFillKrs({
+    required this.message,
+  });
+
+  @override
+  List<Object> get props => [message];
+}
+
+class KrsFound extends KrsState {
+  final List<KartuRencanaStudiLengkap> krsLengkap;
+
+  const KrsFound({required this.krsLengkap});
+
+  @override
+  List<Object> get props => [krsLengkap];
+}
+
+class KrsNotFound extends KrsState {}

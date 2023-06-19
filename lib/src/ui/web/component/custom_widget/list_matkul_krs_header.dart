@@ -13,8 +13,8 @@ class ListMatkulKrsHeader extends StatelessWidget {
         SizedBox(
           width: 17,
         ),
-        SizedBox(
-          width: 150,
+        Expanded(
+          // width: 150,
           child: Text(
             'Kode Mata Kuliah',
             style: TextStyle(
@@ -23,8 +23,9 @@ class ListMatkulKrsHeader extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          width: 300,
+        Expanded(
+          // width: 300,
+          flex: 2,
           child: Text(
             'Nama Mata Kuliah',
             style: TextStyle(
@@ -33,8 +34,8 @@ class ListMatkulKrsHeader extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          width: 50,
+        Expanded(
+          // width: 100,
           child: Text(
             'SKS',
             style: TextStyle(
@@ -43,8 +44,8 @@ class ListMatkulKrsHeader extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          width: 70,
+        Expanded(
+          // width: 100,
           child: Text(
             'Kelas',
             style: TextStyle(
@@ -53,8 +54,8 @@ class ListMatkulKrsHeader extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          width: 120,
+        Expanded(
+          // width: 120,
           child: Text(
             'Jenis',
             style: TextStyle(
@@ -62,6 +63,9 @@ class ListMatkulKrsHeader extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
+        ),
+        SizedBox(
+          width: 50,
         ),
       ],
     );
