@@ -7,6 +7,7 @@ import 'package:academic_system/src/bloc/krs_management/krs_management_bloc.dart
 import 'package:academic_system/src/bloc/mata_kuliah/mata_kuliah_bloc.dart';
 import 'package:academic_system/src/bloc/schedule/schedule_bloc.dart';
 import 'package:academic_system/src/bloc/schedule_management/schedule_management_bloc.dart';
+import 'package:academic_system/src/bloc/tahun_akademik/tahun_akademik_bloc.dart';
 import 'package:academic_system/src/bloc/user/user_bloc.dart';
 import 'package:academic_system/src/repository/khs_repository.dart';
 import 'package:academic_system/src/repository/krs_repository.dart';
@@ -89,6 +90,11 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => DosenBloc(
+              repository: RepositoryProvider.of<NilaiRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => TahunAkademikBloc(
               repository: RepositoryProvider.of<NilaiRepository>(context),
             ),
           ),

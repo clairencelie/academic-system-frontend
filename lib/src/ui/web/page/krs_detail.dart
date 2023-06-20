@@ -193,7 +193,7 @@ class KRSDetailInfo extends StatelessWidget {
               ),
             ),
             Text(
-              'Beban Maks SKS: ${krs.bebanSksMaks}',
+              'Beban Maks SKS: ${int.tryParse(krs.semester)! < 5 ? '20' : krs.bebanSksMaks}',
               style: const TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w500,

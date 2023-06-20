@@ -9,7 +9,6 @@ import 'package:academic_system/src/model/learning_subject.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/transkrip_lengkap.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/info_dialog.dart';
-import 'package:academic_system/src/ui/web/component/custom_widget/list_matkul_krs_header.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/matkul_per_semester.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -69,6 +68,8 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> idMatkulLulus = widget.tranksripLengkap.matkulLulus;
+
     // int maxSks = int.tryParse(widget.user.semester)! <= 4 ? 20 : 24;
     String maxSksFromTranskrip = widget.tranksripLengkap.khs.isEmpty
         ? "20"
@@ -132,6 +133,7 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                         user: widget.user,
                         semester: value.toString(),
                         learningSubIds: learningSubIds,
+                        matkulLulus: idMatkulLulus,
                         matkul: separatedCourses[semesterList.indexOf(value)],
                         maxSks: maxSks,
                         totalSks: totalSks,

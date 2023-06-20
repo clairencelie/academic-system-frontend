@@ -1,19 +1,22 @@
 import 'package:academic_system/src/bloc/dosen/dosen_bloc.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/nilai_mhs.dart';
+import 'package:academic_system/src/ui/web/page/form_nilai.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DPMKDetailPage extends StatefulWidget {
   final String idDosen;
   final String idMataKuliah;
-  final KrsSchedule krsSchedule;
+  final String namaMataKuliah;
+  final String tahunAkademik;
 
   const DPMKDetailPage({
     super.key,
     required this.idDosen,
     required this.idMataKuliah,
-    required this.krsSchedule,
+    required this.namaMataKuliah,
+    required this.tahunAkademik,
   });
 
   @override
@@ -27,8 +30,8 @@ class _DPMKDetailPageState extends State<DPMKDetailPage> {
     context.read<DosenBloc>().add(
           GetNilaiMhs(
             idMataKuliah: widget.idMataKuliah,
-            tahunAkademik: widget.krsSchedule.tahunAkademik,
-            semester: widget.krsSchedule.semester,
+            tahunAkademik: widget.tahunAkademik.split(" ").toList()[0],
+            semester: widget.tahunAkademik.split(" ").toList()[1],
           ),
         );
   }
@@ -46,6 +49,7 @@ class _DPMKDetailPageState extends State<DPMKDetailPage> {
                 children: [
                   DPMKDetailHeader(
                     idDosen: widget.idDosen,
+                    namaMataKuliah: widget.namaMataKuliah,
                   ),
                   const SizedBox(
                     height: 20,
@@ -71,10 +75,40 @@ class _DPMKDetailPageState extends State<DPMKDetailPage> {
                   ),
                   const ListNilaiHeader(),
                   const Divider(),
-                  ListNilaiMahasiswa(listNilaiMhs: state.nilaiMhsList),
+                  ListNilaiMahasiswa(
+                    listNilaiMhs: state.nilaiMhsList,
+                    namaMataKuliah: widget.namaMataKuliah,
+                  ),
                 ],
               );
+            } else if (state is NilaiMhsNotFound) {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    DPMKDetailHeader(
+                      idDosen: widget.idDosen,
+                      namaMataKuliah: widget.namaMataKuliah,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 1.5,
+                      child: const Center(
+                        child: Text(
+                          'Mata kuliah ini belum memiliki peserta',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
             }
+
             return const CircularProgressIndicator();
           },
         ),
@@ -85,9 +119,11 @@ class _DPMKDetailPageState extends State<DPMKDetailPage> {
 
 class DPMKDetailHeader extends StatelessWidget {
   final String idDosen;
+  final String namaMataKuliah;
   const DPMKDetailHeader({
     Key? key,
     required this.idDosen,
+    required this.namaMataKuliah,
   }) : super(key: key);
 
   @override
@@ -110,15 +146,27 @@ class DPMKDetailHeader extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        const SizedBox(
+          width: 5,
+        ),
+        Text(
+          namaMataKuliah,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ],
     );
   }
 }
 
 class ListNilaiMahasiswa extends StatelessWidget {
+  final String namaMataKuliah;
   final List<NilaiMahasiswa> listNilaiMhs;
   const ListNilaiMahasiswa({
     Key? key,
+    required this.namaMataKuliah,
     required this.listNilaiMhs,
   }) : super(key: key);
 
@@ -136,7 +184,21 @@ class ListNilaiMahasiswa extends StatelessWidget {
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: () {
-                      print(listNilaiMhs[index].nama);
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            content: SizedBox(
+                              width: 600,
+                              child: FormNilai(
+                                namaMataKuliah: namaMataKuliah,
+                                nilaiMahasiswa: listNilaiMhs[index],
+                              ),
+                            ),
+                          );
+                        },
+                      );
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),

@@ -7,6 +7,7 @@ import 'package:academic_system/src/model/new_kartu_rencana_studi.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/learning_subject.dart';
 import 'package:academic_system/src/model/student.dart';
+import 'package:academic_system/src/model/transkrip_lengkap.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/info_dialog.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/matkul_per_semester.dart';
 import 'package:flutter/material.dart';
@@ -18,12 +19,14 @@ class ListMatkulEditKRS extends StatefulWidget {
     required this.user,
     required this.krsSchedule,
     required this.krs,
+    required this.tranksripLengkap,
   }) : super(key: key);
 
   final Student user;
   final KrsSchedule krsSchedule;
   // data transkrip untuk mendapatkan data maks beban sks
   final KartuRencanaStudiLengkap krs;
+  final TranksripLengkap tranksripLengkap;
 
   @override
   State<ListMatkulEditKRS> createState() => _ListMatkulEditKRSState();
@@ -62,6 +65,7 @@ class _ListMatkulEditKRSState extends State<ListMatkulEditKRS> {
     super.initState();
     context.read<MataKuliahBloc>().add(
         GetKRSMatkul(student: widget.user, krsSchedule: widget.krsSchedule));
+
     learningSubIds =
         widget.krs.pilihanMataKuliah.map((matkul) => matkul.id).toList();
     totalSks = int.tryParse(widget.krs.kreditDiambil)!;
@@ -70,8 +74,20 @@ class _ListMatkulEditKRSState extends State<ListMatkulEditKRS> {
   @override
   Widget build(BuildContext context) {
     // int maxSks = int.tryParse(widget.user.semester)! <= 4 ? 20 : 24;
+    List<String> idMatkulLulus = widget.tranksripLengkap.matkulLulus;
 
-    int maxSks = int.tryParse(widget.krs.bebanSksMaks)!;
+    // int maxSks = int.tryParse(widget.krs.bebanSksMaks)!;
+    String maxSksFromTranskrip = widget.tranksripLengkap.khs.isEmpty
+        ? "20"
+        : widget.tranksripLengkap.khs
+            .where((element) =>
+                element.semester ==
+                (int.tryParse(widget.user.semester)! - 1).toString())
+            .toList()[0]
+            .maskSks;
+    int maxSks = int.tryParse(widget.user.semester)! <= 4
+        ? 20
+        : int.tryParse(maxSksFromTranskrip)!;
 
     return BlocBuilder<MataKuliahBloc, MataKuliahState>(
       builder: (context, state) {
@@ -123,6 +139,7 @@ class _ListMatkulEditKRSState extends State<ListMatkulEditKRS> {
                         user: widget.user,
                         semester: value.toString(),
                         learningSubIds: learningSubIds,
+                        matkulLulus: idMatkulLulus,
                         matkul: separatedCourses[semesterList.indexOf(value)],
                         maxSks: maxSks,
                         totalSks: totalSks,

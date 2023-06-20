@@ -34,9 +34,15 @@ class KhsRepository {
           .map((value) => KartuHasilStudi.createFromJson(value))
           .toList();
 
+      List<String> matkulLulus = (jsonResponse['nilai'] as List)
+          .where((item) => item['status'] == 'lulus')
+          .map((item) => item['id_mata_kuliah'].toString())
+          .toList();
+
       Map<String, dynamic> map = {
         'transkrip': transkripNilai,
         'khs': khs,
+        'matkul_lulus': matkulLulus,
       };
 
       return TranksripLengkap.createFromMap(map);

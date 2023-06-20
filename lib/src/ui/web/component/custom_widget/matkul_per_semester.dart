@@ -9,6 +9,7 @@ class MatkulPerSemester extends StatefulWidget {
     required this.user,
     required this.semester,
     required this.learningSubIds,
+    required this.matkulLulus,
     required this.matkul,
     required this.maxSks,
     required this.totalSks,
@@ -21,6 +22,7 @@ class MatkulPerSemester extends StatefulWidget {
   final Student user;
   final String semester;
   final List<String> learningSubIds;
+  final List<String> matkulLulus;
   final List<LearningSubject> matkul;
   final int maxSks;
   final int totalSks;
@@ -66,32 +68,22 @@ class _MatkulPerSemesterState extends State<MatkulPerSemester> {
               padding: const EdgeInsets.only(bottom: 10),
               child: ListTile(
                 tileColor: (semester <= userSemester)
-                    ? (widget.totalSks +
-                                int.tryParse(widget.matkul[index].credit)!) <=
-                            widget.maxSks
-                        ? Colors.white
-                        : const Color.fromARGB(255, 244, 218, 218)
+                    ? widget.matkulLulus.contains(widget.matkul[index].id)
+                        ? const Color.fromARGB(255, 201, 247, 225)
+                        : (widget.totalSks +
+                                    int.tryParse(
+                                        widget.matkul[index].credit)!) <=
+                                widget.maxSks
+                            ? Colors.white
+                            : const Color.fromARGB(255, 244, 218, 218)
                     : const Color.fromARGB(255, 244, 218, 218),
                 onTap: (semester <= (userSemester + 1))
-                    ? (widget.totalSks +
-                                int.tryParse(widget.matkul[index].credit)!) <=
-                            widget.maxSks
-                        ? () {
-                            setState(() {
-                              if (isSelected) {
-                                widget.removeLearningSubIds(
-                                    widget.matkul[index].id);
-                                widget.totalSksDecrement(
-                                    int.tryParse(widget.matkul[index].credit)!);
-                              } else {
-                                widget
-                                    .addLearningSubIds(widget.matkul[index].id);
-                                widget.totalSksIncrement(
-                                    int.tryParse(widget.matkul[index].credit)!);
-                              }
-                            });
-                          }
-                        : isSelected
+                    ? (widget.matkulLulus.contains(widget.matkul[index].id))
+                        ? null
+                        : (widget.totalSks +
+                                    int.tryParse(
+                                        widget.matkul[index].credit)!) <=
+                                widget.maxSks
                             ? () {
                                 setState(() {
                                   if (isSelected) {
@@ -107,7 +99,23 @@ class _MatkulPerSemesterState extends State<MatkulPerSemester> {
                                   }
                                 });
                               }
-                            : null
+                            : isSelected
+                                ? () {
+                                    setState(() {
+                                      if (isSelected) {
+                                        widget.removeLearningSubIds(
+                                            widget.matkul[index].id);
+                                        widget.totalSksDecrement(int.tryParse(
+                                            widget.matkul[index].credit)!);
+                                      } else {
+                                        widget.addLearningSubIds(
+                                            widget.matkul[index].id);
+                                        widget.totalSksIncrement(int.tryParse(
+                                            widget.matkul[index].credit)!);
+                                      }
+                                    });
+                                  }
+                                : null
                     : null,
                 selected: isSelected,
                 trailing: isSelected

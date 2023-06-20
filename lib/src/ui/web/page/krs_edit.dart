@@ -1,6 +1,8 @@
+import 'package:academic_system/src/bloc/khs/khs_bloc.dart';
 import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
 import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
 import 'package:academic_system/src/model/student.dart';
+import 'package:academic_system/src/model/transkrip_lengkap.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/list_matkul_edit_krs.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/list_matkul_krs.dart';
 import 'package:flutter/material.dart';
@@ -23,12 +25,12 @@ class EditKRSPage extends StatefulWidget {
 class _EditKRSPageState extends State<EditKRSPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     context.read<KrsBloc>().add(GetKrsScheduleForUpdate(
           nim: widget.student.id,
           semester: widget.student.semester,
         ));
+    context.read<KhsBloc>().add(GetTranskripEvent(nim: widget.student.id));
   }
 
   @override
@@ -37,29 +39,38 @@ class _EditKRSPageState extends State<EditKRSPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-          child: Column(
-            children: [
-              const EditKRSHeader(),
-              const SizedBox(
-                height: 20,
-              ),
-              EditKRSInfo(student: widget.student, krs: widget.krs),
-              const SizedBox(
-                height: 20,
-              ),
-              BlocBuilder<KrsBloc, KrsState>(
-                builder: (context, state) {
-                  if (state is KrsScheduleLoaded) {
-                    return ListMatkulEditKRS(
-                      user: widget.student,
-                      krsSchedule: state.krsSchedule,
-                      krs: widget.krs,
-                    );
-                  }
-                  return const CircularProgressIndicator();
-                },
-              )
-            ],
+          child: BlocBuilder<KhsBloc, KhsState>(
+            builder: (context, state) {
+              if (state is TranskripLoaded) {
+                TranksripLengkap tranksripLengkap = state.transkripLengkap;
+                return Column(
+                  children: [
+                    const EditKRSHeader(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    EditKRSInfo(student: widget.student, krs: widget.krs),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    BlocBuilder<KrsBloc, KrsState>(
+                      builder: (context, state) {
+                        if (state is KrsScheduleLoaded) {
+                          return ListMatkulEditKRS(
+                            user: widget.student,
+                            krsSchedule: state.krsSchedule,
+                            krs: widget.krs,
+                            tranksripLengkap: tranksripLengkap,
+                          );
+                        }
+                        return const CircularProgressIndicator();
+                      },
+                    )
+                  ],
+                );
+              }
+              return const CircularProgressIndicator();
+            },
           ),
         ),
       ),
@@ -161,7 +172,7 @@ class EditKRSInfo extends StatelessWidget {
               ),
             ),
             Text(
-              'Beban Maks SKS: ${krs.bebanSksMaks}',
+              'Beban Maks SKS: ${int.tryParse(krs.semester)! < 5 ? '20' : krs.bebanSksMaks}',
               style: const TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w500,
