@@ -20,8 +20,6 @@ class KrsBloc extends Bloc<KrsEvent, KrsState> {
 
       final List<KartuRencanaStudi> krs = await repository.getKrs(event.nim);
 
-      print(krs);
-
       if (krs.isNotEmpty) {
         for (var element in krs) {
           if (element.semester == event.semester) {
@@ -47,8 +45,6 @@ class KrsBloc extends Bloc<KrsEvent, KrsState> {
       emit(KrsLoading());
 
       KrsSchedule? krsSchedule = await repository.getKrsSchedule();
-
-      final List<KartuRencanaStudi> krs = await repository.getKrs(event.nim);
 
       if (krsSchedule != null) {
         emit(KrsScheduleLoaded(krsSchedule: krsSchedule));

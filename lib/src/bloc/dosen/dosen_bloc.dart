@@ -34,7 +34,6 @@ class DosenBloc extends Bloc<DosenEvent, DosenState> {
         event.semester,
       );
 
-      print(nilaiMhsList);
       if (nilaiMhsList.isNotEmpty) {
         emit(NilaiMhsFound(nilaiMhsList: nilaiMhsList));
       } else {

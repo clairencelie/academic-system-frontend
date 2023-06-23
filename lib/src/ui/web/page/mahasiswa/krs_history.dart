@@ -1,7 +1,7 @@
 import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
 import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
 import 'package:academic_system/src/model/student.dart';
-import 'package:academic_system/src/ui/web/page/krs_detail.dart';
+import 'package:academic_system/src/ui/web/page/mahasiswa/krs_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

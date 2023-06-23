@@ -1,6 +1,6 @@
 import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
 import 'package:academic_system/src/model/student.dart';
-import 'package:academic_system/src/ui/web/page/krs_edit.dart';
+import 'package:academic_system/src/ui/web/page/mahasiswa/krs_edit.dart';
 import 'package:flutter/material.dart';
 
 class KRSDetailPage extends StatelessWidget {

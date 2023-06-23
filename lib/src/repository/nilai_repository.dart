@@ -100,4 +100,54 @@ class NilaiRepository {
 
     return [];
   }
+
+  Future<String> updateNilai(
+    String nim,
+    String idKhs,
+    String idNilai,
+    String jumlahSks,
+    int kehadiran,
+    int tugas,
+    int uts,
+    int uas,
+  ) async {
+    String? jwt = await SecureStorage.getToken('jwt');
+
+    Uri url = Uri.parse('$apiUrl/nilai/mahasiswa');
+
+    var response = await post(
+      url,
+      body: {
+        'nim': nim,
+        'id_khs': idKhs,
+        'id_nilai': idNilai,
+        'jumlah_sks': jumlahSks,
+        'kehadiran': kehadiran.toString(),
+        'tugas': tugas.toString(),
+        'uts': uts.toString(),
+        'uas': uas.toString(),
+      },
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $jwt',
+      },
+    );
+
+    if (response.statusCode == 401) {
+      return await JWTRefresher.refreshToken(response)
+          ? await updateNilai(
+              nim,
+              idKhs,
+              idNilai,
+              jumlahSks,
+              kehadiran,
+              tugas,
+              uts,
+              uas,
+            )
+          : 'session expired';
+    }
+
+    return jsonDecode(response.body)["message"];
+  }
 }

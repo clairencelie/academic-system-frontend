@@ -120,7 +120,9 @@ class _MatkulPerSemesterState extends State<MatkulPerSemester> {
                 selected: isSelected,
                 trailing: isSelected
                     ? const Icon(Icons.check_box_rounded)
-                    : const Icon(Icons.check_box_outline_blank),
+                    : (widget.matkulLulus.contains(widget.matkul[index].id))
+                        ? const Icon(Icons.check_circle)
+                        : const Icon(Icons.check_box_outline_blank),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [

@@ -1,14 +1,24 @@
+import 'package:academic_system/src/bloc/dosen/dosen_bloc.dart';
+import 'package:academic_system/src/bloc/nilai/nilai_bloc.dart';
 import 'package:academic_system/src/model/nilai_mhs.dart';
+import 'package:academic_system/src/ui/web/component/custom_widget/info_dialog.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/web_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FormNilai extends StatefulWidget {
   final NilaiMahasiswa nilaiMahasiswa;
   final String namaMataKuliah;
+  final String idDosen;
+  final String tahunAkademik;
+
   const FormNilai({
     super.key,
     required this.nilaiMahasiswa,
     required this.namaMataKuliah,
+    required this.idDosen,
+    required this.tahunAkademik,
   });
 
   @override
@@ -88,6 +98,10 @@ class _FormNilaiState extends State<FormNilai> {
                   children: [
                     const Text('Kehadiran'),
                     WebFormField(
+                      textInputType: TextInputType.number,
+                      textInputFormatter: [
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       hintText: 'Kehadiran',
                       controller: kehadiran,
                       validator: (value) {
@@ -111,6 +125,10 @@ class _FormNilaiState extends State<FormNilai> {
                     ),
                     const Text('Tugas'),
                     WebFormField(
+                      textInputType: TextInputType.number,
+                      textInputFormatter: [
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       hintText: 'Tugas',
                       controller: tugas,
                       validator: (value) {
@@ -134,6 +152,10 @@ class _FormNilaiState extends State<FormNilai> {
                     ),
                     const Text('UTS'),
                     WebFormField(
+                      textInputType: TextInputType.number,
+                      textInputFormatter: [
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       hintText: 'UTS',
                       controller: uts,
                       validator: (value) {
@@ -157,6 +179,10 @@ class _FormNilaiState extends State<FormNilai> {
                     ),
                     const Text('UAS'),
                     WebFormField(
+                      textInputType: TextInputType.number,
+                      textInputFormatter: [
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       hintText: 'UAS',
                       controller: uas,
                       validator: (value) {
@@ -202,19 +228,117 @@ class _FormNilaiState extends State<FormNilai> {
                         SizedBox(
                           height: 45,
                           width: 100,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateColor.resolveWith(
-                                  (states) =>
-                                      const Color.fromARGB(255, 53, 230, 112)),
-                            ),
-                            onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                print(kehadiran.text);
-                                print(tugas.text);
+                          child: BlocListener<NilaiBloc, NilaiState>(
+                            listener: (context, state) {
+                              if (state is UpdateNilaiSuccess) {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) {
+                                    return InfoDialog(
+                                      title: 'Informasi',
+                                      body: state.message,
+                                      onClose: () {
+                                        Navigator.pop(context);
+
+                                        context.read<DosenBloc>().add(
+                                              GetNilaiMhs(
+                                                idMataKuliah: widget
+                                                    .nilaiMahasiswa
+                                                    .idMataKuliah,
+                                                tahunAkademik: widget
+                                                    .tahunAkademik
+                                                    .split(" ")
+                                                    .toList()[0],
+                                                semester: widget.tahunAkademik
+                                                    .split(" ")
+                                                    .toList()[1],
+                                              ),
+                                            );
+                                      },
+                                    );
+                                  },
+                                );
+                              } else if (state is UpdateNilaiFailed) {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) {
+                                    return InfoDialog(
+                                      title: 'Informasi',
+                                      body: state.message,
+                                      onClose: () {
+                                        Navigator.pop(context);
+
+                                        context.read<DosenBloc>().add(
+                                              GetNilaiMhs(
+                                                idMataKuliah: widget
+                                                    .nilaiMahasiswa
+                                                    .idMataKuliah,
+                                                tahunAkademik: widget
+                                                    .tahunAkademik
+                                                    .split(" ")
+                                                    .toList()[0],
+                                                semester: widget.tahunAkademik
+                                                    .split(" ")
+                                                    .toList()[1],
+                                              ),
+                                            );
+                                      },
+                                    );
+                                  },
+                                );
+                              } else if (state is NilaiLoading) {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(
+                                        color: Color.fromARGB(255, 0, 32, 96),
+                                      ),
+                                    );
+                                  },
+                                );
                               }
                             },
-                            child: const Text('Update'),
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateColor.resolveWith(
+                                    (states) => const Color.fromARGB(
+                                        255, 53, 230, 112)),
+                              ),
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) {
+                                  context.read<NilaiBloc>().add(
+                                        UpdateNilaiMhs(
+                                            nim: widget.nilaiMahasiswa.nim,
+                                            idKhs: widget.nilaiMahasiswa.idKhs,
+                                            idNilai:
+                                                widget.nilaiMahasiswa.idNilai,
+                                            jumlahSks: widget
+                                                .nilaiMahasiswa.jumlahSks
+                                                .toString(),
+                                            kehadiran: int.tryParse(
+                                                kehadiran.text.toString())!,
+                                            tugas: int.tryParse(
+                                                tugas.text.toString())!,
+                                            uts: int.tryParse(
+                                                uts.text.toString())!,
+                                            uas: int.tryParse(
+                                                uas.text.toString())!),
+                                      );
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: const Text('Update'),
+                            ),
                           ),
                         ),
                       ],

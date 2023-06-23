@@ -84,8 +84,6 @@ class KrsRepository {
       },
     );
 
-    print(jsonEncode(data));
-
     if (response.statusCode == 401) {
       return await JWTRefresher.refreshToken(response)
           ? await updateKrs(idKrs, krs, listMataKuliahDiambil)

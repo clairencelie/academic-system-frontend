@@ -2,11 +2,12 @@
 import 'package:academic_system/src/model/academic.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/user.dart';
-import 'package:academic_system/src/ui/web/page/cms.dart';
+import 'package:academic_system/src/ui/web/page/akademik/cms.dart';
 import 'package:academic_system/src/ui/web/page/configuration_page.dart';
-import 'package:academic_system/src/ui/web/page/dpmk.dart';
+import 'package:academic_system/src/ui/web/page/dosen/dpmk.dart';
 import 'package:academic_system/src/ui/web/page/home_page.dart';
 import 'package:academic_system/src/ui/web/page/krs_web.dart';
+import 'package:academic_system/src/ui/web/page/mahasiswa/tagihan_pembayaran.dart';
 import 'package:academic_system/src/ui/web/page/profile_page.dart';
 import 'package:academic_system/src/ui/web/page/schedule_page.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class _WebMainPageState extends State<WebMainPage> {
       WebHomePage(user: widget.user),
       WebSchedulePage(user: widget.user),
       KRSWebPage(user: widget.user),
+      TagihanPembayaran(user: widget.user),
       WebProfilePage(user: widget.user),
       WebConfigurationPage(user: widget.user),
     ];
@@ -88,6 +90,19 @@ class _WebMainPageState extends State<WebMainPage> {
         ),
         label: Text(
           'KRS',
+        ),
+      ),
+      NavigationRailDestination(
+        icon: Icon(
+          Icons.payment,
+          color: Colors.white,
+        ),
+        selectedIcon: Icon(
+          Icons.payment,
+          color: Colors.yellow,
+        ),
+        label: Text(
+          'Tagihan',
         ),
       ),
       NavigationRailDestination(

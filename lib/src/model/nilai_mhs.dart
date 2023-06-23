@@ -1,4 +1,5 @@
 class NilaiMahasiswa {
+  final String idKhs;
   final String nim;
   final String nama;
   final String jurusan;
@@ -8,13 +9,15 @@ class NilaiMahasiswa {
   final int tugas;
   final int uts;
   final int uas;
-  final int nilai;
-  final String angkaKualitas;
+  final String nilai;
+  final int angkaKualitas;
+  final int jumlahSks;
   final String status;
   final String tahunAkademik;
   final String semester;
 
   NilaiMahasiswa({
+    required this.idKhs,
     required this.nim,
     required this.nama,
     required this.jurusan,
@@ -26,6 +29,7 @@ class NilaiMahasiswa {
     required this.uas,
     required this.nilai,
     required this.angkaKualitas,
+    required this.jumlahSks,
     required this.status,
     required this.tahunAkademik,
     required this.semester,
@@ -33,6 +37,7 @@ class NilaiMahasiswa {
 
   factory NilaiMahasiswa.createFromJson(Map<String, dynamic> json) {
     return NilaiMahasiswa(
+      idKhs: json['id_khs'].toString(),
       nim: json['nim'].toString(),
       nama: json['nama'],
       jurusan: json['jurusan'],
@@ -44,6 +49,7 @@ class NilaiMahasiswa {
       uas: json['uas'],
       nilai: json['nilai'],
       angkaKualitas: json['angka_kualitas'],
+      jumlahSks: json['jumlah_sks'],
       status: json['status'],
       tahunAkademik: json['tahun_akademik'],
       semester: json['semester'],

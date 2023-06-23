@@ -1,7 +1,6 @@
 import 'package:academic_system/src/bloc/dosen/dosen_bloc.dart';
-import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/nilai_mhs.dart';
-import 'package:academic_system/src/ui/web/page/form_nilai.dart';
+import 'package:academic_system/src/ui/web/page/dosen/form_nilai.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -78,6 +77,8 @@ class _DPMKDetailPageState extends State<DPMKDetailPage> {
                   ListNilaiMahasiswa(
                     listNilaiMhs: state.nilaiMhsList,
                     namaMataKuliah: widget.namaMataKuliah,
+                    idDosen: widget.idDosen,
+                    tahunAkademik: widget.tahunAkademik,
                   ),
                 ],
               );
@@ -162,12 +163,16 @@ class DPMKDetailHeader extends StatelessWidget {
 }
 
 class ListNilaiMahasiswa extends StatelessWidget {
+  final String idDosen;
+  final String tahunAkademik;
   final String namaMataKuliah;
   final List<NilaiMahasiswa> listNilaiMhs;
   const ListNilaiMahasiswa({
     Key? key,
     required this.namaMataKuliah,
     required this.listNilaiMhs,
+    required this.idDosen,
+    required this.tahunAkademik,
   }) : super(key: key);
 
   @override
@@ -194,6 +199,8 @@ class ListNilaiMahasiswa extends StatelessWidget {
                               child: FormNilai(
                                 namaMataKuliah: namaMataKuliah,
                                 nilaiMahasiswa: listNilaiMhs[index],
+                                idDosen: idDosen,
+                                tahunAkademik: tahunAkademik,
                               ),
                             ),
                           );
@@ -293,15 +300,15 @@ class ListNilaiMahasiswa extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              listNilaiMhs[index].angkaKualitas,
-                              style: const TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
+                          // Expanded(
+                          //   flex: 1,
+                          //   child: Text(
+                          //     listNilaiMhs[index].angkaKualitas.toString(),
+                          //     style: const TextStyle(
+                          //       fontSize: 16,
+                          //     ),
+                          //   ),
+                          // ),
                           Expanded(
                             flex: 1,
                             child: Text(
@@ -415,23 +422,23 @@ class ListNilaiHeader extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Text(
-              'Total',
+              'Nilai',
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: Text(
-              'Kualitas',
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+          // Expanded(
+          //   flex: 1,
+          //   child: Text(
+          //     'Kualitas',
+          //     style: TextStyle(
+          //       fontSize: 17,
+          //       fontWeight: FontWeight.bold,
+          //     ),
+          //   ),
+          // ),
           Expanded(
             flex: 1,
             child: Text(

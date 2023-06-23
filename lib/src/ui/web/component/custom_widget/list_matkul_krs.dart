@@ -2,7 +2,6 @@ import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
 import 'package:academic_system/src/bloc/krs_management/krs_management_bloc.dart';
 import 'package:academic_system/src/bloc/mata_kuliah/mata_kuliah_bloc.dart';
 import 'package:academic_system/src/helper/date_converter.dart';
-import 'package:academic_system/src/model/kartu_hasil_studi.dart';
 import 'package:academic_system/src/model/new_kartu_rencana_studi.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/learning_subject.dart';
@@ -70,7 +69,6 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
   Widget build(BuildContext context) {
     List<String> idMatkulLulus = widget.tranksripLengkap.matkulLulus;
 
-    // int maxSks = int.tryParse(widget.user.semester)! <= 4 ? 20 : 24;
     String maxSksFromTranskrip = widget.tranksripLengkap.khs.isEmpty
         ? "20"
         : widget.tranksripLengkap.khs
@@ -145,11 +143,67 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                     )
                     .toList(),
               ),
-              const SizedBox(
-                height: 10,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Column(
+                    children: [
+                      const Text(
+                        'Max SKS',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        '$maxSks',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 25,
+                  ),
+                  Container(
+                    width: 1,
+                    height: 40,
+                    color: const Color.fromARGB(255, 199, 199, 199),
+                  ),
+                  const SizedBox(
+                    width: 25,
+                  ),
+                  Column(
+                    children: [
+                      const Text(
+                        'SKS Diambil',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        '$totalSks',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              Text('Total SKS yang diambil: $totalSks'),
-              Text('Maks SKS yang bisa diambil: $maxSks'),
+              const SizedBox(
+                height: 20,
+              ),
               BlocListener<KrsManagementBloc, KrsManagementState>(
                 listener: (context, state) {
                   if (state is CreateKrsSuccess) {
@@ -190,7 +244,6 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                       },
                     );
                   } else if (state is KrsManagementLoading) {
-                    // TODO: show dialog loading
                     showDialog(
                       context: context,
                       barrierDismissible: false,
@@ -204,107 +257,125 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                     );
                   }
                 },
-                child: ElevatedButton(
-                  onPressed: () {
-                    // TODO: Show dialog konfirmasi
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text(
-                            'Konfirmasi',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 0, 32, 96),
-                            ),
-                          ),
-                          content: const Text(
-                            'Pastikan pilihan mata kuliah anda sudah sesuai.\nSetelah KRS diajukan, maka KRS tidak dapat diubah.',
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                'Cek kembali',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 0, 32, 96),
-                                ),
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: SizedBox(
+                    width: 230,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: learningSubIds.isEmpty
+                            ? MaterialStateColor.resolveWith(
+                                (states) =>
+                                    const Color.fromARGB(255, 214, 214, 214),
+                              )
+                            : MaterialStateColor.resolveWith(
+                                (states) => Color.fromARGB(255, 11, 39, 118),
                               ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                // KartuHasilStudi khsSmtSebelumnya = widget
-                                //     .tranksripLengkap.khs
-                                //     .where((element) =>
-                                //         element.semester ==
-                                //         (int.tryParse(widget.user.semester)! -
-                                //                 1)
-                                //             .toString())
-                                //     .toList()[0];
-
-                                String ips = widget.tranksripLengkap.khs.isEmpty
-                                    ? '0'
-                                    : widget.tranksripLengkap.khs
-                                        .where((element) =>
-                                            element.semester ==
-                                            (int.tryParse(
-                                                        widget.user.semester)! -
-                                                    1)
-                                                .toString())
-                                        .toList()[0]
-                                        .ips;
-
-                                // String bebansSksMaks = widget
-                                //     .tranksripLengkap.khs
-                                //     .where((element) =>
-                                //         element.semester ==
-                                //         (int.tryParse(widget.user.semester)! -
-                                //                 1)
-                                //             .toString())
-                                //     .toList()[0]
-                                //     .maskSks;
-
-                                String date = DateFormat("yyyy-MM-dd")
-                                    .format(DateTime.now());
-
-                                NewKartuRencanaStudi krs = NewKartuRencanaStudi(
-                                  nim: widget.user.id,
-                                  semester: widget.user.semester,
-                                  jurusan: widget.user.major,
-                                  ips: ips,
-                                  ipk: widget
-                                      .tranksripLengkap.transkripNilai.ipk,
-                                  kreditDiambil: totalSks.toString(),
-                                  bebanSksMaks: maxSksFromTranskrip,
-                                  waktuPengisian: date,
-                                  tahunAkademik:
-                                      widget.krsSchedule.tahunAkademik,
-                                );
-
-                                context.read<KrsManagementBloc>().add(
-                                      CreateKrs(
-                                        krs: krs,
-                                        mataKuliahDiambil: learningSubIds,
+                      ),
+                      onPressed: learningSubIds.isEmpty
+                          ? null
+                          : () {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                      'Konfirmasi',
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 0, 32, 96),
                                       ),
-                                    );
+                                    ),
+                                    content: const SizedBox(
+                                      width: 400,
+                                      child: Text(
+                                        'Pastikan pilihan mata kuliah anda sudah sesuai.\n\nJika anda ingin mengubah KRS setelah KRS diajukan, dapat dilakukan di dalam menu histori pengisian KRS (Sebelum KRS dikunci).',
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text(
+                                          'Cek kembali',
+                                          style: TextStyle(
+                                            color:
+                                                Color.fromARGB(255, 0, 32, 96),
+                                          ),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateColor.resolveWith(
+                                            (states) => const Color.fromARGB(
+                                                255, 0, 32, 96),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          String ips = widget
+                                                  .tranksripLengkap.khs.isEmpty
+                                              ? '0'
+                                              : widget.tranksripLengkap.khs
+                                                  .where((element) =>
+                                                      element.semester ==
+                                                      (int.tryParse(widget.user
+                                                                  .semester)! -
+                                                              1)
+                                                          .toString())
+                                                  .toList()[0]
+                                                  .ips;
 
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                'Ajukan KRS',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 0, 32, 96),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  child: const Text('Ajukan KRS'),
+                                          String date = DateFormat("yyyy-MM-dd")
+                                              .format(DateTime.now());
+
+                                          NewKartuRencanaStudi krs =
+                                              NewKartuRencanaStudi(
+                                            nim: widget.user.id,
+                                            semester: widget.user.semester,
+                                            jurusan: widget.user.major,
+                                            ips: ips,
+                                            ipk: widget.tranksripLengkap
+                                                .transkripNilai.ipk,
+                                            kreditDiambil: totalSks.toString(),
+                                            bebanSksMaks: maxSksFromTranskrip,
+                                            waktuPengisian: date,
+                                            tahunAkademik: widget
+                                                .krsSchedule.tahunAkademik,
+                                          );
+
+                                          context.read<KrsManagementBloc>().add(
+                                                CreateKrs(
+                                                  krs: krs,
+                                                  mataKuliahDiambil:
+                                                      learningSubIds,
+                                                ),
+                                              );
+
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text(
+                                          'Ajukan KRS',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                      child: const Text(
+                        'Ajukan KRS',
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],

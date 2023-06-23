@@ -3,6 +3,7 @@ import 'package:academic_system/src/model/learning_subject.dart';
 class KartuRencanaStudiLengkap {
   final String id;
   final String nim;
+  final String nama;
   final String semester;
   final String jurusan;
   final String ips;
@@ -17,6 +18,7 @@ class KartuRencanaStudiLengkap {
   KartuRencanaStudiLengkap({
     required this.id,
     required this.nim,
+    required this.nama,
     required this.semester,
     required this.jurusan,
     required this.ips,
@@ -33,6 +35,7 @@ class KartuRencanaStudiLengkap {
     return KartuRencanaStudiLengkap(
       id: json['id'],
       nim: json['nim'],
+      nama: json['nama'],
       semester: json['semester'],
       jurusan: json['jurusan'],
       ips: json['ips'],

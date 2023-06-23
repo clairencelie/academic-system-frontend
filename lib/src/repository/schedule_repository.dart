@@ -197,4 +197,57 @@ class ScheduleRepository {
 
     return jsonDecode(response.body)["message"];
   }
+
+  Future<String> setJadwalKrs(
+      String tanggalMulai, String tanggalSelesai) async {
+    Uri url = Uri.parse('$apiUrl/set/jadwal_krs');
+
+    String formattedTanggalMulai = tanggalMulai.split('-').reversed.join('-');
+    String formattedTanggalSelesai =
+        tanggalSelesai.split('-').reversed.join('-');
+
+    var response = await post(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${await SecureStorage.getToken('jwt')}',
+      },
+      body: {
+        'tanggalMulai': formattedTanggalMulai,
+        'tanggalSelesai': formattedTanggalSelesai,
+      },
+    );
+
+    if (response.statusCode == 401) {
+      return await JWTRefresher.refreshToken(response)
+          ? await setJadwalKrs(tanggalMulai, tanggalSelesai)
+          : 'session expired';
+    }
+
+    return jsonDecode(response.body)["message"];
+  }
+
+  Future<String> setTahunAkademik(String tahunAkademik, String semester) async {
+    Uri url = Uri.parse('$apiUrl/set/tahun_akademik');
+
+    var response = await post(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${await SecureStorage.getToken('jwt')}',
+      },
+      body: {
+        'tahunAkademik': tahunAkademik,
+        'semester': semester,
+      },
+    );
+
+    if (response.statusCode == 401) {
+      return await JWTRefresher.refreshToken(response)
+          ? await setJadwalKrs(tahunAkademik, semester)
+          : 'session expired';
+    }
+
+    return jsonDecode(response.body)["message"];
+  }
 }

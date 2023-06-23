@@ -13,4 +13,16 @@ class DateConverter {
 
     return result;
   }
+
+  static String mySQLToDartDateFormat(String inputDate) {
+    initializeDateFormatting('id_ID', null);
+
+    final originalFormat = DateFormat('yyyy-MM-dd');
+    final convertedFormat = DateFormat('dd MMMM yyyy', 'id_ID');
+
+    final dateTime = originalFormat.parse(inputDate);
+    final result = convertedFormat.format(dateTime);
+
+    return result;
+  }
 }

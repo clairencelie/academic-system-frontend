@@ -4,7 +4,7 @@ import 'package:academic_system/src/bloc/tahun_akademik/tahun_akademik_bloc.dart
 import 'package:academic_system/src/model/matkul_dosen.dart';
 import 'package:academic_system/src/model/tahun_akademik.dart';
 import 'package:academic_system/src/model/user.dart';
-import 'package:academic_system/src/ui/web/page/dpmk_detail.dart';
+import 'package:academic_system/src/ui/web/page/dosen/dpmk_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

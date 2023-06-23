@@ -23,3 +23,21 @@ class TahunAkademikLoaded extends TahunAkademikState {
 }
 
 class TahunAkademikNotFound extends TahunAkademikState {}
+
+class TahunAkademikUpdateSuccess extends TahunAkademikState {
+  final String message;
+
+  const TahunAkademikUpdateSuccess({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}
+
+class TahunAkademikUpdateFailed extends TahunAkademikState {
+  final String message;
+
+  const TahunAkademikUpdateFailed({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

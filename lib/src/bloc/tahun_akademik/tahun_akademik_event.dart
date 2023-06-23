@@ -8,3 +8,16 @@ abstract class TahunAkademikEvent extends Equatable {
 }
 
 class GetListTA extends TahunAkademikEvent {}
+
+class SetTahunAkademik extends TahunAkademikEvent {
+  final String tahunAkademik;
+  final String semester;
+
+  const SetTahunAkademik({
+    required this.tahunAkademik,
+    required this.semester,
+  });
+
+  @override
+  List<Object> get props => [tahunAkademik, semester];
+}

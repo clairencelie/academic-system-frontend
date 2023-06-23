@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class WebFormField extends StatelessWidget {
+  final TextInputType? textInputType;
+  final List<TextInputFormatter>? textInputFormatter;
   final TextEditingController? controller;
   final String? Function(String? value)? validator;
   final String hintText;
 
   const WebFormField({
     Key? key,
+    this.textInputType,
+    this.textInputFormatter,
     this.controller,
     this.validator,
     required this.hintText,
@@ -19,6 +24,8 @@ class WebFormField extends StatelessWidget {
       child: TextFormField(
         validator: validator,
         controller: controller,
+        keyboardType: textInputType,
+        inputFormatters: textInputFormatter,
         cursorColor: const Color.fromARGB(255, 0, 32, 96),
         decoration: InputDecoration(
           hintText: hintText,

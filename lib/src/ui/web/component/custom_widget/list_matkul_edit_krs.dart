@@ -173,7 +173,6 @@ class _ListMatkulEditKRSState extends State<ListMatkulEditKRS> {
               ),
               BlocListener<KrsManagementBloc, KrsManagementState>(
                 listener: (context, state) {
-                  // TODO: Ganti statenya listen to UpdateKrsSuccess
                   if (state is UpdateKrsSuccess) {
                     Navigator.of(context, rootNavigator: true).pop();
 
@@ -216,7 +215,6 @@ class _ListMatkulEditKRSState extends State<ListMatkulEditKRS> {
                       },
                     );
                   } else if (state is KrsManagementLoading) {
-                    // TODO: show dialog loading
                     showDialog(
                       context: context,
                       barrierDismissible: false,
@@ -232,8 +230,6 @@ class _ListMatkulEditKRSState extends State<ListMatkulEditKRS> {
                 },
                 child: ElevatedButton(
                   onPressed: () {
-                    // TODO: Show dialog konfirmasi
-                    print(learningSubIds);
                     showDialog(
                       context: context,
                       barrierDismissible: false,
@@ -275,7 +271,6 @@ class _ListMatkulEditKRSState extends State<ListMatkulEditKRS> {
                                       widget.krsSchedule.tahunAkademik,
                                 );
 
-                                //TODO: Call UPDATE KRS
                                 context.read<KrsManagementBloc>().add(
                                       UpdateKrs(
                                         idKrs: widget.krs.id,

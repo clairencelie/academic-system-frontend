@@ -1,7 +1,8 @@
 import 'package:academic_system/src/ui/web/component/custom_widget/cms_item.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/schedule_table.dart';
-import 'package:academic_system/src/ui/web/page/create_schedule.dart';
-import 'package:academic_system/src/ui/web/page/krs_management.dart';
+import 'package:academic_system/src/ui/web/page/akademik/create_schedule.dart';
+import 'package:academic_system/src/ui/web/page/akademik/form_tahun_akademik.dart';
+import 'package:academic_system/src/ui/web/page/akademik/krs_management.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -63,50 +64,22 @@ class CMSPage extends StatelessWidget {
                         },
                       ),
                       CMSItem(
-                        title: 'Arsip',
+                        title: 'Tahun Akademik',
                         icons: Icons.view_timeline,
                         onTap: () async {
-                          // showDialog(
-                          //   context: context,
-                          //   builder: (context) {
-                          //     return const ScheduleReferenceDialog();
-                          //   },
-                          // );
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const AlertDialog(
+                                content: SizedBox(
+                                  width: 430,
+                                  child: FormTahunAkademik(),
+                                ), // TODO: FormSetTahunAkademik
+                              );
+                            },
+                          );
                         },
                       ),
-
-                      // Schedule To PDF
-                      // BlocListener<SchedulePdfBloc, SchedulePdfState>(
-                      //   listener: (context, state) async {
-                      //     if (state is SchedulePdfLoading) {
-                      //       showDialog(
-                      //         context: context,
-                      //         barrierDismissible: false,
-                      //         builder: (context) {
-                      //           return const Center(
-                      //             child: CircularProgressIndicator(
-                      //               color: Color.fromARGB(255, 0, 32, 96),
-                      //             ),
-                      //           );
-                      //         },
-                      //       );
-                      //     } else if (state is SchedulePdfLoaded) {
-                      //       Navigator.of(context, rootNavigator: true).pop();
-                      //       final pdf =
-                      //           await PDFGenerate.generatePdf(state.schedules);
-                      //       PDFGenerate.openFile(pdf);
-                      //     }
-                      //   },
-                      //   child: CMSItem(
-                      //     title: 'Export',
-                      //     icons: Icons.download_for_offline_rounded,
-                      //     onTap: () {
-                      //       context
-                      //           .read<SchedulePdfBloc>()
-                      //           .add(ExportSchedule());
-                      //     },
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),

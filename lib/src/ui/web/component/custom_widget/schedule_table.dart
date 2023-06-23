@@ -3,7 +3,7 @@ import 'package:academic_system/src/bloc/schedule_management/schedule_management
 import 'package:academic_system/src/model/schedule.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/cms_item.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/schedule_detail_text.dart';
-import 'package:academic_system/src/ui/web/page/update_schedule.dart';
+import 'package:academic_system/src/ui/web/page/akademik/update_schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
