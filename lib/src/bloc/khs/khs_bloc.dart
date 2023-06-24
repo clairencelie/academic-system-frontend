@@ -1,5 +1,7 @@
 import 'package:academic_system/src/model/transkrip_lengkap.dart';
+import 'package:academic_system/src/model/transkrip_rinci.dart';
 import 'package:academic_system/src/repository/khs_repository.dart';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -18,6 +20,19 @@ class KhsBloc extends Bloc<KhsEvent, KhsState> {
 
       if (transkripLengkap != null) {
         emit(TranskripLoaded(transkripLengkap: transkripLengkap));
+      } else {
+        emit(TranskripFailed());
+      }
+    });
+
+    on<GetTranskripRinciEvent>((event, emit) async {
+      emit(KhsLoading());
+
+      TranskripRinci? transkripRinci =
+          await repository.getTranskripRinci(event.nim);
+
+      if (transkripRinci != null) {
+        emit(TranskripRinciLoaded(tranksripRinci: transkripRinci));
       } else {
         emit(TranskripFailed());
       }

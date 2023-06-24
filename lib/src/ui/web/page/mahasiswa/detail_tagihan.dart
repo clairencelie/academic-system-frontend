@@ -8,6 +8,8 @@ import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/tagihan_perkuliahan.dart';
 import 'package:academic_system/src/repository/transaksi_repository.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/info_dialog.dart';
+import 'package:academic_system/src/ui/web/component/custom_widget/timer_va.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -152,37 +154,126 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                               },
                             ),
                             transaksiPending.isNotEmpty
-                                ? Column(
-                                    children: [
-                                      Text(
-                                          'Kamu sedang ada transaksi aktif melalui virtual akun ini: ${transaksiPending[0].noVA}.'),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          TransaksiRepository()
-                                              .refreshStatusTransaksi(
-                                            widget.tagihanPerkuliahan
-                                                .idTagihanPerkuliahan,
-                                            transaksiPending[0].idOrder,
-                                          )
-                                              .then((value) {
-                                            context
-                                                .read<HistoriTransaksiBloc>()
-                                                .add(GetListHistoryTransaksi(
-                                                    nim: widget.student.id));
-
-                                            context
-                                                .read<TagihanPerkuliahanBloc>()
-                                                .add(
-                                                  GetListTagihan(
-                                                    nim: widget.student.id,
+                                ? Container(
+                                    padding: const EdgeInsets.all(20),
+                                    color: const Color.fromARGB(
+                                        255, 236, 255, 246),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Flexible(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: const [
+                                                  Text(
+                                                    'Anda sedang memiliki transaksi aktif',
+                                                    style: TextStyle(
+                                                      fontSize: 19,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
-                                                );
-                                          });
-                                        },
-                                        child: const Text(
-                                            'Refresh Status Pembayaran'),
-                                      ),
-                                    ],
+                                                  Text(
+                                                      'Harap melakukan refresh status pembayaran jika sudah berhasil melakukan transfer melalui nomor virtual akun yang diberikan.'),
+                                                ],
+                                              ),
+                                            ),
+                                            Flexible(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  TimerVA(
+                                                      targetUnixTime: DateTime.parse(
+                                                                  transaksiPending[
+                                                                          0]
+                                                                      .waktuKedaluwarsa)
+                                                              .millisecondsSinceEpoch ~/
+                                                          1000),
+                                                  const SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  const Text(
+                                                    'No. Virtual Akun:',
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        transaksiPending[0]
+                                                            .noVA,
+                                                        style: const TextStyle(
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      IconButton(
+                                                        onPressed: () async {
+                                                          await Clipboard
+                                                              .setData(
+                                                            ClipboardData(
+                                                              text:
+                                                                  transaksiPending[
+                                                                          0]
+                                                                      .noVA,
+                                                            ),
+                                                          );
+                                                        },
+                                                        icon: const Icon(
+                                                            Icons.copy),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            TransaksiRepository()
+                                                .refreshStatusTransaksi(
+                                              widget.tagihanPerkuliahan
+                                                  .idTagihanPerkuliahan,
+                                              transaksiPending[0].idOrder,
+                                            )
+                                                .then((value) {
+                                              context
+                                                  .read<HistoriTransaksiBloc>()
+                                                  .add(GetListHistoryTransaksi(
+                                                      nim: widget.student.id));
+
+                                              context
+                                                  .read<
+                                                      TagihanPerkuliahanBloc>()
+                                                  .add(
+                                                    GetListTagihan(
+                                                      nim: widget.student.id,
+                                                    ),
+                                                  );
+                                              // Refresh detail
+                                              setState(() {});
+                                            });
+                                          },
+                                          child: const Text(
+                                              'Refresh Status Pembayaran'),
+                                        ),
+                                      ],
+                                    ),
                                   )
                                 : const SizedBox(),
                           ],
@@ -219,7 +310,6 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                                   // rincian tagihan
                                   ListRincianTagihan(
                                     listRincianTagihan: listRincianTagihan,
-                                    student: widget.student,
                                   ),
                                   // total tagihan
 
@@ -340,12 +430,28 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                                               child: ElevatedButton(
                                                 style: ButtonStyle(
                                                   backgroundColor:
-                                                      MaterialStateColor
-                                                          .resolveWith(
-                                                    (states) =>
-                                                        const Color.fromARGB(
-                                                            255, 11, 39, 118),
-                                                  ),
+                                                      transaksiPending
+                                                              .isNotEmpty
+                                                          ? MaterialStateColor
+                                                              .resolveWith(
+                                                              (states) =>
+                                                                  const Color
+                                                                          .fromARGB(
+                                                                      255,
+                                                                      204,
+                                                                      204,
+                                                                      205),
+                                                            )
+                                                          : MaterialStateColor
+                                                              .resolveWith(
+                                                              (states) =>
+                                                                  const Color
+                                                                          .fromARGB(
+                                                                      255,
+                                                                      11,
+                                                                      39,
+                                                                      118),
+                                                            ),
                                                 ),
                                                 onPressed: transaksiPending
                                                         .isNotEmpty
@@ -393,10 +499,31 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                             return const CircularProgressIndicator();
                           },
                         ),
+                        // List histori transaksi pada tagihan ini
+
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          'Histori Transaksi',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const HeaderHistoriTransaksi(),
+                        const Divider(),
+                        ListHistoriTransaksi(
+                            listHistoriTransaksi: listHistoriPembayaran),
                       ],
                     );
                   }
-                  return const CircularProgressIndicator();
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
                 },
               ),
             ),
@@ -436,12 +563,10 @@ class HeaderDetailTagihan extends StatelessWidget {
 
 class ListRincianTagihan extends StatelessWidget {
   final List<RincianTagihan> listRincianTagihan;
-  final Student student;
 
   const ListRincianTagihan({
     Key? key,
     required this.listRincianTagihan,
-    required this.student,
   }) : super(key: key);
 
   @override
@@ -512,6 +637,111 @@ class ListRincianTagihan extends StatelessWidget {
   }
 }
 
+class ListHistoriTransaksi extends StatelessWidget {
+  final List<HistoriTransaksi> listHistoriTransaksi;
+
+  const ListHistoriTransaksi({
+    Key? key,
+    required this.listHistoriTransaksi,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: listHistoriTransaksi.length,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          height: 50,
+          decoration: BoxDecoration(
+            color: index % 2 == 1
+                ? const Color.fromARGB(255, 245, 245, 245)
+                : const Color.fromARGB(255, 236, 239, 245),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Text(
+                  listHistoriTransaksi[index].idTransaksi,
+                  overflow: TextOverflow.fade,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  listHistoriTransaksi[index].jenisPembayaran,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  NumberFormat.currency(
+                    locale: 'id_ID',
+                    symbol: 'Rp ',
+                    decimalDigits: 0,
+                  ).format(int.tryParse(
+                      listHistoriTransaksi[index].totalPembayaran)!),
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  listHistoriTransaksi[index].noVA,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  listHistoriTransaksi[index].statusTransaksi == 'settlement'
+                      ? 'Berhasil'
+                      : listHistoriTransaksi[index].statusTransaksi == 'pending'
+                          ? 'Pending'
+                          : 'Gagal',
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  listHistoriTransaksi[index].waktuTransaksi,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  listHistoriTransaksi[index].waktuKedaluwarsa,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
 class DetailItemHeader extends StatelessWidget {
   const DetailItemHeader({super.key});
 
@@ -554,6 +784,88 @@ class DetailItemHeader extends StatelessWidget {
                 flex: 1,
                 child: Text(
                   'Total Harga Item',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HeaderHistoriTransaksi extends StatelessWidget {
+  const HeaderHistoriTransaksi({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          Row(
+            children: const [
+              Expanded(
+                flex: 2,
+                child: Text(
+                  'ID Transaksi',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  'Jenis Pembayaran',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  'Total Pembayaran',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  'Nomor V.A',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  'Status',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  'Waktu Transaksi Dibuat',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  'Waktu Transaksi Kedaluwarsa',
                   style: TextStyle(
                     fontSize: 16,
                   ),

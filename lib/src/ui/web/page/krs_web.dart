@@ -1,5 +1,6 @@
 import 'package:academic_system/src/bloc/khs/khs_bloc.dart';
 import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
+import 'package:academic_system/src/bloc/tagihan/tagihan_perkuliahan_bloc.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/transkrip_lengkap.dart';
 import 'package:academic_system/src/model/user.dart';
@@ -53,6 +54,7 @@ class _KRSWebPageState extends State<KRSWebPage> {
                 builder: (context, state) {
                   if (state is TranskripLoaded) {
                     TranksripLengkap tranksripLengkap = state.transkripLengkap;
+
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -88,8 +90,23 @@ class _KRSWebPageState extends State<KRSWebPage> {
                                     ),
                                   );
                                 },
-                                child: const Text(
-                                    'Lihat histori pengisian KRS mu disini'),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                            color: Colors.blue, width: 1),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      'Histori Pengisian KRS',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                         const SizedBox(
                           height: 20,
@@ -97,12 +114,23 @@ class _KRSWebPageState extends State<KRSWebPage> {
                         BlocBuilder<KrsBloc, KrsState>(
                           builder: (context, state) {
                             if (state is AlreadyFillKrs) {
-                              return Center(
-                                child: Text(state.message),
+                              return SizedBox(
+                                height: MediaQuery.of(context).size.height / 2,
+                                child: Center(
+                                  child: Text(
+                                    state.message,
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 189, 189, 189),
+                                    ),
+                                  ),
+                                ),
                               );
                             } else if (state is KrsScheduleLoaded) {
                               semester = state.krsSchedule.semester;
                               tahunAkademik = state.krsSchedule.tahunAkademik;
+                              var krsSchedule = state.krsSchedule;
 
                               isAfterTime = DateFormat('dd-MM-yyyy')
                                   .parse(formattedDateNow)
@@ -113,14 +141,72 @@ class _KRSWebPageState extends State<KRSWebPage> {
                                   .isBefore(DateFormat('dd-MM-yyyy')
                                       .parse(state.krsSchedule.tanggalMulai));
 
-                              // print(isBeforeTime);
-                              // print(isAfterTime);
-
                               return (!isBeforeTime && !isAfterTime)
-                                  ? ListMatkulKRS(
-                                      user: (widget.user as Student),
-                                      tranksripLengkap: tranksripLengkap,
-                                      krsSchedule: state.krsSchedule,
+                                  ? BlocBuilder<TagihanPerkuliahanBloc,
+                                      TagihanPerkuliahanState>(
+                                      builder: (context, state) {
+                                        if (state is TagihanPerkuliahanLoaded) {
+                                          // Cek apakah sudah memenuhi syarat pengisian KRS
+                                          var listTagihan = state.listTagihan;
+
+                                          var tunggakanSemester = listTagihan
+                                              .where(
+                                                (tagihan) =>
+                                                    tagihan.kategori
+                                                        .contains('Semester') &&
+                                                    tagihan.statusPembayaran ==
+                                                        'belum_bayar' &&
+                                                    ((tagihan.tahunAkademik !=
+                                                                krsSchedule
+                                                                    .tahunAkademik &&
+                                                            tagihan.semester !=
+                                                                krsSchedule
+                                                                    .semester) ||
+                                                        (tagihan.tahunAkademik ==
+                                                                krsSchedule
+                                                                    .tahunAkademik &&
+                                                            tagihan.semester !=
+                                                                krsSchedule
+                                                                    .semester)),
+                                              )
+                                              .toList();
+
+                                          var tunggakanDPKrs = listTagihan
+                                              .where((tagihan) =>
+                                                  tagihan.kategori ==
+                                                      'Uang Muka Pengisian KRS' &&
+                                                  tagihan.statusPembayaran ==
+                                                      'belum_bayar' &&
+                                                  tagihan.tahunAkademik ==
+                                                      krsSchedule
+                                                          .tahunAkademik &&
+                                                  tagihan.semester ==
+                                                      krsSchedule.semester)
+                                              .toList();
+
+                                          if (tunggakanSemester.isEmpty &&
+                                              tunggakanDPKrs.isEmpty) {
+                                            return ListMatkulKRS(
+                                              user: (widget.user as Student),
+                                              tranksripLengkap:
+                                                  tranksripLengkap,
+                                              krsSchedule: krsSchedule,
+                                            );
+                                          }
+                                          return SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                2,
+                                            child: const Center(
+                                              child: Text(
+                                                'Maaf, anda belum memenuhi persyaratan untuk pengisian KRS.\nMohon cek halaman tagihan dan pastikan tidak ada tunggakan pembayaran semester sebelumnya dan sudah melunasi uang muka KRS',
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        return const CircularProgressIndicator();
+                                      },
                                     )
                                   : const Text(
                                       'Pengisian KRS untuk semester selanjutnya belum dimulai',
@@ -148,7 +234,12 @@ class _KRSWebPageState extends State<KRSWebPage> {
                       ],
                     );
                   }
-                  return const CircularProgressIndicator();
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
                 },
               ),
             ),

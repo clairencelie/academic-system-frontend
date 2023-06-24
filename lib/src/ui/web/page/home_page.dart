@@ -12,30 +12,93 @@ class WebHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Text(
-                    "Selamat malam, ${user.name}",
-                    style: const TextStyle(
-                      fontSize: 23,
+      body: SingleChildScrollView(
+        child: Center(
+          child: FractionallySizedBox(
+            widthFactor: 0.8,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BerandaHeader(user: user),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    height: 400,
+                    color: const Color.fromARGB(255, 177, 214, 244),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
+                    'Artikel',
+                    style: TextStyle(
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-                IdentityWidget(user: user)
-              ],
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    height: 100,
+                    color: const Color.fromARGB(255, 218, 177, 244),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    height: 100,
+                    color: const Color.fromARGB(255, 177, 244, 198),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    height: 100,
+                    color: const Color.fromARGB(255, 244, 213, 177),
+                  ),
+                ],
+              ),
             ),
-          ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class BerandaHeader extends StatelessWidget {
+  const BerandaHeader({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
+
+  final User user;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Flexible(
+          child: Text(
+            // DateTime.now().hour < 11
+            //     ? "Selamat pagi, ${user.name}"
+            //     : DateTime.now().hour < 15
+            //         ? 'Selamat siang, ${user.name}'
+            //         : DateTime.now().hour < 18
+            //             ? 'Selamat sore, ${user.name}'
+            //             : 'Selamat malam, ${user.name}',
+            'STMIK Dharma Putra',
+            style: TextStyle(
+              fontSize: 23,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        IdentityWidget(user: user),
+      ],
     );
   }
 }

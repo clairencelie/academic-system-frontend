@@ -28,57 +28,62 @@ class _KrsHistoryPageState extends State<KrsHistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        child: Center(
+          child: FractionallySizedBox(
+            widthFactor: 0.8,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        context.read<KrsBloc>().add(
-                              GetKrsSchedule(
-                                nim: widget.student.id,
-                                semester: widget.student.semester,
-                              ),
-                            );
-                      },
-                      icon: const Icon(Icons.arrow_back)),
-                  const Text(
-                    'List Mata KRS',
-                    style: TextStyle(
-                      fontSize: 19,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            context.read<KrsBloc>().add(
+                                  GetKrsSchedule(
+                                    nim: widget.student.id,
+                                    semester: widget.student.semester,
+                                  ),
+                                );
+                          },
+                          icon: const Icon(Icons.arrow_back)),
+                      const Text(
+                        'Histori Pengisian KRS',
+                        style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  BlocBuilder<KrsBloc, KrsState>(
+                    builder: (context, state) {
+                      if (state is KrsFound) {
+                        return Column(
+                          children: [
+                            const KrsListHeader(),
+                            const Divider(),
+                            KrsList(
+                              krsLengkap: state.krsLengkap,
+                              student: widget.student,
+                            ),
+                          ],
+                        );
+                      } else if (state is KrsLoading) {
+                        return const CircularProgressIndicator();
+                      }
+
+                      return const SizedBox();
+                    },
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              BlocBuilder<KrsBloc, KrsState>(
-                builder: (context, state) {
-                  if (state is KrsFound) {
-                    return Column(
-                      children: [
-                        const KrsListHeader(),
-                        const Divider(),
-                        KrsList(
-                          krsLengkap: state.krsLengkap,
-                          student: widget.student,
-                        ),
-                      ],
-                    );
-                  } else if (state is KrsLoading) {
-                    return const CircularProgressIndicator();
-                  }
-
-                  return const SizedBox();
-                },
-              ),
-            ],
+            ),
           ),
         ),
       ),

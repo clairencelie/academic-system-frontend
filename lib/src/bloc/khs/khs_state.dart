@@ -26,4 +26,15 @@ class TranskripLoaded extends KhsState {
   List<Object> get props => [transkripLengkap];
 }
 
+class TranskripRinciLoaded extends KhsState {
+  final TranskripRinci tranksripRinci;
+
+  const TranskripRinciLoaded({
+    required this.tranksripRinci,
+  });
+
+  @override
+  List<Object> get props => [tranksripRinci];
+}
+
 class TranskripFailed extends KhsState {}

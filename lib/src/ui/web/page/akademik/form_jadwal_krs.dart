@@ -48,7 +48,7 @@ class _FormJadwalKrsState extends State<FormJadwalKrs> {
                     final newDate = await showDatePicker(
                         context: context,
                         initialDate: dateMulai,
-                        firstDate: DateTime.now(),
+                        firstDate: DateTime(2022),
                         lastDate: DateTime(2025));
 
                     if (newDate == null) return;
@@ -58,8 +58,6 @@ class _FormJadwalKrsState extends State<FormJadwalKrs> {
                       tanggalMulai.text =
                           '${dateMulai.day}-${dateMulai.month}-${dateMulai.year}';
                     });
-
-                    print(tanggalMulai.text);
                   },
                   decoration: const InputDecoration(
                     hintText: 'Tanggal Mulai...',
@@ -109,7 +107,7 @@ class _FormJadwalKrsState extends State<FormJadwalKrs> {
                     final newDate = await showDatePicker(
                         context: context,
                         initialDate: dateSelesai,
-                        firstDate: DateTime.now(),
+                        firstDate: DateTime(2022),
                         lastDate: DateTime(2025));
 
                     if (newDate == null) return;
@@ -119,11 +117,9 @@ class _FormJadwalKrsState extends State<FormJadwalKrs> {
                       tanggalSelesai.text =
                           '${dateSelesai.day}-${dateSelesai.month}-${dateSelesai.year}';
                     });
-
-                    print(tanggalSelesai.text);
                   },
                   decoration: const InputDecoration(
-                    hintText: 'Tanggal Mulai...',
+                    hintText: 'Tanggal Selesai...',
                     errorStyle: TextStyle(
                       height: 0.7,
                     ),

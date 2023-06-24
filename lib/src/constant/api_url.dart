@@ -1,1 +1,1 @@
-String apiUrl = "http://192.168.1.11:6969";
+String apiUrl = "http://192.168.1.7:6969";

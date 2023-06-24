@@ -17,3 +17,14 @@ class GetTranskripEvent extends KhsEvent {
   @override
   List<Object> get props => [nim];
 }
+
+class GetTranskripRinciEvent extends KhsEvent {
+  final String nim;
+
+  const GetTranskripRinciEvent({
+    required this.nim,
+  });
+
+  @override
+  List<Object> get props => [nim];
+}

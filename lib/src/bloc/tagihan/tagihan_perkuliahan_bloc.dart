@@ -20,11 +20,7 @@ class TagihanPerkuliahanBloc
       final List<TagihanPerkuliahan> listTagihan =
           await tagihanRepository.getTagihanMahasiswa(event.nim);
 
-      if (listTagihan.isNotEmpty) {
-        emit(TagihanPerkuliahanLoaded(listTagihan: listTagihan));
-      } else {
-        emit(TagihanPerkuliahanNotFound());
-      }
+      emit(TagihanPerkuliahanLoaded(listTagihan: listTagihan));
     });
   }
 }

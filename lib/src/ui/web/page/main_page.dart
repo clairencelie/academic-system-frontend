@@ -8,6 +8,7 @@ import 'package:academic_system/src/ui/web/page/dosen/dpmk.dart';
 import 'package:academic_system/src/ui/web/page/home_page.dart';
 import 'package:academic_system/src/ui/web/page/krs_web.dart';
 import 'package:academic_system/src/ui/web/page/mahasiswa/tagihan_pembayaran.dart';
+import 'package:academic_system/src/ui/web/page/mahasiswa/transkrip_page.dart';
 import 'package:academic_system/src/ui/web/page/profile_page.dart';
 import 'package:academic_system/src/ui/web/page/schedule_page.dart';
 import 'package:flutter/material.dart';
@@ -24,12 +25,13 @@ class WebMainPage extends StatefulWidget {
 }
 
 class _WebMainPageState extends State<WebMainPage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
   @override
   Widget build(BuildContext context) {
     List<Widget> studentOptions = <Widget>[
       WebHomePage(user: widget.user),
       WebSchedulePage(user: widget.user),
+      TranskripPage(mahasiswa: widget.user),
       KRSWebPage(user: widget.user),
       TagihanPembayaran(user: widget.user),
       WebProfilePage(user: widget.user),
@@ -48,8 +50,8 @@ class _WebMainPageState extends State<WebMainPage> {
       WebHomePage(user: widget.user),
       WebSchedulePage(user: widget.user),
       WebProfilePage(user: widget.user),
-      WebConfigurationPage(user: widget.user),
       const CMSPage(),
+      WebConfigurationPage(user: widget.user),
     ];
 
     const List<NavigationRailDestination> studentNavigation = [
@@ -77,6 +79,19 @@ class _WebMainPageState extends State<WebMainPage> {
         ),
         label: Text(
           'Jadwal',
+        ),
+      ),
+      NavigationRailDestination(
+        icon: Icon(
+          Icons.grade_outlined,
+          color: Colors.white,
+        ),
+        selectedIcon: Icon(
+          Icons.grade,
+          color: Colors.yellow,
+        ),
+        label: Text(
+          'Transkrip',
         ),
       ),
       NavigationRailDestination(
@@ -243,19 +258,6 @@ class _WebMainPageState extends State<WebMainPage> {
       ),
       NavigationRailDestination(
         icon: Icon(
-          Icons.settings_applications_outlined,
-          color: Colors.white,
-        ),
-        selectedIcon: Icon(
-          Icons.settings_applications_rounded,
-          color: Colors.yellow,
-        ),
-        label: Text(
-          'Pengaturan',
-        ),
-      ),
-      NavigationRailDestination(
-        icon: Icon(
           Icons.edit_calendar_outlined,
           color: Colors.white,
         ),
@@ -265,6 +267,19 @@ class _WebMainPageState extends State<WebMainPage> {
         ),
         label: Text(
           'CMS',
+        ),
+      ),
+      NavigationRailDestination(
+        icon: Icon(
+          Icons.settings_applications_outlined,
+          color: Colors.white,
+        ),
+        selectedIcon: Icon(
+          Icons.settings_applications_rounded,
+          color: Colors.yellow,
+        ),
+        label: Text(
+          'Pengaturan',
         ),
       ),
     ];

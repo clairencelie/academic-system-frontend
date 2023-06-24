@@ -1,9 +1,12 @@
+import 'package:academic_system/src/bloc/schedule_krs/schedule_krs_bloc.dart';
 import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/ui/web/page/mahasiswa/krs_edit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
-class KRSDetailPage extends StatelessWidget {
+class KRSDetailPage extends StatefulWidget {
   final KartuRencanaStudiLengkap krs;
   final Student student;
 
@@ -14,104 +17,140 @@ class KRSDetailPage extends StatelessWidget {
   });
 
   @override
+  State<KRSDetailPage> createState() => _KRSDetailPageState();
+}
+
+class _KRSDetailPageState extends State<KRSDetailPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ScheduleKrsBloc>().add(GetScheduleKrs());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const KRSDetailHeader(),
-              const SizedBox(
-                height: 20,
-              ),
-              KRSDetailInfo(student: student, krs: krs),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Center(
+          child: FractionallySizedBox(
+            widthFactor: 0.8,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'List Mata Kuliah Dipilih',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  const KRSDetailHeader(),
+                  const SizedBox(
+                    height: 20,
                   ),
-                  ElevatedButton(
-                    onPressed: krs.commit == '1'
-                        ? null
-                        : () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return EditKRSPage(
-                                    krs: krs,
-                                    student: student,
-                                  );
-                                },
-                              ),
+                  KRSDetailInfo(student: widget.student, krs: widget.krs),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'List Mata Kuliah Dipilih',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      BlocBuilder<ScheduleKrsBloc, ScheduleKrsState>(
+                        builder: (context, state) {
+                          if (state is ScheduleKrsLoaded) {
+                            String formattedDateNow =
+                                DateFormat('dd-MM-yyyy').format(DateTime.now());
+                            return ElevatedButton(
+                              onPressed: widget.krs.commit == '1' ||
+                                      DateFormat('dd-MM-yyyy')
+                                          .parse(formattedDateNow)
+                                          .isAfter(DateFormat('dd-MM-yyyy')
+                                              .parse(state
+                                                  .krsSchedule.tanggalSelesai))
+                                  ? null
+                                  : () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return EditKRSPage(
+                                              krs: widget.krs,
+                                              student: widget.student,
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                              child: const Text('Ubah pilihan mata kuliah'),
                             );
-                          },
-                    child: const Text('Ubah pilihan mata kuliah'),
+                          }
+                          return const CircularProgressIndicator();
+                        },
+                      ),
+                    ],
                   ),
-                ],
-              ),
 
-              const SizedBox(
-                height: 20,
-              ),
+                  const SizedBox(
+                    height: 20,
+                  ),
 
-              // List Matkul yang diambil
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: krs.pilihanMataKuliah.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    margin: const EdgeInsets.only(bottom: 15),
-                    height: 70,
-                    decoration: BoxDecoration(
-                      color: index % 2 == 1
-                          ? const Color.fromARGB(255, 251, 251, 251)
-                          : const Color.fromARGB(255, 245, 247, 251),
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 1,
-                          color: Color.fromARGB(55, 0, 0, 0),
-                          offset: Offset(0, 1),
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: ListTile(
-                        title: Row(
-                          children: [
-                            Expanded(
-                              child: Text(krs.pilihanMataKuliah[index].id),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Text(krs.pilihanMataKuliah[index].name),
-                            ),
-                            Expanded(
-                              child: Text(krs.pilihanMataKuliah[index].credit),
-                            ),
-                            Expanded(
-                              child: Text(krs.pilihanMataKuliah[index].grade),
-                            ),
-                            Expanded(
-                              child: Text(krs.pilihanMataKuliah[index].type),
+                  // List Matkul yang diambil
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: widget.krs.pilihanMataKuliah.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        margin: const EdgeInsets.only(bottom: 15),
+                        height: 70,
+                        decoration: BoxDecoration(
+                          color: index % 2 == 1
+                              ? const Color.fromARGB(255, 251, 251, 251)
+                              : const Color.fromARGB(255, 245, 247, 251),
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(
+                              blurRadius: 1,
+                              color: Color.fromARGB(55, 0, 0, 0),
+                              offset: Offset(0, 1),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                  );
-                },
+                        child: Center(
+                          child: ListTile(
+                            title: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                      widget.krs.pilihanMataKuliah[index].id),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(
+                                      widget.krs.pilihanMataKuliah[index].name),
+                                ),
+                                Expanded(
+                                  child: Text(widget
+                                      .krs.pilihanMataKuliah[index].credit),
+                                ),
+                                Expanded(
+                                  child: Text(widget
+                                      .krs.pilihanMataKuliah[index].grade),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                      widget.krs.pilihanMataKuliah[index].type),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
