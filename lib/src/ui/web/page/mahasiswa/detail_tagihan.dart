@@ -304,7 +304,11 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                               return Column(
                                 children: [
                                   // Header
-                                  const DetailItemHeader(),
+                                  const Divider(),
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    child: DetailItemHeader(),
+                                  ),
                                   const Divider(),
 
                                   // rincian tagihan
@@ -313,8 +317,10 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                                   ),
                                   // total tagihan
 
+                                  const Divider(),
                                   Padding(
-                                    padding: const EdgeInsets.all(20),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
                                     child: Column(
                                       children: [
                                         Row(
@@ -353,6 +359,7 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                                       ],
                                     ),
                                   ),
+                                  const Divider(),
                                   // button bayar
                                   transaksiSukses.isNotEmpty
                                       ? const Text('Sudah Lunas')

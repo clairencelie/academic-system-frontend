@@ -47,176 +47,198 @@ class _KRSManagementPageState extends State<KRSManagementPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-          child: BlocBuilder<ScheduleKrsBloc, ScheduleKrsState>(
-            builder: (context, state) {
-              if (state is ScheduleKrsLoaded) {
-                final KrsSchedule jadwalKrs = state.krsSchedule;
+        child: Center(
+          child: FractionallySizedBox(
+            widthFactor: 0.8,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: BlocBuilder<ScheduleKrsBloc, ScheduleKrsState>(
+                builder: (context, state) {
+                  if (state is ScheduleKrsLoaded) {
+                    final KrsSchedule jadwalKrs = state.krsSchedule;
 
-                print(jadwalKrs.tanggalMulai);
+                    print(jadwalKrs.tanggalMulai);
 
-                final String semesterBerjalan =
-                    '${jadwalKrs.tahunAkademik} ${jadwalKrs.semester}';
+                    final String semesterBerjalan =
+                        '${jadwalKrs.tahunAkademik} ${jadwalKrs.semester}';
 
-                return BlocBuilder<TahunAkademikBloc, TahunAkademikState>(
-                  builder: (context, state) {
-                    if (state is TahunAkademikLoaded) {
-                      // List tahun akademik
-                      List<TahunAkademik> listTA = state.listTA;
+                    return BlocBuilder<TahunAkademikBloc, TahunAkademikState>(
+                      builder: (context, state) {
+                        if (state is TahunAkademikLoaded) {
+                          // List tahun akademik
+                          List<TahunAkademik> listTA = state.listTA;
 
-                      if (tahunAkademikDropDownValue == '') {
-                        tahunAkademikDropDownValue = semesterBerjalan;
-                      }
+                          if (tahunAkademikDropDownValue == '') {
+                            tahunAkademikDropDownValue = semesterBerjalan;
+                          }
 
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        icon: const Icon(Icons.arrow_back),
+                                      ),
+                                      const Text(
+                                        'Manajemen KRS',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  DropdownButton(
+                                    value: tahunAkademikDropDownValue,
+                                    items: dropDownMenuList(listTA),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        tahunAkademikDropDownValue = value;
+                                      });
                                     },
-                                    icon: const Icon(Icons.arrow_back),
-                                  ),
-                                  const Text(
-                                    'Manajemen KRS',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                  )
                                 ],
                               ),
-                              DropdownButton(
-                                value: tahunAkademikDropDownValue,
-                                items: dropDownMenuList(listTA),
-                                onChanged: (value) {
-                                  setState(() {
-                                    tahunAkademikDropDownValue = value;
-                                  });
-                                },
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            'Jadwal Pengisian KRS: ${DateConverter.convertToDartDateFormat(jadwalKrs.tanggalMulai)} - ${DateConverter.convertToDartDateFormat(jadwalKrs.tanggalSelesai)}',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          // Button set Jadwal KRS
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    content: SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height /
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                'Jadwal Pengisian KRS: ${DateConverter.convertToDartDateFormat(jadwalKrs.tanggalMulai)} - ${DateConverter.convertToDartDateFormat(jadwalKrs.tanggalSelesai)}',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              // Button set Jadwal KRS
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        content: SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
                                               1.5,
-                                      width: 400,
-                                      child: const FormJadwalKrs(),
-                                    ),
+                                          width: 400,
+                                          child: const FormJadwalKrs(),
+                                        ),
+                                      );
+                                    },
                                   );
                                 },
-                              );
-                            },
-                            child: const Text('Set Jadwal KRS'),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
+                                child: const Text('Set Jadwal KRS'),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
 
-                          Text(
-                            'List KRS Mahasiswa T.A $tahunAkademikDropDownValue',
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          const KrsListHeader(),
-                          const Divider(),
-                          BlocListener<KrsManagementBloc, KrsManagementState>(
-                            listener: (context, state) {
-                              if (state is LockKrsSuccess) {
-                                showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (context) {
-                                    return InfoDialog(
-                                      title: 'Informasi',
-                                      body: state.message,
-                                      onClose: () {
-                                        Navigator.pop(context);
-                                        context
-                                            .read<KrsBloc>()
-                                            .add(GetAllKrs());
+                              Text(
+                                'List KRS Mahasiswa T.A $tahunAkademikDropDownValue',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              const KrsListHeader(),
+                              const Divider(),
+                              BlocListener<KrsManagementBloc,
+                                  KrsManagementState>(
+                                listener: (context, state) {
+                                  if (state is LockKrsSuccess) {
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (context) {
+                                        return InfoDialog(
+                                          title: 'Informasi',
+                                          body: state.message,
+                                          onClose: () {
+                                            Navigator.pop(context);
+                                            context
+                                                .read<KrsBloc>()
+                                                .add(GetAllKrs());
+                                          },
+                                        );
                                       },
                                     );
-                                  },
-                                );
-                              } else if (state is LockKrsFailed) {
-                                showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (context) {
-                                    return InfoDialog(
-                                      title: 'Informasi',
-                                      body: state.message,
-                                      onClose: () {
-                                        Navigator.pop(context);
-                                        context
-                                            .read<KrsBloc>()
-                                            .add(GetAllKrs());
+                                  } else if (state is LockKrsFailed) {
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (context) {
+                                        return InfoDialog(
+                                          title: 'Informasi',
+                                          body: state.message,
+                                          onClose: () {
+                                            Navigator.pop(context);
+                                            context
+                                                .read<KrsBloc>()
+                                                .add(GetAllKrs());
+                                          },
+                                        );
                                       },
                                     );
+                                  }
+                                },
+                                child: BlocBuilder<KrsBloc, KrsState>(
+                                  builder: (context, state) {
+                                    if (state is KrsFound) {
+                                      return KrsManagementList(
+                                        krsLengkap: state.krsLengkap,
+                                        tahunAkademik:
+                                            tahunAkademikDropDownValue,
+                                      );
+                                    }
+                                    return const CircularProgressIndicator();
                                   },
-                                );
-                              }
-                            },
-                            child: BlocBuilder<KrsBloc, KrsState>(
-                              builder: (context, state) {
-                                if (state is KrsFound) {
-                                  return KrsManagementList(
-                                    krsLengkap: state.krsLengkap,
-                                    tahunAkademik: tahunAkademikDropDownValue,
-                                  );
-                                }
-                                return const CircularProgressIndicator();
+                                ),
+                              ),
+                            ],
+                          );
+                        } else if (state is TahunAkademikNotFound) {
+                          return Column(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                icon: const Icon(Icons.arrow_back),
+                              ),
+                              const Text(
+                                  'List Tahun Akademik Gagal didapatkan'),
+                            ],
+                          );
+                        }
+                        return Column(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
                               },
+                              icon: const Icon(Icons.arrow_back),
                             ),
-                          ),
-                        ],
-                      );
-                    } else if (state is TahunAkademikNotFound) {
-                      return Column(
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(Icons.arrow_back),
-                          ),
-                          const Text('List Tahun Akademik Gagal didapatkan'),
-                        ],
-                      );
-                    }
+                            const CircularProgressIndicator(),
+                          ],
+                        );
+                      },
+                    );
+                  } else if (state is ScheduleKrsFailed) {
                     return Column(
                       children: [
                         IconButton(
@@ -225,37 +247,25 @@ class _KRSManagementPageState extends State<KRSManagementPage> {
                           },
                           icon: const Icon(Icons.arrow_back),
                         ),
-                        const CircularProgressIndicator(),
+                        const Text('Jadwal KRS Gagal didapatkan'),
                       ],
                     );
-                  },
-                );
-              } else if (state is ScheduleKrsFailed) {
-                return Column(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.arrow_back),
-                    ),
-                    const Text('Jadwal KRS Gagal didapatkan'),
-                  ],
-                );
-              }
+                  }
 
-              return Column(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(Icons.arrow_back),
-                  ),
-                  const CircularProgressIndicator(),
-                ],
-              );
-            },
+                  return Column(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(Icons.arrow_back),
+                      ),
+                      const CircularProgressIndicator(),
+                    ],
+                  );
+                },
+              ),
+            ),
           ),
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:academic_system/src/bloc/khs/khs_bloc.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/transkrip_rinci.dart';
 import 'package:academic_system/src/model/user.dart';
+import 'package:academic_system/src/ui/web/page/mahasiswa/khs_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -129,10 +130,12 @@ class RincianTranskrip extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
+        const KhsListHeader(),
         const Divider(),
         ListKhs(
           transkripRinci: transkripRinci,
           totalSemester: totalSemester,
+          mahasiswa: mahasiswa,
         ),
       ],
     );
@@ -142,10 +145,12 @@ class RincianTranskrip extends StatelessWidget {
 class ListKhs extends StatelessWidget {
   final TranskripRinci transkripRinci;
   final List<String> totalSemester;
+  final Student mahasiswa;
   const ListKhs({
     super.key,
     required this.transkripRinci,
     required this.totalSemester,
+    required this.mahasiswa,
   });
 
   @override
@@ -154,59 +159,82 @@ class ListKhs extends StatelessWidget {
       shrinkWrap: true,
       itemCount: totalSemester.length,
       itemBuilder: (context, index) {
-        return Container(
-          margin: const EdgeInsets.only(bottom: 15),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          height: 70,
-          decoration: BoxDecoration(
-            color: index % 2 == 1
-                ? const Color.fromARGB(255, 251, 251, 251)
-                : const Color.fromARGB(255, 245, 247, 251),
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: const [
-              BoxShadow(
-                blurRadius: 1,
-                color: Color.fromARGB(55, 0, 0, 0),
-                offset: Offset(0, 1),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              const SizedBox(
-                width: 50,
-              ),
-              Expanded(
-                child: Text(
-                  transkripRinci.khs[index].semester.toString(),
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return KHSDetailPage(
+                      student: mahasiswa,
+                      khs: transkripRinci.khs[index],
+                      listNilaiMahasiswa: transkripRinci.listNilaiKhs
+                          .where((nilaiMhs) =>
+                              nilaiMhs.semester ==
+                              transkripRinci.khs[index].semester)
+                          .toList(),
+                    );
+                  },
                 ),
+              );
+            },
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              height: 70,
+              decoration: BoxDecoration(
+                color: index % 2 == 1
+                    ? const Color.fromARGB(255, 251, 251, 251)
+                    : const Color.fromARGB(255, 245, 247, 251),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 1,
+                    color: Color.fromARGB(55, 0, 0, 0),
+                    offset: Offset(0, 1),
+                  ),
+                ],
               ),
-              Expanded(
-                child: Text(
-                  transkripRinci.khs[index].ips,
-                ),
+              child: Row(
+                children: [
+                  const SizedBox(
+                    width: 50,
+                  ),
+                  Expanded(
+                    child: Text(
+                      transkripRinci.khs[index].semester.toString(),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      transkripRinci.khs[index].tahunAkademik,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      transkripRinci.khs[index].ips,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      transkripRinci.khs[index].kreditDiambil,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      transkripRinci.khs[index].kreditDiperoleh,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      transkripRinci.khs[index].maskSks,
+                    ),
+                  ),
+                ],
               ),
-              Expanded(
-                child: Text(
-                  transkripRinci.khs[index].kreditDiambil,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  transkripRinci.khs[index].kreditDiperoleh,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  transkripRinci.khs[index].maskSks,
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  transkripRinci.khs[index].tahunAkademik,
-                ),
-              ),
-            ],
+            ),
           ),
         );
       },
@@ -353,6 +381,86 @@ class IdentitasMahasiswa extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class KhsListHeader extends StatelessWidget {
+  const KhsListHeader({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+      child: Row(
+        children: const [
+          SizedBox(
+            width: 50,
+          ),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'Semester',
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'Tahun Akademik',
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'IPS',
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'Kredit Diambil',
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'Kredit Diperoleh',
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'Beban Maks SKS Selanjutnya',
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

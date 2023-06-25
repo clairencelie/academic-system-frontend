@@ -102,9 +102,9 @@ class _TagihanPembayaranState extends State<TagihanPembayaran> {
                 const SizedBox(
                   height: 20,
                 ),
-                const Divider(color: Colors.black),
+                const Divider(),
                 const HeaderListTagihan(),
-                const Divider(color: Colors.black),
+                const Divider(),
                 BlocBuilder<TagihanPerkuliahanBloc, TagihanPerkuliahanState>(
                   builder: (context, state) {
                     if (state is TagihanPerkuliahanLoading) {

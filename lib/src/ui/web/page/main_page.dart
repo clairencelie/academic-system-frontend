@@ -25,7 +25,7 @@ class WebMainPage extends StatefulWidget {
 }
 
 class _WebMainPageState extends State<WebMainPage> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     List<Widget> studentOptions = <Widget>[
