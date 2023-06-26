@@ -270,7 +270,8 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                                     const Color.fromARGB(255, 214, 214, 214),
                               )
                             : MaterialStateColor.resolveWith(
-                                (states) => Color.fromARGB(255, 11, 39, 118),
+                                (states) =>
+                                    const Color.fromARGB(255, 11, 39, 118),
                               ),
                       ),
                       onPressed: learningSubIds.isEmpty

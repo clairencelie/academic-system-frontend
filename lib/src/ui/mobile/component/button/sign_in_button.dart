@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class MobileSignInButton extends StatelessWidget {
-  final Function() onTap;
+  final Function()? onTap;
+  final Widget? widget;
 
   const MobileSignInButton({
     Key? key,
+    this.widget,
     required this.onTap,
   }) : super(key: key);
 
@@ -26,16 +28,17 @@ class MobileSignInButton extends StatelessWidget {
           child: InkWell(
             onTap: onTap,
             borderRadius: BorderRadius.circular(25),
-            child: const Center(
-              child: Text(
-                'Sign In',
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+            child: widget ??
+                const Center(
+                  child: Text(
+                    'Sign In',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
-            ),
           ),
         ),
       ),

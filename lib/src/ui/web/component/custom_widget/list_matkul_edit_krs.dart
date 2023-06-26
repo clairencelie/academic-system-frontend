@@ -113,18 +113,22 @@ class _ListMatkulEditKRSState extends State<ListMatkulEditKRS> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Pilihan Mata Kuliah',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  const Flexible(
+                    child: Text(
+                      'Pilihan Mata Kuliah',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  Text(
-                    '${DateConverter.convertToDartDateFormat(widget.krsSchedule.tanggalMulai)} - ${DateConverter.convertToDartDateFormat(widget.krsSchedule.tanggalSelesai)}',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Text(
+                      'Masa Isi KRS: ${DateConverter.convertToDartDateFormat(widget.krsSchedule.tanggalMulai)} - ${DateConverter.convertToDartDateFormat(widget.krsSchedule.tanggalSelesai)}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
@@ -151,25 +155,66 @@ class _ListMatkulEditKRSState extends State<ListMatkulEditKRS> {
                     )
                     .toList(),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Column(
+                    children: [
+                      const Text(
+                        'Max SKS',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        '$maxSks',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 25,
+                  ),
+                  Container(
+                    width: 1,
+                    height: 40,
+                    color: const Color.fromARGB(255, 199, 199, 199),
+                  ),
+                  const SizedBox(
+                    width: 25,
+                  ),
+                  Column(
+                    children: [
+                      const Text(
+                        'SKS Diambil',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        '$totalSks',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
               const SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Total SKS yang diambil: $totalSks',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                'Maks SKS yang bisa diambil: $maxSks',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
+                height: 20,
               ),
               BlocListener<KrsManagementBloc, KrsManagementState>(
                 listener: (context, state) {
@@ -228,72 +273,91 @@ class _ListMatkulEditKRSState extends State<ListMatkulEditKRS> {
                     );
                   }
                 },
-                child: ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: const Text(
-                            'Konfirmasi',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 0, 32, 96),
-                            ),
-                          ),
-                          content: const Text(
-                            'Pastikan pilihan mata kuliah anda sudah sesuai.',
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                'Cek kembali',
+                child: Container(
+                  alignment: Alignment.centerRight,
+                  child: SizedBox(
+                    width: 230,
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: learningSubIds.isEmpty
+                            ? MaterialStateColor.resolveWith(
+                                (states) =>
+                                    const Color.fromARGB(255, 214, 214, 214),
+                              )
+                            : MaterialStateColor.resolveWith(
+                                (states) =>
+                                    const Color.fromARGB(255, 11, 39, 118),
+                              ),
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text(
+                                'Konfirmasi',
                                 style: TextStyle(
                                   color: Color.fromARGB(255, 0, 32, 96),
                                 ),
                               ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                NewKartuRencanaStudi krs = NewKartuRencanaStudi(
-                                  nim: widget.user.id,
-                                  semester: widget.user.semester,
-                                  jurusan: widget.user.major,
-                                  ips: widget.krs.ips,
-                                  ipk: widget.krs.ipk,
-                                  kreditDiambil: totalSks.toString(),
-                                  bebanSksMaks: maxSks.toString(),
-                                  waktuPengisian: widget.krs.waktuPengisian,
-                                  tahunAkademik:
-                                      widget.krsSchedule.tahunAkademik,
-                                );
-
-                                context.read<KrsManagementBloc>().add(
-                                      UpdateKrs(
-                                        idKrs: widget.krs.id,
-                                        krs: krs,
-                                        mataKuliahDiambil: learningSubIds,
-                                      ),
+                              content: const Text(
+                                'Pastikan pilihan mata kuliah anda sudah sesuai.',
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(
+                                    'Cek kembali',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 0, 32, 96),
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    NewKartuRencanaStudi krs =
+                                        NewKartuRencanaStudi(
+                                      nim: widget.user.id,
+                                      semester: widget.user.semester,
+                                      jurusan: widget.user.major,
+                                      ips: widget.krs.ips,
+                                      ipk: widget.krs.ipk,
+                                      kreditDiambil: totalSks.toString(),
+                                      bebanSksMaks: maxSks.toString(),
+                                      waktuPengisian: widget.krs.waktuPengisian,
+                                      tahunAkademik:
+                                          widget.krsSchedule.tahunAkademik,
                                     );
 
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                'Ajukan Perubahan KRS',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 0, 32, 96),
+                                    context.read<KrsManagementBloc>().add(
+                                          UpdateKrs(
+                                            idKrs: widget.krs.id,
+                                            krs: krs,
+                                            mataKuliahDiambil: learningSubIds,
+                                          ),
+                                        );
+
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text(
+                                    'Ajukan Perubahan KRS',
+                                    style: TextStyle(
+                                      color: Color.fromARGB(255, 0, 32, 96),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ],
+                              ],
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                  child: const Text('Ajukan Perubahan KRS'),
+                      child: const Text('Ajukan Perubahan KRS'),
+                    ),
+                  ),
                 ),
               ),
             ],

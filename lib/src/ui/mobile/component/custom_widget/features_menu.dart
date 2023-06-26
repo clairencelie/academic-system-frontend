@@ -2,6 +2,7 @@ import 'package:academic_system/src/model/lecturer.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/user.dart';
 import 'package:academic_system/src/ui/mobile/component/card/feature_card.dart';
+import 'package:academic_system/src/ui/mobile/page/mahasiswa/transkrip_page.dart';
 import 'package:academic_system/src/ui/mobile/page/schedule_page.dart';
 import 'package:flutter/material.dart';
 
@@ -22,9 +23,9 @@ class FeaturesMenu extends StatelessWidget {
         title: 'Jadwal',
       ),
       FeatureCard(
-        page: SchedulePage(user: user),
+        page: MobileTranskripPage(mahasiswa: user),
         color: const Color.fromARGB(255, 213, 255, 223),
-        title: 'KHS',
+        title: 'Transkrip',
       ),
       FeatureCard(
         page: SchedulePage(user: user),
@@ -34,7 +35,7 @@ class FeaturesMenu extends StatelessWidget {
       FeatureCard(
         page: SchedulePage(user: user),
         color: const Color.fromARGB(255, 231, 189, 248),
-        title: 'Pembayaran',
+        title: 'Tagihan',
       ),
     ];
 
@@ -64,28 +65,8 @@ class FeaturesMenu extends StatelessWidget {
       ),
       FeatureCard(
         page: SchedulePage(user: user),
-        color: const Color.fromARGB(255, 231, 189, 248),
-        title: 'DPMK',
-      ),
-      FeatureCard(
-        page: SchedulePage(user: user),
-        color: const Color.fromARGB(255, 213, 255, 223),
-        title: 'KHS',
-      ),
-      FeatureCard(
-        page: SchedulePage(user: user),
         color: const Color.fromARGB(255, 189, 214, 248),
         title: 'KRS',
-      ),
-      FeatureCard(
-        page: SchedulePage(user: user),
-        color: const Color.fromARGB(255, 213, 255, 223),
-        title: 'Nilai',
-      ),
-      FeatureCard(
-        page: SchedulePage(user: user),
-        color: const Color.fromARGB(255, 189, 191, 248),
-        title: 'CMS',
       ),
     ];
 
@@ -93,18 +74,16 @@ class FeaturesMenu extends StatelessWidget {
       margin: const EdgeInsets.only(top: 15),
       padding: const EdgeInsets.fromLTRB(10, 15, 10, 40),
       color: const Color.fromARGB(255, 225, 241, 255),
-      child: Center(
-        child: Wrap(
-          alignment: WrapAlignment.start,
-          direction: Axis.horizontal,
-          spacing: 20,
-          runSpacing: 20,
-          children: (user is Student)
-              ? studentFeatures
-              : (user is Lecturer)
-                  ? lecturerFeatures
-                  : academicFeatures,
-        ),
+      child: Wrap(
+        alignment: WrapAlignment.start,
+        direction: Axis.horizontal,
+        spacing: 20,
+        runSpacing: 20,
+        children: (user is Student)
+            ? studentFeatures
+            : (user is Lecturer)
+                ? lecturerFeatures
+                : academicFeatures,
       ),
     );
   }

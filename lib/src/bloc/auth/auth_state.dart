@@ -24,6 +24,8 @@ class AuthSuccess extends AuthState {
 
 class AuthFailed extends AuthState {}
 
+class LoginLoading extends AuthState {}
+
 class LoginFailed extends AuthState {
   final String message;
 

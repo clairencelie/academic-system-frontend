@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class WebSignInButton extends StatelessWidget {
-  final Function() onTap;
+  final Function()? onTap;
+  final Widget? widget;
 
   const WebSignInButton({
     Key? key,
+    this.widget,
     required this.onTap,
   }) : super(key: key);
 
@@ -26,16 +28,17 @@ class WebSignInButton extends StatelessWidget {
           child: InkWell(
             onTap: onTap,
             borderRadius: BorderRadius.circular(5),
-            child: const Center(
-              child: Text(
-                'Masuk',
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+            child: widget ??
+                const Center(
+                  child: Text(
+                    'Masuk',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
-            ),
           ),
         ),
       ),

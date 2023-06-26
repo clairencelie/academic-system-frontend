@@ -133,9 +133,7 @@ class WebDailyScheduleList extends StatelessWidget {
           }
         } else if (state is ScheduleEmpty) {
           return const WebNoSchedule();
-        } else if (state is ScheduleRequestFailed) {
-          // TODO: Make schedule request failed dialog
-        }
+        } else if (state is ScheduleRequestFailed) {}
         return const WebNoSchedule();
       },
     );

@@ -200,8 +200,6 @@ class _FormTahunAkademikState extends State<FormTahunAkademik> {
                           final String tahunAkademik =
                               '${tahunAkademik1.text}/${tahunAkademik2.text}';
 
-                          print(tahunAkademik);
-
                           context.read<TahunAkademikBloc>().add(
                                 SetTahunAkademik(
                                   tahunAkademik: tahunAkademik,

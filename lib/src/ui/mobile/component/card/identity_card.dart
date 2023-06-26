@@ -31,9 +31,9 @@ class IdentityCard extends StatelessWidget {
             width: 55,
             decoration: BoxDecoration(
               color: const Color.fromARGB(255, 224, 224, 224),
-              // image: const DecorationImage(
-              //   image: AssetImage('assets/img/avatar/default-avatar.jpg'),
-              // ),
+              image: const DecorationImage(
+                image: AssetImage('assets/img/avatar/default-avatar.jpg'),
+              ),
               borderRadius: BorderRadius.circular(50),
             ),
           ),
@@ -64,7 +64,7 @@ class IdentityCard extends StatelessWidget {
                 ),
               ),
               Text(
-                user.role,
+                '${user.role[0].toUpperCase()}${user.role.substring(1)}',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,

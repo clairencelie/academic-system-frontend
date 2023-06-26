@@ -57,8 +57,6 @@ class _KRSManagementPageState extends State<KRSManagementPage> {
                   if (state is ScheduleKrsLoaded) {
                     final KrsSchedule jadwalKrs = state.krsSchedule;
 
-                    print(jadwalKrs.tanggalMulai);
-
                     final String semesterBerjalan =
                         '${jadwalKrs.tahunAkademik} ${jadwalKrs.semester}';
 

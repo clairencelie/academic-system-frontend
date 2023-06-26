@@ -218,7 +218,12 @@ class _KRSWebPageState extends State<KRSWebPage> {
                                       ),
                                     );
                             } else if (state is KrsLoading) {
-                              return const CircularProgressIndicator();
+                              return SizedBox(
+                                height: MediaQuery.of(context).size.height / 2,
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
                             }
                             return const Text(
                               'Pengisian KRS untuk semester selanjutnya belum dimulai',

@@ -31,7 +31,9 @@ class DetailTagihanPage extends StatefulWidget {
 
 class _DetailTagihanPageState extends State<DetailTagihanPage> {
   List<String> title = [
-    'Pembayaran ',
+    'Nama',
+    'NIM',
+    'Pembayaran',
     'Tipe pembayaran',
     'Tahun akademik',
     'Semester',
@@ -57,7 +59,11 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
 
   @override
   Widget build(BuildContext context) {
+    var currentTagihanPerkuliahan = widget.tagihanPerkuliahan;
+
     List<String> value = [
+      widget.student.name,
+      widget.student.id,
       widget.tagihanPerkuliahan.kategori,
       widget.tagihanPerkuliahan.metodePembayaran == 'full'
           ? 'Pembayaran Full'
@@ -68,16 +74,17 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
         locale: 'id_ID',
         symbol: 'Rp ',
         decimalDigits: 0,
-      ).format(widget.tagihanPerkuliahan.totalTagihan),
+      ).format(currentTagihanPerkuliahan.totalTagihan),
       NumberFormat.currency(
         locale: 'id_ID',
         symbol: 'Rp ',
         decimalDigits: 0,
       ).format(widget.tagihanPerkuliahan.sisaPembayaran),
-      widget.tagihanPerkuliahan.statusPembayaran == 'belum_bayar'
+      currentTagihanPerkuliahan.statusPembayaran == 'belum_bayar'
           ? 'Belum bayar'
           : 'Lunas',
     ];
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Center(
@@ -157,7 +164,7 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                                 ? Container(
                                     padding: const EdgeInsets.all(20),
                                     color: const Color.fromARGB(
-                                        255, 236, 255, 246),
+                                        255, 239, 243, 255),
                                     child: Column(
                                       children: [
                                         Row(
@@ -166,127 +173,163 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Flexible(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: const [
-                                                  Text(
-                                                    'Anda sedang memiliki transaksi aktif',
-                                                    style: TextStyle(
-                                                      fontSize: 19,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const Text(
+                                                  'Anda sedang memiliki transaksi aktif',
+                                                  style: TextStyle(
+                                                    fontSize: 19,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                  Text(
-                                                      'Harap melakukan refresh status pembayaran jika sudah berhasil melakukan transfer melalui nomor virtual akun yang diberikan.'),
-                                                ],
-                                              ),
-                                            ),
-                                            Flexible(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  TimerVA(
-                                                      targetUnixTime: DateTime.parse(
-                                                                  transaksiPending[
-                                                                          0]
-                                                                      .waktuKedaluwarsa)
-                                                              .millisecondsSinceEpoch ~/
-                                                          1000),
-                                                  const SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  const Text(
-                                                    'No. Virtual Akun:',
+                                                ),
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                                SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      3,
+                                                  child: const Text(
+                                                    'Harap melakukan refresh status pembayaran jika sudah berhasil melakukan transfer melalui nomor virtual akun yang diberikan.',
+                                                    textAlign:
+                                                        TextAlign.justify,
                                                     style: TextStyle(
                                                       fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w500,
                                                     ),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 5,
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                TimerVA(
+                                                    targetUnixTime: DateTime.parse(
+                                                                transaksiPending[
+                                                                        0]
+                                                                    .waktuKedaluwarsa)
+                                                            .millisecondsSinceEpoch ~/
+                                                        1000),
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                                const Text(
+                                                  'No. Virtual Akun:',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w500,
                                                   ),
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        transaksiPending[0]
-                                                            .noVA,
-                                                        style: const TextStyle(
-                                                          fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      transaksiPending[0].noVA,
+                                                      style: const TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                       ),
-                                                      IconButton(
-                                                        onPressed: () async {
-                                                          await Clipboard
-                                                              .setData(
-                                                            ClipboardData(
-                                                              text:
-                                                                  transaksiPending[
-                                                                          0]
-                                                                      .noVA,
-                                                            ),
-                                                          );
-                                                        },
-                                                        icon: const Icon(
-                                                            Icons.copy),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
+                                                    ),
+                                                    IconButton(
+                                                      onPressed: () async {
+                                                        await Clipboard.setData(
+                                                          ClipboardData(
+                                                            text:
+                                                                transaksiPending[
+                                                                        0]
+                                                                    .noVA,
+                                                          ),
+                                                        );
+                                                      },
+                                                      icon: const Icon(
+                                                          Icons.copy),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            TransaksiRepository()
-                                                .refreshStatusTransaksi(
-                                              widget.tagihanPerkuliahan
-                                                  .idTagihanPerkuliahan,
-                                              transaksiPending[0].idOrder,
-                                            )
-                                                .then((value) {
-                                              context
-                                                  .read<HistoriTransaksiBloc>()
-                                                  .add(GetListHistoryTransaksi(
-                                                      nim: widget.student.id));
-
-                                              context
-                                                  .read<
-                                                      TagihanPerkuliahanBloc>()
-                                                  .add(
-                                                    GetListTagihan(
-                                                      nim: widget.student.id,
-                                                    ),
-                                                  );
-                                              // Refresh detail
+                                        BlocListener<TagihanPerkuliahanBloc,
+                                            TagihanPerkuliahanState>(
+                                          listener: (context, state) {
+                                            if (state
+                                                is TagihanPerkuliahanLoaded) {
+                                              currentTagihanPerkuliahan = state
+                                                  .listTagihan
+                                                  .where((tagihan) =>
+                                                      tagihan
+                                                          .idTagihanPerkuliahan ==
+                                                      widget.tagihanPerkuliahan
+                                                          .idTagihanPerkuliahan)
+                                                  .first;
                                               setState(() {});
-                                            });
+                                            }
                                           },
-                                          child: const Text(
-                                              'Refresh Status Pembayaran'),
+                                          child: Container(
+                                            margin:
+                                                const EdgeInsets.only(top: 15),
+                                            alignment: Alignment.centerRight,
+                                            child: SizedBox(
+                                              width: 230,
+                                              height: 50,
+                                              child: ElevatedButton(
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateColor
+                                                          .resolveWith(
+                                                    (states) =>
+                                                        const Color.fromARGB(
+                                                            255, 11, 39, 118),
+                                                  ),
+                                                ),
+                                                onPressed: () {
+                                                  TransaksiRepository()
+                                                      .refreshStatusTransaksi(
+                                                    widget.tagihanPerkuliahan
+                                                        .idTagihanPerkuliahan,
+                                                    transaksiPending[0].idOrder,
+                                                  )
+                                                      .then((value) {
+                                                    context
+                                                        .read<
+                                                            HistoriTransaksiBloc>()
+                                                        .add(
+                                                            GetListHistoryTransaksi(
+                                                                nim: widget
+                                                                    .student
+                                                                    .id));
+
+                                                    context
+                                                        .read<
+                                                            TagihanPerkuliahanBloc>()
+                                                        .add(
+                                                          GetListTagihan(
+                                                            nim: widget
+                                                                .student.id,
+                                                          ),
+                                                        );
+                                                    // Refresh detail
+                                                    setState(() {});
+                                                  });
+                                                },
+                                                child: const Text(
+                                                    'Refresh Status Pembayaran'),
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
                                   )
                                 : const SizedBox(),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              widget.student.name,
-                            ),
-                            Text(
-                              widget.student.id,
-                            ),
                           ],
                         ),
 
@@ -320,26 +363,33 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                                   const Divider(),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 10),
+                                      vertical: 10,
+                                      horizontal: 20,
+                                    ),
                                     child: Column(
                                       children: [
                                         Row(
                                           children: [
                                             const Expanded(
+                                              flex: 1,
                                               child: SizedBox(),
                                             ),
                                             const Expanded(
+                                              flex: 1,
                                               child: SizedBox(),
                                             ),
                                             const Expanded(
+                                              flex: 1,
                                               child: Text(
                                                 'Total tagihan:',
                                                 style: TextStyle(
-                                                  fontSize: 16,
-                                                ),
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             ),
                                             Expanded(
+                                              flex: 1,
                                               child: Text(
                                                 NumberFormat.currency(
                                                   locale: 'id_ID',
@@ -350,8 +400,9 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                                                       .totalTagihan,
                                                 ),
                                                 style: const TextStyle(
-                                                  fontSize: 16,
-                                                ),
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                             ),
                                           ],
@@ -362,7 +413,7 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                                   const Divider(),
                                   // button bayar
                                   transaksiSukses.isNotEmpty
-                                      ? const Text('Sudah Lunas')
+                                      ? const SizedBox()
                                       : BlocListener<TransaksiBloc,
                                           TransaksiState>(
                                           listener: (context, state) {
@@ -597,7 +648,7 @@ class ListRincianTagihan extends StatelessWidget {
                 child: Text(
                   listRincianTagihan[index].item,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -606,7 +657,7 @@ class ListRincianTagihan extends StatelessWidget {
                 child: Text(
                   listRincianTagihan[index].jumlahItem.toString(),
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -619,7 +670,7 @@ class ListRincianTagihan extends StatelessWidget {
                     decimalDigits: 0,
                   ).format(listRincianTagihan[index].hargaItem),
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -632,7 +683,7 @@ class ListRincianTagihan extends StatelessWidget {
                     decimalDigits: 0,
                   ).format(listRincianTagihan[index].totalHargaItem),
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -674,16 +725,16 @@ class ListHistoriTransaksi extends StatelessWidget {
                   listHistoriTransaksi[index].idTransaksi,
                   overflow: TextOverflow.fade,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
-              Expanded(
+              const Expanded(
                 flex: 1,
                 child: Text(
-                  listHistoriTransaksi[index].jenisPembayaran,
-                  style: const TextStyle(
-                    fontSize: 16,
+                  'BNI Virtual Account',
+                  style: TextStyle(
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -697,7 +748,7 @@ class ListHistoriTransaksi extends StatelessWidget {
                   ).format(int.tryParse(
                       listHistoriTransaksi[index].totalPembayaran)!),
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -706,7 +757,7 @@ class ListHistoriTransaksi extends StatelessWidget {
                 child: Text(
                   listHistoriTransaksi[index].noVA,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -719,7 +770,7 @@ class ListHistoriTransaksi extends StatelessWidget {
                           ? 'Pending'
                           : 'Gagal',
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -728,7 +779,7 @@ class ListHistoriTransaksi extends StatelessWidget {
                 child: Text(
                   listHistoriTransaksi[index].waktuTransaksi,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -737,7 +788,7 @@ class ListHistoriTransaksi extends StatelessWidget {
                 child: Text(
                   listHistoriTransaksi[index].waktuKedaluwarsa,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -765,7 +816,8 @@ class DetailItemHeader extends StatelessWidget {
                 child: Text(
                   'Nama Item',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -774,7 +826,8 @@ class DetailItemHeader extends StatelessWidget {
                 child: Text(
                   'Jumlah Item',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -783,7 +836,8 @@ class DetailItemHeader extends StatelessWidget {
                 child: Text(
                   'Harga Item',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -792,7 +846,8 @@ class DetailItemHeader extends StatelessWidget {
                 child: Text(
                   'Total Harga Item',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -820,16 +875,16 @@ class HeaderHistoriTransaksi extends StatelessWidget {
                 child: Text(
                   'ID Transaksi',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
               Expanded(
                 flex: 1,
                 child: Text(
-                  'Jenis Pembayaran',
+                  'Metode Pembayaran',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -838,7 +893,7 @@ class HeaderHistoriTransaksi extends StatelessWidget {
                 child: Text(
                   'Total Pembayaran',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -847,7 +902,7 @@ class HeaderHistoriTransaksi extends StatelessWidget {
                 child: Text(
                   'Nomor V.A',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -856,7 +911,7 @@ class HeaderHistoriTransaksi extends StatelessWidget {
                 child: Text(
                   'Status',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -865,7 +920,7 @@ class HeaderHistoriTransaksi extends StatelessWidget {
                 child: Text(
                   'Waktu Transaksi Dibuat',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),
@@ -874,7 +929,7 @@ class HeaderHistoriTransaksi extends StatelessWidget {
                 child: Text(
                   'Waktu Transaksi Kedaluwarsa',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                   ),
                 ),
               ),

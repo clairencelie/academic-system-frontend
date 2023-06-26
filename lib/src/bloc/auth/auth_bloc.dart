@@ -14,7 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required this.repository}) : super(AuthInitial()) {
     on<Login>((event, emit) async {
       // Sebaiknya ganti LoginLoading agar tidak sama dengan Auth
-      emit(AuthLoading());
+      emit(LoginLoading());
 
       final UserLoginRequest userLoginRequest =
           UserLoginRequest(id: event.id, password: event.password);

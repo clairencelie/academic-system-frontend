@@ -36,40 +36,47 @@ class _EditKRSPageState extends State<EditKRSPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-          child: BlocBuilder<KhsBloc, KhsState>(
-            builder: (context, state) {
-              if (state is TranskripLoaded) {
-                TranksripLengkap tranksripLengkap = state.transkripLengkap;
-                return Column(
-                  children: [
-                    const EditKRSHeader(),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    EditKRSInfo(student: widget.student, krs: widget.krs),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    BlocBuilder<KrsBloc, KrsState>(
-                      builder: (context, state) {
-                        if (state is KrsScheduleLoaded) {
-                          return ListMatkulEditKRS(
-                            user: widget.student,
-                            krsSchedule: state.krsSchedule,
-                            krs: widget.krs,
-                            tranksripLengkap: tranksripLengkap,
-                          );
-                        }
-                        return const CircularProgressIndicator();
-                      },
-                    )
-                  ],
-                );
-              }
-              return const CircularProgressIndicator();
-            },
+        child: Center(
+          child: FractionallySizedBox(
+            widthFactor: 0.6,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              child: BlocBuilder<KhsBloc, KhsState>(
+                builder: (context, state) {
+                  if (state is TranskripLoaded) {
+                    TranksripLengkap tranksripLengkap = state.transkripLengkap;
+                    return Column(
+                      children: [
+                        EditKRSHeader(
+                          student: widget.student,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        EditKRSInfo(student: widget.student, krs: widget.krs),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        BlocBuilder<KrsBloc, KrsState>(
+                          builder: (context, state) {
+                            if (state is KrsScheduleLoaded) {
+                              return ListMatkulEditKRS(
+                                user: widget.student,
+                                krsSchedule: state.krsSchedule,
+                                krs: widget.krs,
+                                tranksripLengkap: tranksripLengkap,
+                              );
+                            }
+                            return const CircularProgressIndicator();
+                          },
+                        )
+                      ],
+                    );
+                  }
+                  return const CircularProgressIndicator();
+                },
+              ),
+            ),
           ),
         ),
       ),
@@ -78,8 +85,10 @@ class _EditKRSPageState extends State<EditKRSPage> {
 }
 
 class EditKRSHeader extends StatelessWidget {
+  final Student student;
   const EditKRSHeader({
     Key? key,
+    required this.student,
   }) : super(key: key);
 
   @override
@@ -89,6 +98,7 @@ class EditKRSHeader extends StatelessWidget {
         IconButton(
           onPressed: () {
             Navigator.pop(context);
+            context.read<KrsBloc>().add(GetKrsLengkap(nim: student.id));
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -120,76 +130,82 @@ class EditKRSInfo extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Nama: ${student.name}',
-              style: const TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w500,
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Nama: ${student.name}',
+                style: const TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            Text(
-              'NIM: ${student.id}',
-              style: const TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w500,
+              Text(
+                'NIM: ${student.id}',
+                style: const TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            Text(
-              'Semester: ${krs.semester}',
-              style: const TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w500,
+              Text(
+                'Semester: ${krs.semester}',
+                style: const TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            Text(
-              'Program Studi: ${krs.jurusan}',
-              style: const TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w500,
+              Text(
+                'Program Studi: ${krs.jurusan}',
+                style: const TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'IPK: ${krs.ipk}',
-              style: const TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w500,
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'IPK: ${krs.ipk}',
+                style: const TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            Text(
-              'IPS: ${krs.ips}',
-              style: const TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w500,
+              Text(
+                'IPS: ${krs.ips}',
+                style: const TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            Text(
-              'Beban Maks SKS: ${int.tryParse(krs.semester)! < 5 ? '20' : krs.bebanSksMaks}',
-              style: const TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w500,
+              Text(
+                'Beban Maks SKS: ${int.tryParse(krs.semester)! < 5 ? '20' : krs.bebanSksMaks}',
+                style: const TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'T.A Akademik: ${krs.tahunAkademik}',
-              style: const TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w500,
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'T.A Akademik: ${krs.tahunAkademik}',
+                style: const TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );
