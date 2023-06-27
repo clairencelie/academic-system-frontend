@@ -2,6 +2,7 @@ import 'package:academic_system/src/model/lecturer.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/user.dart';
 import 'package:academic_system/src/ui/mobile/component/card/feature_card.dart';
+import 'package:academic_system/src/ui/mobile/page/mahasiswa/krs_mobile.dart';
 import 'package:academic_system/src/ui/mobile/page/mahasiswa/transkrip_page.dart';
 import 'package:academic_system/src/ui/mobile/page/schedule_page.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class FeaturesMenu extends StatelessWidget {
         title: 'Transkrip',
       ),
       FeatureCard(
-        page: SchedulePage(user: user),
+        page: MobileKRSPage(user: user),
         color: const Color.fromARGB(255, 189, 214, 248),
         title: 'KRS',
       ),

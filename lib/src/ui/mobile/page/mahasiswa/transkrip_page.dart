@@ -2,7 +2,7 @@ import 'package:academic_system/src/bloc/khs/khs_bloc.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/transkrip_rinci.dart';
 import 'package:academic_system/src/model/user.dart';
-import 'package:academic_system/src/ui/web/page/mahasiswa/khs_detail.dart';
+import 'package:academic_system/src/ui/mobile/page/mahasiswa/khs_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -381,135 +381,157 @@ class ListKhs extends StatelessWidget {
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) {
-            //       return KHSDetailPage(
-            //         student: mahasiswa,
-            //         khs: transkripRinci.khs[index],
-            //         listNilaiMahasiswa: transkripRinci.listNilaiKhs
-            //             .where((nilaiMhs) =>
-            //                 nilaiMhs.semester ==
-            //                 transkripRinci.khs[index].semester)
-            //             .toList(),
-            //       );
-            //     },
-            //   ),
-            // );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return MobileKHSDetailPage(
+                    student: mahasiswa,
+                    khs: transkripRinci.khs[index],
+                    listNilaiMahasiswa: transkripRinci.listNilaiKhs
+                        .where((nilaiMhs) =>
+                            nilaiMhs.semester ==
+                            transkripRinci.khs[index].semester)
+                        .toList(),
+                  );
+                },
+              ),
+            );
           },
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            margin: const EdgeInsets.only(bottom: 20),
-            decoration: BoxDecoration(
-              color: index % 2 == 1
-                  ? const Color.fromARGB(255, 251, 253, 255)
-                  : const Color.fromARGB(255, 239, 242, 252),
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: const [
-                BoxShadow(
-                  blurRadius: 3,
-                  color: Color.fromARGB(55, 0, 0, 0),
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(
-                  width: 50,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Semester ${transkripRinci.khs[index].semester.toString()}',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Container(
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(color: Colors.black, width: 1),
-                        ),
-                      ),
-                      child: Text(
-                        transkripRinci.khs[index].tahunAkademik,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                // margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: index % 2 == 1
+                      ? const Color.fromARGB(255, 251, 253, 255)
+                      : const Color.fromARGB(255, 239, 242, 252),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                      blurRadius: 3,
+                      color: Color.fromARGB(55, 0, 0, 0),
+                      offset: Offset(0, 2),
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    const SizedBox(
+                      width: 50,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Semester ${transkripRinci.khs[index].semester.toString()}',
+                          style: const TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Container(
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(color: Colors.black, width: 1),
+                            ),
+                          ),
+                          child: Text(
+                            transkripRinci.khs[index].tahunAkademik,
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Text(
+                          'IPS',
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 3,
+                        ),
+                        Text(
+                          transkripRinci.khs[index].ips,
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
                     const Text(
-                      'IPS',
-                      textAlign: TextAlign.end,
+                      'Kredit',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(
-                      height: 3,
+                      height: 5,
                     ),
                     Text(
-                      transkripRinci.khs[index].ips,
-                      textAlign: TextAlign.end,
+                      'Diambil: ${transkripRinci.khs[index].kreditDiambil}',
                       style: const TextStyle(
+                        fontSize: 17,
+                        // fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      'Diperoleh: ${transkripRinci.khs[index].kreditDiperoleh}',
+                      style: const TextStyle(
+                        fontSize: 17,
+                        // fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Text(
+                      'Beban Maks SKS Semester Selanjutnya',
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      transkripRinci.khs[index].maskSks,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        // fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ],
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
-                const Text(
-                  'Kredit',
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  'Diambil = ${transkripRinci.khs[index].kreditDiambil}',
-                ),
-                Text(
-                  'Diperoleh = ${transkripRinci.khs[index].kreditDiperoleh}',
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Text(
-                  'Beban Maks SKS Semester Selanjutnya',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  transkripRinci.khs[index].maskSks,
-                ),
-              ],
-            ),
+              ),
+              index == totalSemester.length - 1
+                  ? const SizedBox()
+                  : const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Divider(),
+                    ),
+            ],
           ),
         );
       },

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:academic_system/src/model/user.dart';
 import 'package:academic_system/src/ui/mobile/component/card/identity_card.dart';
 import 'package:academic_system/src/ui/mobile/component/custom_widget/features_menu.dart';
@@ -17,53 +19,71 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  "Selamat malam ${user.name}",
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+          child: Center(
+            child: FractionallySizedBox(
+              widthFactor: 0.9,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    IdentityCard(user: user),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text(
+                      'Menu',
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    FeaturesMenu(user: user),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text(
+                      'Artikel',
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const ListArtikel(),
+                  ],
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
-                IdentityCard(user: user),
-                FeaturesMenu(user: user),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Artikel',
-                  style: TextStyle(
-                    fontSize: 19,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 15),
-                  height: 150,
-                  color: Colors.lime,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 15),
-                  height: 150,
-                  color: Colors.cyan,
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 15),
-                  height: 150,
-                  color: Colors.indigo,
-                ),
-              ],
+              ),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class ListArtikel extends StatelessWidget {
+  const ListArtikel({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: 3,
+      itemBuilder: (context, index) {
+        return Container(
+          margin: const EdgeInsets.only(top: 15),
+          height: 150,
+          color: Color.fromARGB(
+            255,
+            Random().nextInt(255) + 220,
+            Random().nextInt(255) + 220,
+            Random().nextInt(255) + 220,
+          ),
+        );
+      },
     );
   }
 }
