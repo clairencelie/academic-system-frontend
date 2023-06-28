@@ -33,7 +33,7 @@ class _MainPageState extends State<MainPage> {
       HomePage(
         user: widget.user,
       ),
-      ConfigurationPage(
+      MobileConfigurationPage(
         user: widget.user,
       ),
     ];

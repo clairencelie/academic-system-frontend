@@ -2,7 +2,10 @@ import 'package:academic_system/src/model/lecturer.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/user.dart';
 import 'package:academic_system/src/ui/mobile/component/card/feature_card.dart';
+import 'package:academic_system/src/ui/mobile/page/akademik/krs_management.dart';
+import 'package:academic_system/src/ui/mobile/page/dosen/dpmk.dart';
 import 'package:academic_system/src/ui/mobile/page/mahasiswa/krs_mobile.dart';
+import 'package:academic_system/src/ui/mobile/page/mahasiswa/tagihan_pembayaran.dart';
 import 'package:academic_system/src/ui/mobile/page/mahasiswa/transkrip_page.dart';
 import 'package:academic_system/src/ui/mobile/page/schedule_page.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +37,7 @@ class FeaturesMenu extends StatelessWidget {
         title: 'KRS',
       ),
       FeatureCard(
-        page: SchedulePage(user: user),
+        page: MobileTagihanPembayaran(user: user),
         color: const Color.fromARGB(255, 231, 189, 248),
         title: 'Tagihan',
       ),
@@ -47,12 +50,7 @@ class FeaturesMenu extends StatelessWidget {
         title: 'Jadwal',
       ),
       FeatureCard(
-        page: SchedulePage(user: user),
-        color: const Color.fromARGB(255, 213, 255, 223),
-        title: 'Nilai',
-      ),
-      FeatureCard(
-        page: SchedulePage(user: user),
+        page: MobileDPMKPage(dosen: user),
         color: const Color.fromARGB(255, 231, 189, 248),
         title: 'DPMK',
       ),
@@ -64,9 +62,9 @@ class FeaturesMenu extends StatelessWidget {
         color: const Color.fromARGB(255, 255, 245, 213),
         title: 'Jadwal',
       ),
-      FeatureCard(
-        page: SchedulePage(user: user),
-        color: const Color.fromARGB(255, 189, 214, 248),
+      const FeatureCard(
+        page: MobileKRSManagementPage(),
+        color: Color.fromARGB(255, 189, 214, 248),
         title: 'KRS',
       ),
     ];

@@ -69,6 +69,8 @@ flutter:
     - assets/img/logo/logo_nav_web.png
     - assets/img/logo/3d.png
     - assets/img/avatar/default-avatar.jpg
+    - assets/img/about_us/gedung.jpg
+    - assets/img/visi_misi/logo.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
