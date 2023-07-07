@@ -42,12 +42,12 @@ class _DosenChoiceState extends State<DosenChoice> {
           return Padding(
             padding: const EdgeInsets.only(top: 5),
             child: DropdownButtonFormField(
-              validator: (value) {
-                if (value == null) {
-                  return 'Field pilihan dosen belum terisi!';
-                }
-                return null;
-              },
+              // validator: (value) {
+              //   if (value == null) {
+              //     return 'Field pilihan dosen belum terisi!';
+              //   }
+              //   return null;
+              // },
               decoration: const InputDecoration(
                 hintText: 'Pilih dosen...',
                 errorStyle: TextStyle(
@@ -84,11 +84,13 @@ class _DosenChoiceState extends State<DosenChoice> {
               value: (widget.dosenId.text == '') ? value : widget.dosenId.text,
               isExpanded: true,
               items: dropDownMenuList(state.lecturers),
-              onChanged: (value) {
-                setState(() {
-                  widget.dosenId.text = value;
-                });
-              },
+              onChanged: null
+              //  (value) {
+              //   setState(() {
+              //     widget.dosenId.text = value;
+              //   });
+              // }
+              ,
             ),
           );
         }

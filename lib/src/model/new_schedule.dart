@@ -7,6 +7,8 @@ class NewSchedule {
   final String day;
   final String room;
   final String information;
+  final String tahunAkademik;
+  final String semester;
 
   const NewSchedule({
     this.id,
@@ -17,6 +19,8 @@ class NewSchedule {
     required this.day,
     required this.room,
     required this.information,
+    required this.tahunAkademik,
+    required this.semester,
   });
 
   Map<String, dynamic> toJson() {
@@ -30,6 +34,8 @@ class NewSchedule {
             'day': day,
             'room': room,
             'information': information,
+            'tahun_akademik': tahunAkademik,
+            'semester': semester,
           }
         : {
             'learning_sub_id': learningSubId,
@@ -39,6 +45,8 @@ class NewSchedule {
             'day': day,
             'room': room,
             'information': information,
+            'tahun_akademik': tahunAkademik,
+            'semester': semester,
           };
   }
 }

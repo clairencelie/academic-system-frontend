@@ -18,15 +18,15 @@ class WebNoSchedule extends StatelessWidget {
             size: 40,
           ),
           SizedBox(
-            height: 8,
+            height: 10,
           ),
           Center(
             child: Text(
-              'Jadwal Kosong',
+              'Hari ini tidak ada jadwal perkuliahan.',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

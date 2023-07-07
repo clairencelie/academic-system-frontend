@@ -45,13 +45,11 @@ class _MobileKRSDetailPageState extends State<MobileKRSDetailPage> {
                       height: 20,
                     ),
                     KRSDetailInfo(student: widget.student, krs: widget.krs),
-                    Container(
-                      alignment: Alignment.centerRight,
-                      child: ButtonPengajuanPerubahanKrs(
-                        krs: widget.krs,
-                        mahasiswa: widget.student,
-                      ),
+
+                    const SizedBox(
+                      height: 20,
                     ),
+
                     const Text(
                       'List Mata Kuliah Dipilih',
                       style:
@@ -92,7 +90,8 @@ class _MobileKRSDetailPageState extends State<MobileKRSDetailPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    widget.krs.pilihanMataKuliah[index].id,
+                                    widget
+                                        .krs.pilihanMataKuliah[index].idMatkul,
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
@@ -107,6 +106,9 @@ class _MobileKRSDetailPageState extends State<MobileKRSDetailPage> {
                                   ),
                                 ],
                               ),
+                              const SizedBox(
+                                height: 5,
+                              ),
                               Text(
                                 widget.krs.pilihanMataKuliah[index].name,
                                 style: const TextStyle(
@@ -115,32 +117,42 @@ class _MobileKRSDetailPageState extends State<MobileKRSDetailPage> {
                                 ),
                               ),
                               const SizedBox(
-                                height: 10,
+                                height: 30,
                               ),
-                              Text(
-                                'Jumlah SKS: ${widget.krs.pilihanMataKuliah[index].credit}',
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                // '${widget.krs.pilihanMataKuliah[index].type[0].toUpperCase()}${widget.krs.pilihanMataKuliah[index].type.substring(1)}',
-                                widget.krs.pilihanMataKuliah[index].type
-                                    .toUpperCase(),
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Jumlah SKS: ${widget.krs.pilihanMataKuliah[index].credit}',
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  Text(
+                                    // '${widget.krs.pilihanMataKuliah[index].type[0].toUpperCase()}${widget.krs.pilihanMataKuliah[index].type.substring(1)}',
+                                    widget.krs.pilihanMataKuliah[index].type
+                                        .toUpperCase(),
+                                    textAlign: TextAlign.end,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         );
                       },
+                    ),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: ButtonPengajuanPerubahanKrs(
+                        krs: widget.krs,
+                        mahasiswa: widget.student,
+                      ),
                     ),
                   ],
                 ),
@@ -170,26 +182,36 @@ class ButtonPengajuanPerubahanKrs extends StatelessWidget {
         if (state is ScheduleKrsLoaded) {
           String formattedDateNow =
               DateFormat('dd-MM-yyyy').format(DateTime.now());
-          return ElevatedButton(
-            onPressed: krs.commit == '1' ||
-                    DateFormat('dd-MM-yyyy').parse(formattedDateNow).isAfter(
-                        DateFormat('dd-MM-yyyy')
-                            .parse(state.krsSchedule.tanggalSelesai))
-                ? null
-                : () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return MobileEditKRSPage(
-                            krs: krs,
-                            student: mahasiswa,
-                          );
-                        },
-                      ),
-                    );
-                  },
-            child: const Text('Ajukan Perubahan KRS'),
+          return SizedBox(
+            height: 50,
+            width: MediaQuery.of(context).size.width,
+            child: ElevatedButton(
+              onPressed: krs.commit == '1' ||
+                      DateFormat('dd-MM-yyyy').parse(formattedDateNow).isAfter(
+                          DateFormat('dd-MM-yyyy')
+                              .parse(state.krsSchedule.tanggalSelesai))
+                  ? null
+                  : () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return MobileEditKRSPage(
+                              krs: krs,
+                              student: mahasiswa,
+                            );
+                          },
+                        ),
+                      );
+                    },
+              child: const Text(
+                'Ajukan Perubahan KRS',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           );
         }
         return const CircularProgressIndicator();

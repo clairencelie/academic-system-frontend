@@ -8,6 +8,8 @@ class CMSItem extends StatelessWidget {
   final Function()? onTap;
   final Color? color;
   final Color? contentColor;
+  final double? fontSize;
+  final double? iconSize;
 
   const CMSItem({
     Key? key,
@@ -18,14 +20,15 @@ class CMSItem extends StatelessWidget {
     this.height = 70,
     this.color = const Color.fromARGB(255, 248, 250, 252),
     this.contentColor = const Color.fromARGB(255, 0, 32, 96),
+    this.fontSize = 11,
+    this.iconSize = 24,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      // padding: const EdgeInsets.symmetric(vertical: 12),
-      // height: height,
+      height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: const Color.fromARGB(255, 248, 250, 252),
@@ -56,6 +59,7 @@ class CMSItem extends StatelessWidget {
                 Icon(
                   icons,
                   color: contentColor,
+                  size: iconSize,
                 ),
                 const SizedBox(
                   height: 3,
@@ -64,7 +68,7 @@ class CMSItem extends StatelessWidget {
                   title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: fontSize,
                     fontWeight: FontWeight.w600,
                     color: contentColor,
                   ),

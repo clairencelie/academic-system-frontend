@@ -1,5 +1,6 @@
 import 'package:academic_system/src/bloc/schedule/schedule_bloc.dart';
 import 'package:academic_system/src/bloc/schedule_management/schedule_management_bloc.dart';
+import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/schedule.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/cms_item.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/schedule_detail_text.dart';
@@ -8,7 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ScheduleTable extends StatefulWidget {
-  const ScheduleTable({super.key});
+  final KrsSchedule krsSchedule;
+  const ScheduleTable({
+    super.key,
+    required this.krsSchedule,
+  });
 
   @override
   State<ScheduleTable> createState() => _ScheduleTableState();
@@ -23,7 +28,7 @@ class _ScheduleTableState extends State<ScheduleTable> {
 
   List<String> selectedSchedule = [];
 
-  final List<String> columns = ['ID', 'Mata Kuliah', 'Hari'];
+  final List<String> columns = ['Kode MK', 'Mata Kuliah', 'Hari'];
 
   List<DataColumn> getColumns(List<String> columns) => columns
       .map(
@@ -63,7 +68,10 @@ class _ScheduleTableState extends State<ScheduleTable> {
                               Navigator.of(context).pop();
                               Navigator.push(context, MaterialPageRoute(
                                 builder: (context) {
-                                  return UpdateSchedulePage(schedule: schedule);
+                                  return UpdateSchedulePage(
+                                    schedule: schedule,
+                                    krsSchedule: widget.krsSchedule,
+                                  );
                                 },
                               ));
                             },
@@ -76,13 +84,24 @@ class _ScheduleTableState extends State<ScheduleTable> {
                             child: const Text('Kembali'),
                           ),
                         ],
-                        title: const Center(child: Text('Detail Jadwal')),
+                        title: const Center(
+                          child: Text(
+                            'Detail Jadwal',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                         content: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ScheduleDetailText(
-                              title: 'ID',
+                              title: 'ID Jadwal',
                               data: schedule.id,
+                            ),
+                            ScheduleDetailText(
+                              title: 'ID Matkul',
+                              data: schedule.idMatkul,
                             ),
                             ScheduleDetailText(
                               title: 'Nama Matkul',
@@ -109,10 +128,6 @@ class _ScheduleTableState extends State<ScheduleTable> {
                               data: schedule.credit,
                             ),
                             ScheduleDetailText(
-                              title: 'Keterangan',
-                              data: schedule.information,
-                            ),
-                            ScheduleDetailText(
                               title: 'Ruangan',
                               data: schedule.room,
                             ),
@@ -123,7 +138,7 @@ class _ScheduleTableState extends State<ScheduleTable> {
           },
           cells: [
             DataCell(
-              Text(schedule.learningSubId),
+              Text(schedule.idMatkul),
             ),
             DataCell(
               Text(
@@ -143,7 +158,10 @@ class _ScheduleTableState extends State<ScheduleTable> {
   @override
   void initState() {
     super.initState();
-    context.read<ScheduleBloc>().add(RequestAllSchedule());
+    context.read<ScheduleBloc>().add(RequestAllSchedule(
+          tahunAkademik: widget.krsSchedule.tahunAkademik,
+          semester: widget.krsSchedule.semester,
+        ));
   }
 
   @override
@@ -339,9 +357,10 @@ class _ScheduleTableState extends State<ScheduleTable> {
                       TextButton(
                         onPressed: () {
                           // Add get schedule list event to refresh table schedule list.
-                          context
-                              .read<ScheduleBloc>()
-                              .add(RequestAllSchedule());
+                          context.read<ScheduleBloc>().add(RequestAllSchedule(
+                                tahunAkademik: widget.krsSchedule.tahunAkademik,
+                                semester: widget.krsSchedule.semester,
+                              ));
                           Navigator.of(context).pop();
                         },
                         child: const Text('Tutup'),

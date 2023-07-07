@@ -5,6 +5,7 @@ import 'package:academic_system/src/helper/date_converter.dart';
 import 'package:academic_system/src/model/new_kartu_rencana_studi.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/learning_subject.dart';
+import 'package:academic_system/src/model/penasehat_akademik.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/transkrip_lengkap.dart';
 import 'package:academic_system/src/ui/mobile/component/custom_widget/matkul_per_semester.dart';
@@ -31,6 +32,50 @@ class MobileListMatkulKRS extends StatefulWidget {
 }
 
 class _MobileListMatkulKRSState extends State<MobileListMatkulKRS> {
+  String? penasehatAkademik;
+
+  List<PenasehatAkademik> listPA = [
+    PenasehatAkademik(
+      id: '151190003',
+      name: 'Sugesti, S.Si., M.Kom.',
+    ),
+    PenasehatAkademik(
+      id: '151190006',
+      name: 'Hari Santoso, S.Kom., M.Kom.',
+    ),
+    PenasehatAkademik(
+      id: '151190010',
+      name: 'Hans Saputra, S.Kom., MMSI.',
+    ),
+    PenasehatAkademik(
+      id: '151190012',
+      name: 'Desy Mora Daulay, S.Kom., M.Kom.',
+    ),
+    PenasehatAkademik(
+      id: '151190013',
+      name: 'Syarah, S.Kom., M.Kom.',
+    ),
+    PenasehatAkademik(
+      id: '151190009',
+      name: 'Sobiyanto, S.E., S.Kom., M.Kom., MTA.',
+    ),
+    PenasehatAkademik(
+      id: '151190018',
+      name: 'Rama Putra, S.Kom., M.Kom.',
+    ),
+  ];
+
+  List<DropdownMenuItem> dropDownMenuList(List<PenasehatAkademik> listPA) {
+    return listPA.map((pa) {
+      return DropdownMenuItem(
+          value: pa.id,
+          child: Text(
+            pa.name,
+            overflow: TextOverflow.ellipsis,
+          ));
+    }).toList();
+  }
+
   List<String> learningSubIds = [];
   int totalSks = 0;
 
@@ -117,6 +162,27 @@ class _MobileListMatkulKRSState extends State<MobileListMatkulKRS> {
               //     fontWeight: FontWeight.bold,
               //   ),
               // ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                'Penasehat Akademik:',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              DropdownButton(
+                isExpanded: true,
+                value: penasehatAkademik,
+                hint: const Text('Pilih Penasehat Akademik...'),
+                items: dropDownMenuList(listPA),
+                onChanged: (value) {
+                  setState(() {
+                    penasehatAkademik = value;
+                  });
+                },
+              ),
+
               const SizedBox(
                 height: 20,
               ),
@@ -270,13 +336,15 @@ class _MobileListMatkulKRSState extends State<MobileListMatkulKRS> {
                     ),
                     onPressed: learningSubIds.isEmpty
                         ? null
-                        : () {
-                            maxSks > totalSks
-                                ? showDialogPeringatanPengajuanKRS(
-                                    context, maxSksFromTranskrip)
-                                : showDialogKonfirmasiPengajuanKRS(
-                                    context, maxSksFromTranskrip);
-                          },
+                        : penasehatAkademik == null
+                            ? null
+                            : () {
+                                maxSks > totalSks
+                                    ? showDialogPeringatanPengajuanKRS(
+                                        context, maxSksFromTranskrip)
+                                    : showDialogKonfirmasiPengajuanKRS(
+                                        context, maxSksFromTranskrip);
+                              },
                     child: const Text(
                       'Ajukan KRS',
                       style: TextStyle(
@@ -357,6 +425,7 @@ class _MobileListMatkulKRSState extends State<MobileListMatkulKRS> {
 
                 NewKartuRencanaStudi krs = NewKartuRencanaStudi(
                   nim: widget.user.id,
+                  idDosen: penasehatAkademik!,
                   semester: widget.user.semester,
                   jurusan: widget.user.major,
                   ips: ips,
@@ -450,6 +519,7 @@ class _MobileListMatkulKRSState extends State<MobileListMatkulKRS> {
 
                 NewKartuRencanaStudi krs = NewKartuRencanaStudi(
                   nim: widget.user.id,
+                  idDosen: penasehatAkademik!,
                   semester: widget.user.semester,
                   jurusan: widget.user.major,
                   ips: ips,

@@ -54,6 +54,7 @@ class _MobileKRSPageState extends State<MobileKRSPage> {
 
     return Scaffold(
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: SafeArea(
           child: Center(
             child: FractionallySizedBox(
@@ -80,39 +81,37 @@ class _MobileKRSPageState extends State<MobileKRSPage> {
                           const SizedBox(
                             height: 20,
                           ),
-                          (widget.user as Student).semester == '1'
-                              ? const SizedBox()
-                              : TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return MobileKrsHistoryPage(
-                                            student: (widget.user as Student),
-                                          );
-                                        },
-                                      ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return MobileKrsHistoryPage(
+                                      student: (widget.user as Student),
                                     );
                                   },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                              color: Colors.blue, width: 1),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Histori Pengisian KRS',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    ),
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.blue, width: 1),
                                   ),
                                 ),
+                                child: const Text(
+                                  'Histori Pengisian KRS',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
                           const SizedBox(
                             height: 20,
                           ),

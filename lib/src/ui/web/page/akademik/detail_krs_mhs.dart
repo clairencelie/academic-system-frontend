@@ -13,78 +13,88 @@ class DetailKrsMhs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const KRSDetailHeader(),
-              const SizedBox(
-                height: 20,
-              ),
-              KRSDetailInfo(nama: krs.nama, krs: krs),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'List Mata Kuliah Dipilih',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              // List Matkul yang diambil
-              const MatkulListHeader(),
-              const Divider(),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: krs.pilihanMataKuliah.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    margin: const EdgeInsets.only(bottom: 15),
-                    height: 70,
-                    decoration: BoxDecoration(
-                      color: index % 2 == 1
-                          ? const Color.fromARGB(255, 251, 251, 251)
-                          : const Color.fromARGB(255, 245, 247, 251),
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 1,
-                          color: Color.fromARGB(55, 0, 0, 0),
-                          offset: Offset(0, 1),
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: ListTile(
-                        title: Row(
-                          children: [
-                            Expanded(
-                              child: Text(krs.pilihanMataKuliah[index].id),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Text(krs.pilihanMataKuliah[index].name),
-                            ),
-                            Expanded(
-                              child: Text(krs.pilihanMataKuliah[index].credit),
-                            ),
-                            Expanded(
-                              child: Text(krs.pilihanMataKuliah[index].grade),
-                            ),
-                            Expanded(
-                              child: Text(krs.pilihanMataKuliah[index].type),
+        child: Center(
+          child: FractionallySizedBox(
+            widthFactor: 0.8,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const KRSDetailHeader(),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  KRSDetailInfo(nama: krs.nama, krs: krs),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
+                    'List Mata Kuliah Dipilih',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  // List Matkul yang diambil
+                  const MatkulListHeader(),
+                  const Divider(),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: krs.pilihanMataKuliah.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        margin: const EdgeInsets.only(bottom: 15),
+                        height: 70,
+                        decoration: BoxDecoration(
+                          color: index % 2 == 1
+                              ? const Color.fromARGB(255, 251, 251, 251)
+                              : const Color.fromARGB(255, 245, 247, 251),
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(
+                              blurRadius: 1,
+                              color: Color.fromARGB(55, 0, 0, 0),
+                              offset: Offset(0, 1),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                  );
-                },
+                        child: Center(
+                          child: ListTile(
+                            title: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                      krs.pilihanMataKuliah[index].idMatkul),
+                                ),
+                                Expanded(
+                                  flex: 2,
+                                  child:
+                                      Text(krs.pilihanMataKuliah[index].name),
+                                ),
+                                Expanded(
+                                  child:
+                                      Text(krs.pilihanMataKuliah[index].credit),
+                                ),
+                                Expanded(
+                                  child:
+                                      Text(krs.pilihanMataKuliah[index].grade),
+                                ),
+                                Expanded(
+                                  child:
+                                      Text(krs.pilihanMataKuliah[index].type),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

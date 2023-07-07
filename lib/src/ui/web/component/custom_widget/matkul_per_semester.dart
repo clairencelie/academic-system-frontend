@@ -43,8 +43,9 @@ class _MatkulPerSemesterState extends State<MatkulPerSemester> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        const Divider(),
         Padding(
-          padding: const EdgeInsets.fromLTRB(17, 10, 0, 20),
+          padding: const EdgeInsets.fromLTRB(17, 10, 0, 10),
           child: Text(
             'Semester ${widget.semester}',
             textAlign: TextAlign.start,
@@ -54,10 +55,14 @@ class _MatkulPerSemesterState extends State<MatkulPerSemester> {
             ),
           ),
         ),
+        const Divider(),
         const SizedBox(
           height: 10,
         ),
         const ListMatkulKrsHeader(),
+        const SizedBox(
+          height: 10,
+        ),
         const Divider(),
         ListView.builder(
           shrinkWrap: true,
@@ -122,13 +127,15 @@ class _MatkulPerSemesterState extends State<MatkulPerSemester> {
                     ? const Icon(Icons.check_box_rounded)
                     : (widget.matkulLulus.contains(widget.matkul[index].id))
                         ? const Icon(Icons.check_circle)
-                        : const Icon(Icons.check_box_outline_blank),
+                        : userSemester < semester
+                            ? const SizedBox()
+                            : const Icon(Icons.check_box_outline_blank),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Expanded(
                       // width: 150,
-                      child: Text(widget.matkul[index].id),
+                      child: Text(widget.matkul[index].idMatkul),
                     ),
                     Expanded(
                       flex: 2,

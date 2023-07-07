@@ -322,6 +322,7 @@ class _ListMatkulEditKRSState extends State<ListMatkulEditKRS> {
                                     NewKartuRencanaStudi krs =
                                         NewKartuRencanaStudi(
                                       nim: widget.user.id,
+                                      idDosen: widget.krs.idDosen,
                                       semester: widget.user.semester,
                                       jurusan: widget.user.major,
                                       ips: widget.krs.ips,

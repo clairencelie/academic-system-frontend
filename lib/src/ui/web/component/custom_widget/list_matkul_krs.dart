@@ -5,6 +5,7 @@ import 'package:academic_system/src/helper/date_converter.dart';
 import 'package:academic_system/src/model/new_kartu_rencana_studi.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/learning_subject.dart';
+import 'package:academic_system/src/model/penasehat_akademik.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/transkrip_lengkap.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/info_dialog.dart';
@@ -31,7 +32,10 @@ class ListMatkulKRS extends StatefulWidget {
 }
 
 class _ListMatkulKRSState extends State<ListMatkulKRS> {
+  String? penasehatAkademik;
+
   List<String> learningSubIds = [];
+
   int totalSks = 0;
 
   void totalSksIncrement(int credit) {
@@ -67,6 +71,48 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
 
   @override
   Widget build(BuildContext context) {
+    List<PenasehatAkademik> listPA = [
+      PenasehatAkademik(
+        id: '151190003',
+        name: 'Sugesti, S.Si., M.Kom.',
+      ),
+      PenasehatAkademik(
+        id: '151190006',
+        name: 'Hari Santoso, S.Kom., M.Kom.',
+      ),
+      PenasehatAkademik(
+        id: '151190010',
+        name: 'Hans Saputra, S.Kom., MMSI.',
+      ),
+      PenasehatAkademik(
+        id: '151190012',
+        name: 'Desy Mora Daulay, S.Kom., M.Kom.',
+      ),
+      PenasehatAkademik(
+        id: '151190013',
+        name: 'Syarah, S.Kom., M.Kom.',
+      ),
+      PenasehatAkademik(
+        id: '151190009',
+        name: 'Sobiyanto, S.E., S.Kom., M.Kom., MTA.',
+      ),
+      PenasehatAkademik(
+        id: '151190018',
+        name: 'Rama Putra, S.Kom., M.Kom.',
+      ),
+    ];
+
+    List<DropdownMenuItem> dropDownMenuList(List<PenasehatAkademik> listPA) {
+      return listPA.map((pa) {
+        return DropdownMenuItem(
+            value: pa.id,
+            child: Text(
+              pa.name,
+              overflow: TextOverflow.ellipsis,
+            ));
+      }).toList();
+    }
+
     List<String> idMatkulLulus = widget.tranksripLengkap.matkulLulus;
 
     String maxSksFromTranskrip = widget.tranksripLengkap.khs.isEmpty
@@ -95,7 +141,9 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
             semesterList.length,
             (semesterIndex) => userLearningSubjects
                 .where((matkul) =>
-                    matkul.grade.contains('${semesterList[semesterIndex]}'))
+                    matkul.grade.contains('${semesterList[semesterIndex]}') &&
+                    matkul.tahunAkademik == widget.krsSchedule.tahunAkademik &&
+                    matkul.semester == widget.krsSchedule.semester)
                 .toList(),
           );
 
@@ -118,6 +166,29 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  const Text(
+                    "Penasehat Akademik: ",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  DropdownButton(
+                    hint: const Text('Pilih penasehat akademik...'),
+                    value: penasehatAkademik,
+                    items: dropDownMenuList(listPA),
+                    onChanged: (value) {
+                      setState(() {
+                        penasehatAkademik = value;
+                      });
+                    },
                   ),
                 ],
               ),
@@ -269,106 +340,125 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                                 (states) =>
                                     const Color.fromARGB(255, 214, 214, 214),
                               )
-                            : MaterialStateColor.resolveWith(
-                                (states) =>
-                                    const Color.fromARGB(255, 11, 39, 118),
-                              ),
+                            : penasehatAkademik == null
+                                ? MaterialStateColor.resolveWith(
+                                    (states) => const Color.fromARGB(
+                                        255, 214, 214, 214),
+                                  )
+                                : MaterialStateColor.resolveWith(
+                                    (states) =>
+                                        const Color.fromARGB(255, 11, 39, 118),
+                                  ),
                       ),
                       onPressed: learningSubIds.isEmpty
                           ? null
-                          : () {
-                              showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: const Text(
-                                      'Konfirmasi',
-                                      style: TextStyle(
-                                        color: Color.fromARGB(255, 0, 32, 96),
-                                      ),
-                                    ),
-                                    content: const SizedBox(
-                                      width: 400,
-                                      child: Text(
-                                        'Pastikan pilihan mata kuliah anda sudah sesuai.\n\nJika anda ingin mengubah KRS setelah KRS diajukan, dapat dilakukan di dalam menu histori pengisian KRS (Sebelum KRS dikunci).',
-                                      ),
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text(
-                                          'Cek kembali',
+                          : penasehatAkademik == null
+                              ? null
+                              : () {
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: const Text(
+                                          'Konfirmasi',
                                           style: TextStyle(
                                             color:
                                                 Color.fromARGB(255, 0, 32, 96),
                                           ),
                                         ),
-                                      ),
-                                      ElevatedButton(
-                                        style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateColor.resolveWith(
-                                            (states) => const Color.fromARGB(
-                                                255, 0, 32, 96),
+                                        content: const SizedBox(
+                                          width: 400,
+                                          child: Text(
+                                            'Pastikan pilihan mata kuliah anda sudah sesuai.\n\nJika anda ingin mengubah KRS setelah KRS diajukan, dapat dilakukan di dalam menu histori pengisian KRS (Sebelum KRS dikunci).',
                                           ),
                                         ),
-                                        onPressed: () {
-                                          String ips = widget
-                                                  .tranksripLengkap.khs.isEmpty
-                                              ? '0'
-                                              : widget.tranksripLengkap.khs
-                                                  .where((element) =>
-                                                      element.semester ==
-                                                      (int.tryParse(widget.user
-                                                                  .semester)! -
-                                                              1)
-                                                          .toString())
-                                                  .toList()[0]
-                                                  .ips;
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text(
+                                              'Cek kembali',
+                                              style: TextStyle(
+                                                color: Color.fromARGB(
+                                                    255, 0, 32, 96),
+                                              ),
+                                            ),
+                                          ),
+                                          ElevatedButton(
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateColor
+                                                      .resolveWith(
+                                                (states) =>
+                                                    const Color.fromARGB(
+                                                        255, 0, 32, 96),
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              String ips = widget
+                                                      .tranksripLengkap
+                                                      .khs
+                                                      .isEmpty
+                                                  ? '0'
+                                                  : widget.tranksripLengkap.khs
+                                                      .where((element) =>
+                                                          element.semester ==
+                                                          (int.tryParse(widget
+                                                                      .user
+                                                                      .semester)! -
+                                                                  1)
+                                                              .toString())
+                                                      .toList()[0]
+                                                      .ips;
 
-                                          String date = DateFormat("yyyy-MM-dd")
-                                              .format(DateTime.now());
+                                              String date =
+                                                  DateFormat("yyyy-MM-dd")
+                                                      .format(DateTime.now());
 
-                                          NewKartuRencanaStudi krs =
-                                              NewKartuRencanaStudi(
-                                            nim: widget.user.id,
-                                            semester: widget.user.semester,
-                                            jurusan: widget.user.major,
-                                            ips: ips,
-                                            ipk: widget.tranksripLengkap
-                                                .transkripNilai.ipk,
-                                            kreditDiambil: totalSks.toString(),
-                                            bebanSksMaks: maxSksFromTranskrip,
-                                            waktuPengisian: date,
-                                            tahunAkademik: widget
-                                                .krsSchedule.tahunAkademik,
-                                          );
-
-                                          context.read<KrsManagementBloc>().add(
-                                                CreateKrs(
-                                                  krs: krs,
-                                                  mataKuliahDiambil:
-                                                      learningSubIds,
-                                                ),
+                                              NewKartuRencanaStudi krs =
+                                                  NewKartuRencanaStudi(
+                                                nim: widget.user.id,
+                                                idDosen: penasehatAkademik!,
+                                                semester: widget.user.semester,
+                                                jurusan: widget.user.major,
+                                                ips: ips,
+                                                ipk: widget.tranksripLengkap
+                                                    .transkripNilai.ipk,
+                                                kreditDiambil:
+                                                    totalSks.toString(),
+                                                bebanSksMaks:
+                                                    maxSksFromTranskrip,
+                                                waktuPengisian: date,
+                                                tahunAkademik: widget
+                                                    .krsSchedule.tahunAkademik,
                                               );
 
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text(
-                                          'Ajukan KRS',
-                                          style: TextStyle(
-                                            color: Colors.white,
+                                              context
+                                                  .read<KrsManagementBloc>()
+                                                  .add(
+                                                    CreateKrs(
+                                                      krs: krs,
+                                                      mataKuliahDiambil:
+                                                          learningSubIds,
+                                                    ),
+                                                  );
+
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text(
+                                              'Ajukan KRS',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ],
+                                        ],
+                                      );
+                                    },
                                   );
                                 },
-                              );
-                            },
                       child: const Text(
                         'Ajukan KRS',
                         style: TextStyle(
@@ -382,7 +472,10 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
             ],
           );
         }
-        return const CircularProgressIndicator();
+        return Container(
+            alignment: Alignment.center,
+            height: MediaQuery.of(context).size.height / 2,
+            child: const Center(child: CircularProgressIndicator()));
       },
     );
   }

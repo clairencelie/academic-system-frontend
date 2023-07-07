@@ -207,44 +207,46 @@ class _FormJadwalKrsState extends State<FormJadwalKrs> {
                     );
                   }
                 },
-                child: Center(
-                  child: SizedBox(
-                    height: 45,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateColor.resolveWith(
-                            (states) =>
-                                const Color.fromARGB(255, 53, 230, 112)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateColor.resolveWith(
+                              (states) =>
+                                  const Color.fromARGB(255, 193, 47, 47)),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Batal'),
                       ),
-                      onPressed: () {
-                        context.read<ScheduleKrsBloc>().add(
-                              UpdateScheduleKrs(
-                                  tanggalMulai: tanggalMulai.text,
-                                  tanggalSelesai: tanggalSelesai.text),
-                            );
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Set Jadwal KRS'),
                     ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Center(
-                child: SizedBox(
-                  height: 45,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateColor.resolveWith(
-                          (states) => const Color.fromARGB(255, 193, 47, 47)),
+                    const SizedBox(
+                      width: 10,
                     ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Batal'),
-                  ),
+                    SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateColor.resolveWith(
+                              (states) =>
+                                  const Color.fromARGB(255, 53, 230, 112)),
+                        ),
+                        onPressed: () {
+                          context.read<ScheduleKrsBloc>().add(
+                                UpdateScheduleKrs(
+                                    tanggalMulai: tanggalMulai.text,
+                                    tanggalSelesai: tanggalSelesai.text),
+                              );
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Set Jadwal KRS'),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

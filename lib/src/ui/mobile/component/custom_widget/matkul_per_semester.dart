@@ -170,7 +170,7 @@ class _MobileMatkulPerSemesterState extends State<MobileMatkulPerSemester> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              widget.matkul[index].id,
+                              widget.matkul[index].idMatkul,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w500,
                               ),

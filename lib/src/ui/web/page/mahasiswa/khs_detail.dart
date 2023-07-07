@@ -177,7 +177,7 @@ class ListNilaiMahasiswa extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  listNilaiMahasiswa[index].idMataKuliah,
+                  listNilaiMahasiswa[index].idMataKuliahMaster,
                   style: const TextStyle(
                     fontSize: 17,
                   ),

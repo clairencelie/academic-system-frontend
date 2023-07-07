@@ -14,8 +14,13 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       emit(RequestingSchedule());
 
       try {
-        List<Schedule> schedules =
-            await repository.getStudentSchedules(id: event.id, day: event.day);
+        List<Schedule> schedules = await repository.getStudentSchedules(
+          id: event.id,
+          idKrs: event.idKrs,
+          day: event.day,
+          tahunAkademik: event.tahunAkademik,
+          semester: event.semester,
+        );
 
         if (schedules.isNotEmpty) {
           emit(ScheduleLoaded(schedules: schedules));
@@ -31,8 +36,12 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       emit(RequestingSchedule());
 
       try {
-        List<Schedule> schedules =
-            await repository.getLecturerSchedules(id: event.id, day: event.day);
+        List<Schedule> schedules = await repository.getLecturerSchedules(
+          id: event.id,
+          day: event.day,
+          tahunAkademik: event.tahunAkademik,
+          semester: event.semester,
+        );
 
         if (schedules.isNotEmpty) {
           emit(ScheduleLoaded(schedules: schedules));
@@ -65,7 +74,10 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       emit(RequestingSchedule());
 
       try {
-        List<Schedule> schedules = await repository.getAllSchedule();
+        List<Schedule> schedules = await repository.getAllSchedule(
+          event.tahunAkademik,
+          event.semester,
+        );
 
         if (schedules.isNotEmpty) {
           emit(ScheduleLoaded(schedules: schedules));

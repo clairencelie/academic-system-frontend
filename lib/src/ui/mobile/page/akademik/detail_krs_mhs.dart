@@ -1,5 +1,4 @@
 import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
-import 'package:academic_system/src/model/student.dart';
 import 'package:flutter/material.dart';
 
 class MobileDetailKrsMhs extends StatelessWidget {

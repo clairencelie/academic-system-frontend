@@ -14,45 +14,40 @@ class ScheduleDetailText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width / 4,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                    ),
-                  ),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width / 3,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
                 ),
-                const Text(
-                  ':',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 5,
-          ),
-          Flexible(
-            child: Text(
-              ' $data',
-              style: const TextStyle(
-                fontSize: 16,
               ),
             ),
-          ),
-        ],
+            const Flexible(
+              child: Text(
+                ': ',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Text(
+                data,
+                style: const TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

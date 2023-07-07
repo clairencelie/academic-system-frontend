@@ -86,6 +86,7 @@ class _MobileDetailTagihanPageState extends State<MobileDetailTagihanPage> {
 
     return Scaffold(
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: SafeArea(
           child: Center(
             child: FractionallySizedBox(
@@ -198,22 +199,24 @@ class _MobileDetailTagihanPageState extends State<MobileDetailTagihanPage> {
                                     const SizedBox(
                                       height: 10,
                                     ),
-                                    Container(
-                                      decoration: const BoxDecoration(
-                                        border: Border(
-                                          top: BorderSide(
-                                            color: Color.fromARGB(
-                                                201, 184, 184, 184),
-                                          ),
-                                          bottom: BorderSide(
-                                            color: Color.fromARGB(
-                                                201, 184, 184, 184),
-                                          ),
-                                        ),
-                                      ),
-                                      child: ListRincianTagihan(
-                                        listRincianTagihan: listRincianTagihan,
-                                      ),
+                                    const Divider(
+                                      height: 0,
+                                      thickness: 1,
+                                      color: Color.fromARGB(201, 184, 184, 184),
+                                    ),
+                                    const HeaderRincianTagihan(),
+                                    const Divider(
+                                      height: 0,
+                                      thickness: 1,
+                                      color: Color.fromARGB(201, 184, 184, 184),
+                                    ),
+                                    ListRincianTagihan(
+                                      listRincianTagihan: listRincianTagihan,
+                                    ),
+                                    const Divider(
+                                      height: 0,
+                                      thickness: 1,
+                                      color: Color.fromARGB(201, 184, 184, 184),
                                     ),
                                     Container(
                                       padding: const EdgeInsets.symmetric(
@@ -239,6 +242,7 @@ class _MobileDetailTagihanPageState extends State<MobileDetailTagihanPage> {
                                                 flex: 3,
                                                 child: Text(
                                                   'Total :',
+                                                  textAlign: TextAlign.end,
                                                   style: TextStyle(
                                                       fontSize: 15,
                                                       fontWeight:
@@ -246,7 +250,7 @@ class _MobileDetailTagihanPageState extends State<MobileDetailTagihanPage> {
                                                 ),
                                               ),
                                               const Expanded(
-                                                flex: 1,
+                                                flex: 2,
                                                 child: SizedBox(),
                                               ),
                                               Expanded(
@@ -260,6 +264,7 @@ class _MobileDetailTagihanPageState extends State<MobileDetailTagihanPage> {
                                                     widget.tagihanPerkuliahan
                                                         .totalTagihan,
                                                   ),
+                                                  textAlign: TextAlign.end,
                                                   style: const TextStyle(
                                                       fontSize: 15,
                                                       fontWeight:
@@ -316,7 +321,7 @@ class _MobileDetailTagihanPageState extends State<MobileDetailTagihanPage> {
                                                     return InfoDialog(
                                                       title: 'Informasi',
                                                       body:
-                                                          'Gagal membuat transaksi',
+                                                          'Gagal membuat transaksi, silahkan coba lagi.',
                                                       onClose: () {
                                                         Navigator.pop(context);
                                                       },
@@ -435,6 +440,69 @@ class _MobileDetailTagihanPageState extends State<MobileDetailTagihanPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class HeaderRincianTagihan extends StatelessWidget {
+  const HeaderRincianTagihan({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      child: Row(
+        children: const [
+          Expanded(
+            flex: 4,
+            child: Text(
+              'Item',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Text(
+              'Harga',
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Text(
+              'Jml',
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            flex: 3,
+            child: Text(
+              'Total Harga',
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -694,7 +762,7 @@ class ListRincianTagihan extends StatelessWidget {
                 child: Text(
                   listRincianTagihan[index].item,
                   style: const TextStyle(
-                    fontSize: 15,
+                    fontSize: 13.5,
                   ),
                 ),
               ),
@@ -706,19 +774,24 @@ class ListRincianTagihan extends StatelessWidget {
                     symbol: '',
                     decimalDigits: 0,
                   ).format(listRincianTagihan[index].hargaItem),
+                  textAlign: TextAlign.end,
                   style: const TextStyle(
-                    fontSize: 15,
+                    fontSize: 13.5,
                   ),
                 ),
               ),
               Expanded(
-                flex: 1,
+                flex: 2,
                 child: Text(
                   '${listRincianTagihan[index].jumlahItem.toString()}x',
+                  textAlign: TextAlign.end,
                   style: const TextStyle(
-                    fontSize: 15,
+                    fontSize: 13.5,
                   ),
                 ),
+              ),
+              const SizedBox(
+                width: 10,
               ),
               Expanded(
                 flex: 3,
@@ -728,8 +801,9 @@ class ListRincianTagihan extends StatelessWidget {
                     symbol: '',
                     decimalDigits: 0,
                   ).format(listRincianTagihan[index].totalHargaItem),
+                  textAlign: TextAlign.end,
                   style: const TextStyle(
-                    fontSize: 15,
+                    fontSize: 13.5,
                   ),
                 ),
               ),

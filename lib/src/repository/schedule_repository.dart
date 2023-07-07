@@ -7,8 +7,13 @@ import 'package:http/http.dart';
 import 'dart:convert';
 
 class ScheduleRepository {
-  Future<List<Schedule>> getStudentSchedules(
-      {required String id, required String day}) async {
+  Future<List<Schedule>> getStudentSchedules({
+    required String id,
+    required String day,
+    required String idKrs,
+    required String tahunAkademik,
+    required String semester,
+  }) async {
     Uri url = Uri.parse('$apiUrl/student/schedules');
 
     var response = await post(
@@ -19,7 +24,10 @@ class ScheduleRepository {
       },
       body: {
         'id': id,
+        'id_krs': idKrs,
         'day': day,
+        'tahun_akademik': tahunAkademik,
+        'semester': semester
       },
     );
 
@@ -33,15 +41,25 @@ class ScheduleRepository {
       return schedules;
     } else if (response.statusCode == 401) {
       return await JWTRefresher.refreshToken(response)
-          ? await getStudentSchedules(id: id, day: day)
+          ? await getStudentSchedules(
+              id: id,
+              day: day,
+              idKrs: idKrs,
+              tahunAkademik: tahunAkademik,
+              semester: semester,
+            )
           : [];
     }
 
     return [];
   }
 
-  Future<List<Schedule>> getLecturerSchedules(
-      {required String id, required String day}) async {
+  Future<List<Schedule>> getLecturerSchedules({
+    required String id,
+    required String day,
+    required String tahunAkademik,
+    required String semester,
+  }) async {
     Uri url = Uri.parse('$apiUrl/lecturer/schedules');
 
     var response = await post(
@@ -53,6 +71,8 @@ class ScheduleRepository {
       body: {
         'id': id,
         'day': day,
+        'tahun_akademik': tahunAkademik,
+        'semester': semester,
       },
     );
 
@@ -66,7 +86,12 @@ class ScheduleRepository {
       return schedules;
     } else if (response.statusCode == 401) {
       return await JWTRefresher.refreshToken(response)
-          ? await getLecturerSchedules(id: id, day: day)
+          ? await getLecturerSchedules(
+              id: id,
+              day: day,
+              tahunAkademik: tahunAkademik,
+              semester: semester,
+            )
           : [];
     }
 
@@ -101,16 +126,19 @@ class ScheduleRepository {
     return [];
   }
 
-  Future<List<Schedule>> getAllSchedule() async {
+  Future<List<Schedule>> getAllSchedule(
+    String tahunAkademik,
+    String semester,
+  ) async {
     Uri url = Uri.parse('$apiUrl/all_schedules');
 
-    var response = await get(
-      url,
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${await SecureStorage.getToken('jwt')}',
-      },
-    );
+    var response = await post(url, headers: {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${await SecureStorage.getToken('jwt')}',
+    }, body: {
+      'tahun_akademik': tahunAkademik,
+      'semester': semester,
+    });
 
     if (response.statusCode == 200) {
       List jsonResponse = jsonDecode(response.body);
@@ -122,7 +150,10 @@ class ScheduleRepository {
       return schedules;
     } else if (response.statusCode == 401) {
       return await JWTRefresher.refreshToken(response)
-          ? await getAllSchedule()
+          ? await getAllSchedule(
+              tahunAkademik,
+              semester,
+            )
           : [];
     }
 

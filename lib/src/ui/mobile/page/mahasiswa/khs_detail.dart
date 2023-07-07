@@ -27,6 +27,7 @@ class MobileKHSDetailPage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Center(
             child: FractionallySizedBox(
               widthFactor: 0.9,
@@ -264,7 +265,7 @@ class ListNilaiMahasiswa extends StatelessWidget {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Text(
-                                  listNilaiMahasiswa[index].idMataKuliah,
+                                  listNilaiMahasiswa[index].idMataKuliahMaster,
                                   textAlign: TextAlign.end,
                                   style: const TextStyle(
                                     fontSize: 16,
@@ -285,7 +286,7 @@ class ListNilaiMahasiswa extends StatelessWidget {
                             ),
                             Expanded(
                               child: Text(
-                                '${listNilaiMahasiswa[index].jumlahSks.toString()} sks',
+                                '${listNilaiMahasiswa[index].jumlahSks.toString()} SKS',
                                 textAlign: TextAlign.end,
                                 style: const TextStyle(
                                   fontSize: 18,

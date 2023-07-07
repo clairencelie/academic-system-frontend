@@ -80,26 +80,35 @@ class _DPMKPageState extends State<DPMKPage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  DropdownButton(
-                                    value: tahunAkademikDropDownValue,
-                                    items: dropDownMenuList(listTA),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        tahunAkademikDropDownValue = value;
-                                      });
-                                      context.read<DosenBloc>().add(
-                                          GetMatkulDosen(
-                                              idDosen: widget.dosen.id));
-                                    },
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        'Tahun akademik: ',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      DropdownButton(
+                                        value: tahunAkademikDropDownValue,
+                                        items: dropDownMenuList(listTA),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            tahunAkademikDropDownValue = value;
+                                          });
+                                          context.read<DosenBloc>().add(
+                                                GetMatkulDosen(
+                                                    idDosen: widget.dosen.id),
+                                              );
+                                        },
+                                      ),
+                                    ],
                                   )
                                 ],
                               ),
                               const SizedBox(
                                 height: 20,
                               ),
-                              const Text(
-                                'List Mata Kuliah',
-                                style: TextStyle(
+                              Text(
+                                'List Mata Kuliah T.A ${tahunAkademikDropDownValue.split(' ')[0]} Semester ${tahunAkademikDropDownValue.split(' ')[1][0].toUpperCase()}${tahunAkademikDropDownValue.split(' ')[1].substring(1)}',
+                                style: const TextStyle(
                                   fontSize: 19,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -117,15 +126,33 @@ class _DPMKPageState extends State<DPMKPage> {
                             ],
                           );
                         }
-                        return const CircularProgressIndicator();
+                        return Container(
+                          alignment: Alignment.center,
+                          height: MediaQuery.of(context).size.height,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
                       },
                     );
                   }
-                  return const CircularProgressIndicator();
+                  return Container(
+                    alignment: Alignment.center,
+                    height: MediaQuery.of(context).size.height,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
                 },
               );
             }
-            return const CircularProgressIndicator();
+            return Container(
+              alignment: Alignment.center,
+              height: MediaQuery.of(context).size.height,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
           },
         ),
       ),
@@ -176,6 +203,7 @@ class ListMatkulDosen extends StatelessWidget {
                               idMataKuliah: filteredMatkul[index].idMataKuliah,
                               namaMataKuliah: filteredMatkul[index].nama,
                               tahunAkademik: tahunAkademik,
+                              kelas: filteredMatkul[index].kelas,
                             );
                           },
                         ),
@@ -202,7 +230,7 @@ class ListMatkulDosen extends StatelessWidget {
                           Expanded(
                             flex: 1,
                             child: Text(
-                              filteredMatkul[index].idMataKuliah,
+                              filteredMatkul[index].idMataKuliahMaster,
                               style: const TextStyle(
                                 fontSize: 16,
                               ),

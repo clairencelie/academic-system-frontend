@@ -49,9 +49,71 @@ class HomePage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const ListArtikel(),
+                    const ArticleCard(
+                      title: 'Apa Itu Program Studi Sistem Informasi?',
+                      imgPath: 'assets/img/article/si.jpg',
+                    ),
+                    const ArticleCard(
+                      title: 'Apa Itu Program Studi Teknik Informatika?',
+                      imgPath: 'assets/img/article/ti.jpg',
+                    ),
+                    const ArticleCard(
+                      title:
+                          'Ini Dia List Bahasa Pemrograman Yang Sedang Tren!',
+                      imgPath: 'assets/img/article/eb.jpg',
+                    ),
                   ],
                 ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ArticleCard extends StatelessWidget {
+  final String title;
+  final String imgPath;
+
+  const ArticleCard({
+    Key? key,
+    required this.title,
+    required this.imgPath,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 15),
+      height: 150,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        image: DecorationImage(
+          image: AssetImage(imgPath),
+          fit: BoxFit.cover,
+        ),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 2,
+            offset: Offset(0, 2),
+            color: Color.fromARGB(59, 0, 0, 0),
+          ),
+        ],
+      ),
+      child: Material(
+        color: const Color.fromARGB(190, 0, 0, 0),
+        borderRadius: BorderRadius.circular(10),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Center(
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

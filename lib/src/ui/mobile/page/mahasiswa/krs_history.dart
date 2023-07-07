@@ -1,5 +1,6 @@
 import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
 import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
+import 'package:academic_system/src/model/penasehat_akademik.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/ui/mobile/page/mahasiswa/krs_detail.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,7 @@ class _MobileKrsHistoryPageState extends State<MobileKrsHistoryPage> {
                       ],
                     ),
                     const SizedBox(
-                      height: 15,
+                      height: 20,
                     ),
                     const Text(
                       'Anda dapat mengajukan perubahan pemilihan mata kuliah pada KRS selama KRS anda belum dikunci oleh bagian akademik.',
@@ -72,15 +73,17 @@ class _MobileKrsHistoryPageState extends State<MobileKrsHistoryPage> {
                       style: TextStyle(fontSize: 16),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     const Text(
-                      'Berikut adalah list histori pengisian KRS anda:',
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(fontSize: 16),
+                      'List Histori KRS',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     BlocBuilder<KrsBloc, KrsState>(
                       builder: (context, state) {
@@ -123,6 +126,37 @@ class KrsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<PenasehatAkademik> listPA = [
+      PenasehatAkademik(
+        id: '151190003',
+        name: 'Sugesti, S.Si., M.Kom.',
+      ),
+      PenasehatAkademik(
+        id: '151190006',
+        name: 'Hari Santoso, S.Kom., M.Kom.',
+      ),
+      PenasehatAkademik(
+        id: '151190010',
+        name: 'Hans Saputra, S.Kom., MMSI.',
+      ),
+      PenasehatAkademik(
+        id: '151190012',
+        name: 'Desy Mora Daulay, S.Kom., M.Kom.',
+      ),
+      PenasehatAkademik(
+        id: '151190013',
+        name: 'Syarah, S.Kom., M.Kom.',
+      ),
+      PenasehatAkademik(
+        id: '151190009',
+        name: 'Sobiyanto, S.E., S.Kom., M.Kom., MTA.',
+      ),
+      PenasehatAkademik(
+        id: '151190018',
+        name: 'Rama Putra, S.Kom., M.Kom.',
+      ),
+    ];
+
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       itemCount: krsLengkap.length,
@@ -218,6 +252,15 @@ class KrsList extends StatelessWidget {
                       ),
                       Text(
                         'Tanggal Pengisian: ${krsLengkap[index].waktuPengisian}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'P.A: ${listPA.where((element) => element.id == krsLengkap[index].idDosen).first.name}',
                         style: const TextStyle(
                           fontSize: 16,
                         ),

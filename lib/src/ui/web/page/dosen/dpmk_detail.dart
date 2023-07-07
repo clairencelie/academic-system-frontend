@@ -9,6 +9,7 @@ class DPMKDetailPage extends StatefulWidget {
   final String idMataKuliah;
   final String namaMataKuliah;
   final String tahunAkademik;
+  final String kelas;
 
   const DPMKDetailPage({
     super.key,
@@ -16,6 +17,7 @@ class DPMKDetailPage extends StatefulWidget {
     required this.idMataKuliah,
     required this.namaMataKuliah,
     required this.tahunAkademik,
+    required this.kelas,
   });
 
   @override
@@ -38,80 +40,87 @@ class _DPMKDetailPageState extends State<DPMKDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-        child: BlocBuilder<DosenBloc, DosenState>(
-          builder: (context, state) {
-            if (state is NilaiMhsFound) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  DPMKDetailHeader(
-                    idDosen: widget.idDosen,
-                    namaMataKuliah: widget.namaMataKuliah,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text(
-                    'List Nilai Kelas',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Jumlah peserta: ${state.nilaiMhsList.length}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const ListNilaiHeader(),
-                  const Divider(),
-                  ListNilaiMahasiswa(
-                    listNilaiMhs: state.nilaiMhsList,
-                    namaMataKuliah: widget.namaMataKuliah,
-                    idDosen: widget.idDosen,
-                    tahunAkademik: widget.tahunAkademik,
-                  ),
-                ],
-              );
-            } else if (state is NilaiMhsNotFound) {
-              return SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DPMKDetailHeader(
-                      idDosen: widget.idDosen,
-                      namaMataKuliah: widget.namaMataKuliah,
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height / 1.5,
-                      child: const Center(
-                        child: Text(
-                          'Mata kuliah ini belum memiliki peserta',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold,
-                          ),
+      body: Center(
+        child: FractionallySizedBox(
+          widthFactor: 0.8,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: BlocBuilder<DosenBloc, DosenState>(
+              builder: (context, state) {
+                if (state is NilaiMhsFound) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      DPMKDetailHeader(
+                        idDosen: widget.idDosen,
+                        namaMataKuliah: widget.namaMataKuliah,
+                        kelas: widget.kelas,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const Text(
+                        'List Nilai Kelas',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'Jumlah peserta: ${state.nilaiMhsList.length}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      const ListNilaiHeader(),
+                      const Divider(),
+                      ListNilaiMahasiswa(
+                        listNilaiMhs: state.nilaiMhsList,
+                        namaMataKuliah: widget.namaMataKuliah,
+                        idDosen: widget.idDosen,
+                        tahunAkademik: widget.tahunAkademik,
+                      ),
+                    ],
+                  );
+                } else if (state is NilaiMhsNotFound) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        DPMKDetailHeader(
+                          idDosen: widget.idDosen,
+                          namaMataKuliah: widget.namaMataKuliah,
+                          kelas: widget.kelas,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 1.5,
+                          child: const Center(
+                            child: Text(
+                              'Mata kuliah ini belum memiliki peserta',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            }
+                  );
+                }
 
-            return const CircularProgressIndicator();
-          },
+                return const CircularProgressIndicator();
+              },
+            ),
+          ),
         ),
       ),
     );
@@ -121,10 +130,12 @@ class _DPMKDetailPageState extends State<DPMKDetailPage> {
 class DPMKDetailHeader extends StatelessWidget {
   final String idDosen;
   final String namaMataKuliah;
+  final String kelas;
   const DPMKDetailHeader({
     Key? key,
     required this.idDosen,
     required this.namaMataKuliah,
+    required this.kelas,
   }) : super(key: key);
 
   @override
@@ -151,7 +162,7 @@ class DPMKDetailHeader extends StatelessWidget {
           width: 5,
         ),
         Text(
-          namaMataKuliah,
+          '$namaMataKuliah - $kelas',
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,

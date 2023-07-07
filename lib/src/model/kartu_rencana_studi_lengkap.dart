@@ -3,6 +3,7 @@ import 'package:academic_system/src/model/learning_subject.dart';
 class KartuRencanaStudiLengkap {
   final String id;
   final String nim;
+  final String idDosen;
   final String nama;
   final String semester;
   final String jurusan;
@@ -13,11 +14,13 @@ class KartuRencanaStudiLengkap {
   final String waktuPengisian;
   final String tahunAkademik;
   final String commit;
+  final String approve;
   final List<LearningSubject> pilihanMataKuliah;
 
   KartuRencanaStudiLengkap({
     required this.id,
     required this.nim,
+    required this.idDosen,
     required this.nama,
     required this.semester,
     required this.jurusan,
@@ -28,6 +31,7 @@ class KartuRencanaStudiLengkap {
     required this.waktuPengisian,
     required this.tahunAkademik,
     required this.commit,
+    required this.approve,
     required this.pilihanMataKuliah,
   });
 
@@ -35,6 +39,7 @@ class KartuRencanaStudiLengkap {
     return KartuRencanaStudiLengkap(
       id: json['id'],
       nim: json['nim'],
+      idDosen: json['id_dosen'],
       nama: json['nama'],
       semester: json['semester'],
       jurusan: json['jurusan'],
@@ -45,6 +50,7 @@ class KartuRencanaStudiLengkap {
       waktuPengisian: json['waktu_pengisian'],
       tahunAkademik: json['tahun_akademik'],
       commit: json['commit'],
+      approve: json['approve'],
       pilihanMataKuliah: (json['pilihan_mata_kuliah'] as List)
           .map((pilihanMatkul) => LearningSubject.createFromJson(pilihanMatkul))
           .toList(),

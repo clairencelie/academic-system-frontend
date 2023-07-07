@@ -1,30 +1,56 @@
 import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
 import 'package:academic_system/src/bloc/tahun_akademik/tahun_akademik_bloc.dart';
+import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/info_dialog.dart';
-import 'package:academic_system/src/ui/web/component/custom_widget/web_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FormTahunAkademik extends StatefulWidget {
-  const FormTahunAkademik({super.key});
+  final KrsSchedule krsSchedule;
+
+  const FormTahunAkademik({
+    super.key,
+    required this.krsSchedule,
+  });
 
   @override
   State<FormTahunAkademik> createState() => _FormTahunAkademikState();
 }
 
 class _FormTahunAkademikState extends State<FormTahunAkademik> {
-  TextEditingController tahunAkademik1 = TextEditingController();
-  TextEditingController tahunAkademik2 = TextEditingController();
+  String? valueTA;
+  String? valueSmt;
+
+  final int currentYear = DateTime.now().year;
+
+  List<DropdownMenuItem> listSemester = const [
+    DropdownMenuItem<String>(
+      value: 'ganjil',
+      child: Text('ganjil'),
+    ),
+    DropdownMenuItem<String>(
+      value: 'genap',
+      child: Text('genap'),
+    ),
+  ];
+
+  TextEditingController tahunAkademik = TextEditingController();
+  // TextEditingController tahunAkademik2 = TextEditingController();
   TextEditingController semester = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    context.read<KrsBloc>().add(GetTahunAkademik());
-  }
-
-  @override
   Widget build(BuildContext context) {
+    List<DropdownMenuItem> listTahunAkademik = [
+      DropdownMenuItem<String>(
+        value: '${currentYear - 1}/$currentYear',
+        child: Text('${currentYear - 1}/$currentYear'),
+      ),
+      DropdownMenuItem<String>(
+        value: '$currentYear/${currentYear + 1}',
+        child: Text('$currentYear/${currentYear + 1}'),
+      ),
+    ];
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -44,64 +70,24 @@ class _FormTahunAkademikState extends State<FormTahunAkademik> {
               const SizedBox(
                 height: 20,
               ),
-              BlocBuilder<KrsBloc, KrsState>(
-                builder: (context, state) {
-                  if (state is KrsScheduleLoaded) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Tahun Akademik Berjalan: ${state.krsSchedule.tahunAkademik}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          'Semester: ${state.krsSchedule.semester}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    );
-                  } else if (state is KrsScheduleNotFound) {
-                    return const Text(
-                      'Data tahun akademik gagal didapatkan',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    );
-                  }
-                  return const CircularProgressIndicator();
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text('Tahun Akademik'),
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: 80,
-                    child: WebFormField(
-                      hintText: '...',
-                      controller: tahunAkademik1,
-                    ),
-                  ),
-                  const Text(
-                    '   /   ',
-                    style: TextStyle(
+                  Text(
+                    'Semester: ${widget.krsSchedule.semester}',
+                    style: const TextStyle(
                       fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(
-                    width: 80,
-                    child: WebFormField(
-                      hintText: '...',
-                      controller: tahunAkademik2,
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Tahun Akademik Berjalan: ${widget.krsSchedule.tahunAkademik}',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
@@ -110,13 +96,49 @@ class _FormTahunAkademikState extends State<FormTahunAkademik> {
                 height: 20,
               ),
               const Text('Semester'),
-              WebFormField(
-                hintText: 'Semester...',
-                controller: semester,
+              // WebFormField(
+              //   hintText: 'Semester...',
+              //   controller: semester,
+              // ),
+
+              DropdownButton(
+                isExpanded: true,
+                hint: const Text('Input Semester...'),
+                value: (semester.text == '') ? valueSmt : semester.text,
+                onChanged: (value) {
+                  setState(() {
+                    semester.text = value;
+                  });
+                },
+                items: listSemester,
               ),
               const SizedBox(
                 height: 20,
               ),
+              const Text('Tahun Akademik'),
+              // SizedBox(
+              //   width: 80,
+              //   child: WebFormField(
+              //     hintText: '...',
+              //     controller: tahunAkademik,
+              //   ),
+              // ),
+              DropdownButton(
+                isExpanded: true,
+                hint: const Text('Input Tahun Akademik...'),
+                value:
+                    (tahunAkademik.text == '') ? valueTA : tahunAkademik.text,
+                onChanged: (value) {
+                  setState(() {
+                    tahunAkademik.text = value;
+                  });
+                },
+                items: listTahunAkademik,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -197,12 +219,9 @@ class _FormTahunAkademikState extends State<FormTahunAkademik> {
                                   const Color.fromARGB(255, 53, 230, 112)),
                         ),
                         onPressed: () {
-                          final String tahunAkademik =
-                              '${tahunAkademik1.text}/${tahunAkademik2.text}';
-
                           context.read<TahunAkademikBloc>().add(
                                 SetTahunAkademik(
-                                  tahunAkademik: tahunAkademik,
+                                  tahunAkademik: tahunAkademik.text,
                                   semester: semester.text,
                                 ),
                               );

@@ -1,5 +1,9 @@
+import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
 import 'package:academic_system/src/bloc/schedule/schedule_bloc.dart';
+import 'package:academic_system/src/bloc/schedule_krs/schedule_krs_bloc.dart';
 import 'package:academic_system/src/helper/ina_day.dart';
+import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
+import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/lecturer.dart';
 import 'package:academic_system/src/model/schedule.dart';
 import 'package:academic_system/src/model/student.dart';
@@ -25,27 +29,129 @@ class _ScheduleListState extends State<ScheduleList> {
   @override
   void initState() {
     super.initState();
+    context.read<ScheduleKrsBloc>().add(GetScheduleKrs());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ScheduleKrsBloc, ScheduleKrsState>(
+      builder: (context, state) {
+        if (state is ScheduleKrsLoaded) {
+          return ScheduleBody(
+            krsSchedule: state.krsSchedule,
+            user: widget.user,
+          );
+        }
+        return const CircularProgressIndicator();
+      },
+    );
+  }
+}
+
+class ScheduleBody extends StatefulWidget {
+  final KrsSchedule krsSchedule;
+  final User user;
+
+  const ScheduleBody({
+    Key? key,
+    required this.krsSchedule,
+    required this.user,
+  }) : super(key: key);
+
+  @override
+  State<ScheduleBody> createState() => _ScheduleBodyState();
+}
+
+class _ScheduleBodyState extends State<ScheduleBody> {
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.user is Student) {
+      context.read<KrsBloc>().add(
+            GetKrsLengkap(nim: widget.user.id),
+          );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<KrsBloc, KrsState>(
+      builder: (context, state) {
+        if (widget.user is Student) {
+          if (state is KrsFound) {
+            var krsSmtIni = state.krsLengkap
+                .where((element) =>
+                    element.tahunAkademik == widget.krsSchedule.tahunAkademik &&
+                    element.semester == (widget.user as Student).semester)
+                .first;
+            return MobileScheduleList(
+              user: widget.user,
+              krsLengkap: krsSmtIni,
+              krsSchedule: widget.krsSchedule,
+            );
+          }
+        } else if (widget.user is Lecturer) {
+          return MobileScheduleList(
+            user: widget.user,
+            krsSchedule: widget.krsSchedule,
+          );
+        }
+        return MobileScheduleList(
+          krsSchedule: widget.krsSchedule,
+        );
+      },
+    );
+  }
+}
+
+class MobileScheduleList extends StatefulWidget {
+  final KartuRencanaStudiLengkap? krsLengkap;
+  final User? user;
+  final KrsSchedule krsSchedule;
+
+  const MobileScheduleList({
+    Key? key,
+    this.krsLengkap,
+    this.user,
+    required this.krsSchedule,
+  }) : super(key: key);
+
+  @override
+  State<MobileScheduleList> createState() => _MobileScheduleListState();
+}
+
+class _MobileScheduleListState extends State<MobileScheduleList> {
+  void callScheduleBloc() {
     if (widget.user is Student) {
       context.read<ScheduleBloc>().add(RequestStudentSchedules(
-            id: widget.user.id,
+            id: widget.krsLengkap!.nim,
+            idKrs: widget.krsLengkap!.id,
             day: InaDay.getDayName(),
+            tahunAkademik: widget.krsLengkap!.tahunAkademik,
+            semester: int.tryParse(widget.krsLengkap!.semester)! % 2 == 0
+                ? 'genap'
+                : 'ganjil',
           ));
     } else if (widget.user is Lecturer) {
       context.read<ScheduleBloc>().add(RequestLecturerSchedules(
-            id: widget.user.id,
+            id: widget.user!.id,
             day: InaDay.getDayName(),
+            tahunAkademik: widget.krsSchedule.tahunAkademik,
+            semester: widget.krsSchedule.semester,
           ));
     } else {
-      context.read<ScheduleBloc>().add(RequestSchedulesByDay(
-            day: InaDay.getDayName(),
+      context.read<ScheduleBloc>().add(RequestAllSchedule(
+            tahunAkademik: widget.krsSchedule.tahunAkademik,
+            semester: widget.krsSchedule.semester,
           ));
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    callScheduleBloc();
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -59,28 +165,11 @@ class _ScheduleListState extends State<ScheduleList> {
             ),
             IconButton(
               onPressed: () {
-                if (widget.user is Student) {
-                  context.read<ScheduleBloc>().add(RequestStudentSchedules(
-                        id: widget.user.id,
-                        day: InaDay.getDayName(),
-                      ));
-                } else if (widget.user is Lecturer) {
-                  context.read<ScheduleBloc>().add(RequestLecturerSchedules(
-                        id: widget.user.id,
-                        day: InaDay.getDayName(),
-                      ));
-                } else {
-                  context.read<ScheduleBloc>().add(RequestSchedulesByDay(
-                        day: InaDay.getDayName(),
-                      ));
-                }
+                callScheduleBloc();
               },
               icon: const Icon(Icons.replay_outlined),
             ),
           ],
-        ),
-        const SizedBox(
-          height: 10,
         ),
         BlocBuilder<ScheduleBloc, ScheduleState>(
           builder: (context, state) {
@@ -95,21 +184,27 @@ class _ScheduleListState extends State<ScheduleList> {
               );
             } else if (state is ScheduleLoaded) {
               List<Schedule> schedules = state.schedules;
+
+              List<Schedule> schedulesByDay = schedules
+                  .where((element) => element.day == InaDay.getDayName())
+                  .toList();
+
               if (schedules.isNotEmpty) {
                 return ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return DailyScheduleCard(schedule: schedules[index]);
+                    return DailyScheduleCard(schedule: schedulesByDay[index]);
                   },
-                  itemCount: schedules.length,
+                  itemCount: schedulesByDay.length,
                 );
               }
             } else if (state is ScheduleEmpty) {
               return const NoSchedule();
             } else if (state is ScheduleRequestFailed) {
-              // TODO: Make schedule request failed dialog
+              return const Text(
+                  'Gagal mendapatkan data jadwal, mohon klik icon refresh');
             }
             return const NoSchedule();
           },

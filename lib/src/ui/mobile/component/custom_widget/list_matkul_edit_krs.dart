@@ -312,6 +312,7 @@ class _MobileListMatkulEditKRSState extends State<MobileListMatkulEditKRS> {
                                   NewKartuRencanaStudi krs =
                                       NewKartuRencanaStudi(
                                     nim: widget.user.id,
+                                    idDosen: widget.krs.idDosen,
                                     semester: widget.user.semester,
                                     jurusan: widget.user.major,
                                     ips: widget.krs.ips,

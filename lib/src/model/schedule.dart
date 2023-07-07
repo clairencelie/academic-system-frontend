@@ -1,5 +1,6 @@
 class Schedule {
   String id;
+  String idMatkul;
   String learningSubId;
   String learningSubName;
   String lecturerId;
@@ -11,9 +12,12 @@ class Schedule {
   String grade;
   String credit;
   String information;
+  String tahunAkademik;
+  String semester;
 
   Schedule({
     required this.id,
+    required this.idMatkul,
     required this.learningSubId,
     required this.learningSubName,
     required this.lecturerId,
@@ -25,12 +29,15 @@ class Schedule {
     required this.grade,
     required this.credit,
     required this.information,
+    required this.tahunAkademik,
+    required this.semester,
   });
 
   factory Schedule.createFromJson(Map<String, dynamic> json) {
     return Schedule(
       id: json['id'].toString(),
-      learningSubId: json['learning_sub_id'],
+      idMatkul: json['id_matkul'].toString(),
+      learningSubId: json['learning_sub_id'].toString(),
       learningSubName: json['learning_sub_name'],
       lecturerId: json['lecturer_id'].toString(),
       lecturerName: json['lecturer_name'],
@@ -41,6 +48,8 @@ class Schedule {
       grade: json['grade'],
       credit: json['credit'].toString(),
       information: json['information'],
+      tahunAkademik: json['tahun_akademik'],
+      semester: json['semester'],
     );
   }
 }

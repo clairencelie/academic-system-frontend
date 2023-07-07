@@ -116,6 +116,29 @@ class KrsRepository {
     return jsonDecode(response.body)["message"];
   }
 
+  Future<String> approveKrs(String idKrs) async {
+    Uri url = Uri.parse('$apiUrl/approve/krs');
+
+    var response = await post(
+      url,
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ${await SecureStorage.getToken('jwt')}',
+      },
+      body: {
+        'id_krs': idKrs,
+      },
+    );
+
+    if (response.statusCode == 401) {
+      return await JWTRefresher.refreshToken(response)
+          ? await approveKrs(idKrs)
+          : 'session expired';
+    }
+
+    return jsonDecode(response.body)["message"];
+  }
+
   Future<List<KartuRencanaStudi>> getKrs(String nim) async {
     String? jwt = await SecureStorage.getToken('jwt');
 

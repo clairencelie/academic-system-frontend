@@ -32,6 +32,7 @@ class _MobileTranskripPageState extends State<MobileTranskripPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: SafeArea(
           child: Center(
             child: FractionallySizedBox(
@@ -269,7 +270,10 @@ class KartuTranskripMahasiswa extends StatelessWidget {
                           height: 5,
                         ),
                         Text(
-                          transkripRinci.transkripNilai.ipk.substring(0, 4),
+                          transkripRinci.transkripNilai.ipk.length > 3
+                              ? transkripRinci.transkripNilai.ipk
+                                  .substring(0, 4)
+                              : transkripRinci.transkripNilai.ipk,
                           textAlign: TextAlign.end,
                           style: const TextStyle(
                             color: Colors.white,

@@ -5,7 +5,9 @@ import 'package:academic_system/src/bloc/histori_transaksi/histori_transaksi_blo
 import 'package:academic_system/src/bloc/khs/khs_bloc.dart';
 import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
 import 'package:academic_system/src/bloc/krs_management/krs_management_bloc.dart';
+import 'package:academic_system/src/bloc/master_mata_kuliah/master_mata_kuliah_bloc.dart';
 import 'package:academic_system/src/bloc/mata_kuliah/mata_kuliah_bloc.dart';
+import 'package:academic_system/src/bloc/matkul_management/matkul_management_bloc.dart';
 import 'package:academic_system/src/bloc/nilai/nilai_bloc.dart';
 import 'package:academic_system/src/bloc/rincian_tagihan/rincian_tagihan_bloc.dart';
 import 'package:academic_system/src/bloc/schedule/schedule_bloc.dart';
@@ -148,6 +150,17 @@ class MyApp extends StatelessWidget {
             create: (context) => TransaksiBloc(
               transaksiRepository:
                   RepositoryProvider.of<TransaksiRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => MasterMataKuliahBloc(
+              repository: RepositoryProvider.of<MataKuliahRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => MatkulManagementBloc(
+              mataKuliahRepository:
+                  RepositoryProvider.of<MataKuliahRepository>(context),
             ),
           ),
         ],

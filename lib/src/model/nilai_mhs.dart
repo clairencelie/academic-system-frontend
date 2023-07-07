@@ -4,6 +4,7 @@ class NilaiMahasiswa {
   final String nama;
   final String jurusan;
   final String idMataKuliah;
+  final String idMataKuliahMaster;
   final String namaMataKuliah;
   final String idNilai;
   final int kehadiran;
@@ -23,6 +24,7 @@ class NilaiMahasiswa {
     required this.nama,
     required this.jurusan,
     required this.idMataKuliah,
+    required this.idMataKuliahMaster,
     required this.namaMataKuliah,
     required this.idNilai,
     required this.kehadiran,
@@ -43,7 +45,8 @@ class NilaiMahasiswa {
       nim: json['nim']?.toString() ?? '',
       nama: json['nama'] ?? '',
       jurusan: json['jurusan'] ?? '',
-      idMataKuliah: json['id_mata_kuliah'],
+      idMataKuliah: json['id_mata_kuliah'].toString(),
+      idMataKuliahMaster: json['id_mata_kuliah_master'],
       namaMataKuliah: json['nama_mata_kuliah'] ?? '',
       idNilai: json['id_nilai'].toString(),
       kehadiran: json['kehadiran'],

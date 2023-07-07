@@ -37,6 +37,9 @@ class _KRSWebPageState extends State<KRSWebPage> {
           semester: (widget.user as Student).semester,
         ));
     context.read<KhsBloc>().add(GetTranskripEvent(nim: widget.user.id));
+    context.read<TagihanPerkuliahanBloc>().add(
+          GetListTagihan(nim: widget.user.id),
+        );
   }
 
   @override
@@ -75,39 +78,37 @@ class _KRSWebPageState extends State<KRSWebPage> {
                         const SizedBox(
                           height: 20,
                         ),
-                        (widget.user as Student).semester == '1'
-                            ? const SizedBox()
-                            : TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return KrsHistoryPage(
-                                          student: (widget.user as Student),
-                                        );
-                                      },
-                                    ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return KrsHistoryPage(
+                                    student: (widget.user as Student),
                                   );
                                 },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      border: Border(
-                                        bottom: BorderSide(
-                                            color: Colors.blue, width: 1),
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      'Histori Pengisian KRS',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                  bottom:
+                                      BorderSide(color: Colors.blue, width: 1),
                                 ),
                               ),
+                              child: const Text(
+                                'Histori Pengisian KRS',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                         const SizedBox(
                           height: 20,
                         ),
@@ -205,7 +206,16 @@ class _KRSWebPageState extends State<KRSWebPage> {
                                             ),
                                           );
                                         }
-                                        return const CircularProgressIndicator();
+                                        return Container(
+                                          alignment: Alignment.center,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              2,
+                                          child: const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        );
                                       },
                                     )
                                   : const Text(
@@ -218,7 +228,8 @@ class _KRSWebPageState extends State<KRSWebPage> {
                                       ),
                                     );
                             } else if (state is KrsLoading) {
-                              return SizedBox(
+                              return Container(
+                                alignment: Alignment.center,
                                 height: MediaQuery.of(context).size.height / 2,
                                 child: const Center(
                                   child: CircularProgressIndicator(),
@@ -239,7 +250,8 @@ class _KRSWebPageState extends State<KRSWebPage> {
                       ],
                     );
                   }
-                  return SizedBox(
+                  return Container(
+                    alignment: Alignment.center,
                     height: MediaQuery.of(context).size.height,
                     child: const Center(
                       child: CircularProgressIndicator(),

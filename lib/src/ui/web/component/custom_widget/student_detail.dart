@@ -64,7 +64,10 @@ class _StudentDetailState extends State<StudentDetail> {
           ],
         ),
         widget.user.semester == '1'
-            ? const Text('Semester 1')
+            ? const Text(
+                'Semester 1',
+                style: TextStyle(fontSize: 18),
+              )
             : Row(
                 children: [
                   Column(

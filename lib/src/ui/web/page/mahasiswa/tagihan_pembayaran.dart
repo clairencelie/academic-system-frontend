@@ -3,6 +3,7 @@ import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/tagihan_perkuliahan.dart';
 import 'package:academic_system/src/model/user.dart';
 import 'package:academic_system/src/ui/web/page/mahasiswa/detail_tagihan.dart';
+import 'package:academic_system/src/ui/web/page/mahasiswa/histori_transaksi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -78,7 +79,18 @@ class _TagihanPembayaranState extends State<TagihanPembayaran> {
                       ],
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        // Navigate to histori transaksi
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return WebHistoriTransakasi(
+                                  mahasiswa: widget.user as Student);
+                            },
+                          ),
+                        );
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(

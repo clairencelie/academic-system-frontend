@@ -2,6 +2,8 @@ import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
 import 'package:academic_system/src/bloc/krs_management/krs_management_bloc.dart';
 import 'package:academic_system/src/bloc/schedule_krs/schedule_krs_bloc.dart';
 import 'package:academic_system/src/bloc/tahun_akademik/tahun_akademik_bloc.dart';
+import 'package:academic_system/src/bloc/user/user_bloc.dart';
+import 'package:academic_system/src/constant/colors.dart';
 import 'package:academic_system/src/helper/date_converter.dart';
 import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
@@ -82,6 +84,9 @@ class _KRSManagementPageState extends State<KRSManagementPage> {
                                       IconButton(
                                         onPressed: () {
                                           Navigator.pop(context);
+                                          context
+                                              .read<KrsBloc>()
+                                              .add(GetTahunAkademik());
                                         },
                                         icon: const Icon(Icons.arrow_back),
                                       ),
@@ -94,57 +99,74 @@ class _KRSManagementPageState extends State<KRSManagementPage> {
                                       ),
                                     ],
                                   ),
-                                  DropdownButton(
-                                    value: tahunAkademikDropDownValue,
-                                    items: dropDownMenuList(listTA),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        tahunAkademikDropDownValue = value;
-                                      });
-                                    },
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        'Tahun akademik: ',
+                                        style: TextStyle(fontSize: 16),
+                                      ),
+                                      DropdownButton(
+                                        value: tahunAkademikDropDownValue,
+                                        items: dropDownMenuList(listTA),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            tahunAkademikDropDownValue = value;
+                                          });
+                                        },
+                                      ),
+                                    ],
                                   )
                                 ],
                               ),
                               const SizedBox(
                                 height: 20,
                               ),
-                              Text(
-                                'Jadwal Pengisian KRS: ${DateConverter.convertToDartDateFormat(jadwalKrs.tanggalMulai)} - ${DateConverter.convertToDartDateFormat(jadwalKrs.tanggalSelesai)}',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              // Button set Jadwal KRS
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        content: SizedBox(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              1.5,
-                                          width: 400,
-                                          child: const FormJadwalKrs(),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: const Text('Set Jadwal KRS'),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Jadwal Pengisian KRS: ${DateConverter.convertToDartDateFormat(jadwalKrs.tanggalMulai)} - ${DateConverter.convertToDartDateFormat(jadwalKrs.tanggalSelesai)}',
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateColor.resolveWith(
+                                                (states) => mainColor),
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              content: SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    1.5,
+                                                width: 400,
+                                                child: const FormJadwalKrs(),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: const Text('Set Jadwal KRS'),
+                                    ),
+                                  ),
+                                ],
                               ),
                               const SizedBox(
                                 height: 20,
                               ),
-
                               Text(
-                                'List KRS Mahasiswa T.A $tahunAkademikDropDownValue',
+                                'List KRS Mahasiswa T.A ${tahunAkademikDropDownValue.split(' ')[0]} Semester ${tahunAkademikDropDownValue.split(' ')[1][0].toUpperCase()}${tahunAkademikDropDownValue.split(' ')[1].substring(1)}',
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -203,7 +225,13 @@ class _KRSManagementPageState extends State<KRSManagementPage> {
                                             tahunAkademikDropDownValue,
                                       );
                                     }
-                                    return const CircularProgressIndicator();
+                                    return Container(
+                                      alignment: Alignment.center,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              2,
+                                      child: const CircularProgressIndicator(),
+                                    );
                                   },
                                 ),
                               ),
@@ -223,21 +251,16 @@ class _KRSManagementPageState extends State<KRSManagementPage> {
                             ],
                           );
                         }
-                        return Column(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(Icons.arrow_back),
-                            ),
-                            const CircularProgressIndicator(),
-                          ],
+                        return Container(
+                          alignment: Alignment.center,
+                          height: MediaQuery.of(context).size.height / 2,
+                          child: const CircularProgressIndicator(),
                         );
                       },
                     );
                   } else if (state is ScheduleKrsFailed) {
                     return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         IconButton(
                           onPressed: () {
@@ -250,16 +273,10 @@ class _KRSManagementPageState extends State<KRSManagementPage> {
                     );
                   }
 
-                  return Column(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(Icons.arrow_back),
-                      ),
-                      const CircularProgressIndicator(),
-                    ],
+                  return Container(
+                    alignment: Alignment.center,
+                    height: MediaQuery.of(context).size.height / 2,
+                    child: const CircularProgressIndicator(),
                   );
                 },
               ),
@@ -271,7 +288,7 @@ class _KRSManagementPageState extends State<KRSManagementPage> {
   }
 }
 
-class KrsManagementList extends StatelessWidget {
+class KrsManagementList extends StatefulWidget {
   final List<KartuRencanaStudiLengkap> krsLengkap;
   final String tahunAkademik;
 
@@ -282,16 +299,27 @@ class KrsManagementList extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<KrsManagementList> createState() => _KrsManagementListState();
+}
+
+class _KrsManagementListState extends State<KrsManagementList> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<UserBloc>().add(GetLecturer());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final String tahunAkdm = tahunAkademik.split(" ").toList()[0];
-    final String semester = tahunAkademik.split(" ").toList()[1];
+    final String tahunAkdm = widget.tahunAkademik.split(" ").toList()[0];
+    final String semester = widget.tahunAkademik.split(" ").toList()[1];
 
     final List<KartuRencanaStudiLengkap> filterSemesterKrsLengkap =
         semester == 'genap'
-            ? krsLengkap
+            ? widget.krsLengkap
                 .where((krs) => int.tryParse(krs.semester)! % 2 == 0)
                 .toList()
-            : krsLengkap
+            : widget.krsLengkap
                 .where((krs) => int.tryParse(krs.semester)! % 2 == 1)
                 .toList();
 
@@ -300,134 +328,172 @@ class KrsManagementList extends StatelessWidget {
             .where((krs) => krs.tahunAkademik == tahunAkdm)
             .toList();
 
-    return ListView.builder(
-      itemCount: filterTahunAkademikKrs.length,
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        return MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return DetailKrsMhs(krs: filterTahunAkademikKrs[index]);
+    return BlocBuilder<UserBloc, UserState>(
+      builder: (context, state) {
+        if (state is LecturerFound) {
+          return ListView.builder(
+            itemCount: filterTahunAkademikKrs.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return DetailKrsMhs(
+                              krs: filterTahunAkademikKrs[index]);
+                        },
+                      ),
+                    );
                   },
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        height: 70,
+                        decoration: BoxDecoration(
+                          color: index % 2 == 1
+                              ? const Color.fromARGB(255, 251, 251, 251)
+                              : const Color.fromARGB(255, 245, 247, 251),
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: const [
+                            BoxShadow(
+                              blurRadius: 1,
+                              color: Color.fromARGB(55, 0, 0, 0),
+                              offset: Offset(0, 1),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                filterTahunAkademikKrs[index].nim,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                filterTahunAkademikKrs[index].nama,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                filterTahunAkademikKrs[index].bebanSksMaks,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                filterTahunAkademikKrs[index].kreditDiambil,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                filterTahunAkademikKrs[index].tahunAkademik,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                filterTahunAkademikKrs[index].approve == "1"
+                                    ? "Sudah Diapprove"
+                                    : "Belum Diapprove",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                state.lecturers
+                                    .where((element) =>
+                                        element.id ==
+                                        filterTahunAkademikKrs[index].idDosen)
+                                    .first
+                                    .name,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      filterTahunAkademikKrs[index].approve ==
+                                                  "0" ||
+                                              filterTahunAkademikKrs[index]
+                                                      .commit ==
+                                                  "1"
+                                          ? null
+                                          : MaterialStateColor.resolveWith(
+                                              (states) => mainColor),
+                                ),
+                                onPressed: filterTahunAkademikKrs[index]
+                                                .approve ==
+                                            "0" ||
+                                        filterTahunAkademikKrs[index].commit ==
+                                            "1"
+                                    ? null
+                                    : () {
+                                        // Call commit krs
+                                        context.read<KrsManagementBloc>().add(
+                                              LockKrs(
+                                                  idKrs: filterTahunAkademikKrs[
+                                                          index]
+                                                      .id),
+                                            );
+                                      },
+                                child: const Text('Kunci KRS'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  height: 70,
-                  decoration: BoxDecoration(
-                    color: index % 2 == 1
-                        ? const Color.fromARGB(255, 251, 251, 251)
-                        : const Color.fromARGB(255, 245, 247, 251),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                        blurRadius: 1,
-                        color: Color.fromARGB(55, 0, 0, 0),
-                        offset: Offset(0, 1),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          filterTahunAkademikKrs[index].nim,
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Text(
-                          filterTahunAkademikKrs[index].nama,
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          filterTahunAkademikKrs[index].semester,
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          filterTahunAkademikKrs[index].kreditDiambil,
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          DateConverter.mySQLToDartDateFormat(
-                              filterTahunAkademikKrs[index].waktuPengisian),
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          filterTahunAkademikKrs[index].tahunAkademik,
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          filterTahunAkademikKrs[index].commit == "1"
-                              ? "Dikunci"
-                              : "Belum dikunci",
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: ElevatedButton(
-                          onPressed: filterTahunAkademikKrs[index].commit == "1"
-                              ? null
-                              : () {
-                                  // Call commit krs
-                                  context.read<KrsManagementBloc>().add(
-                                        LockKrs(
-                                            idKrs: filterTahunAkademikKrs[index]
-                                                .id),
-                                      );
-                                },
-                          child: const Text('Kunci KRS'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-              ],
-            ),
-          ),
+          );
+        } else if (state is UserNotFound) {
+          return Container(
+            alignment: Alignment.center,
+            height: MediaQuery.of(context).size.height / 2,
+            child: Text(state.message),
+          );
+        }
+        return Container(
+          alignment: Alignment.center,
+          height: MediaQuery.of(context).size.height / 2,
+          child: const CircularProgressIndicator(),
         );
       },
     );
@@ -468,16 +534,6 @@ class KrsListHeader extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Text(
-              'Smt',
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Text(
               'Kredit Diambil',
               style: TextStyle(
                 fontSize: 17,
@@ -488,7 +544,7 @@ class KrsListHeader extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Text(
-              'Tanggal Pengajuan KRS',
+              'Maks Kredit',
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
@@ -509,6 +565,16 @@ class KrsListHeader extends StatelessWidget {
             flex: 1,
             child: Text(
               'Status KRS',
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'P.A',
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,

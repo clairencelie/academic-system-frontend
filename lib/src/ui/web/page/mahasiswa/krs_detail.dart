@@ -121,8 +121,8 @@ class _KRSDetailPageState extends State<KRSDetailPage> {
                             title: Row(
                               children: [
                                 Expanded(
-                                  child: Text(
-                                      widget.krs.pilihanMataKuliah[index].id),
+                                  child: Text(widget
+                                      .krs.pilihanMataKuliah[index].idMatkul),
                                 ),
                                 Expanded(
                                   flex: 2,
@@ -138,8 +138,9 @@ class _KRSDetailPageState extends State<KRSDetailPage> {
                                       .krs.pilihanMataKuliah[index].grade),
                                 ),
                                 Expanded(
-                                  child: Text(
-                                      widget.krs.pilihanMataKuliah[index].type),
+                                  child: Text(widget
+                                      .krs.pilihanMataKuliah[index].type
+                                      .toUpperCase()),
                                 ),
                               ],
                             ),

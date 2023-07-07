@@ -5,11 +5,11 @@ import 'package:academic_system/src/model/user.dart';
 import 'package:academic_system/src/ui/web/page/akademik/cms.dart';
 import 'package:academic_system/src/ui/web/page/configuration_page.dart';
 import 'package:academic_system/src/ui/web/page/dosen/dpmk.dart';
+import 'package:academic_system/src/ui/web/page/dosen/penasehat_akademik.dart';
 import 'package:academic_system/src/ui/web/page/home_page.dart';
 import 'package:academic_system/src/ui/web/page/krs_web.dart';
 import 'package:academic_system/src/ui/web/page/mahasiswa/tagihan_pembayaran.dart';
 import 'package:academic_system/src/ui/web/page/mahasiswa/transkrip_page.dart';
-import 'package:academic_system/src/ui/web/page/profile_page.dart';
 import 'package:academic_system/src/ui/web/page/schedule_page.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +34,6 @@ class _WebMainPageState extends State<WebMainPage> {
       TranskripPage(mahasiswa: widget.user),
       KRSWebPage(user: widget.user),
       TagihanPembayaran(user: widget.user),
-      WebProfilePage(user: widget.user),
       WebConfigurationPage(user: widget.user),
     ];
 
@@ -42,14 +41,13 @@ class _WebMainPageState extends State<WebMainPage> {
       WebHomePage(user: widget.user),
       DPMKPage(dosen: widget.user),
       WebSchedulePage(user: widget.user),
-      WebProfilePage(user: widget.user),
+      PenasehatAkademikPage(dosen: widget.user),
       WebConfigurationPage(user: widget.user),
     ];
 
     List<Widget> academicOptions = <Widget>[
       WebHomePage(user: widget.user),
       WebSchedulePage(user: widget.user),
-      WebProfilePage(user: widget.user),
       const CMSPage(),
       WebConfigurationPage(user: widget.user),
     ];
@@ -122,19 +120,6 @@ class _WebMainPageState extends State<WebMainPage> {
       ),
       NavigationRailDestination(
         icon: Icon(
-          Icons.person_outline_outlined,
-          color: Colors.white,
-        ),
-        selectedIcon: Icon(
-          Icons.person,
-          color: Colors.yellow,
-        ),
-        label: Text(
-          'Profil',
-        ),
-      ),
-      NavigationRailDestination(
-        icon: Icon(
           Icons.settings_applications_outlined,
           color: Colors.white,
         ),
@@ -190,15 +175,15 @@ class _WebMainPageState extends State<WebMainPage> {
       ),
       NavigationRailDestination(
         icon: Icon(
-          Icons.person_outline_outlined,
+          Icons.fact_check_outlined,
           color: Colors.white,
         ),
         selectedIcon: Icon(
-          Icons.person,
+          Icons.fact_check_outlined,
           color: Colors.yellow,
         ),
         label: Text(
-          'Profil',
+          'Penasehat Akademik',
         ),
       ),
       NavigationRailDestination(
@@ -245,19 +230,6 @@ class _WebMainPageState extends State<WebMainPage> {
       ),
       NavigationRailDestination(
         icon: Icon(
-          Icons.person_outline_outlined,
-          color: Colors.white,
-        ),
-        selectedIcon: Icon(
-          Icons.person,
-          color: Colors.yellow,
-        ),
-        label: Text(
-          'Profil',
-        ),
-      ),
-      NavigationRailDestination(
-        icon: Icon(
           Icons.edit_calendar_outlined,
           color: Colors.white,
         ),
@@ -288,13 +260,14 @@ class _WebMainPageState extends State<WebMainPage> {
       body: Row(
         children: [
           NavigationRail(
+            elevation: 1,
             leading: Container(
               width: 60,
               height: 60,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
                 image: const DecorationImage(
-                  image: AssetImage('img/logo/logo_nav_web.png'),
+                  image: AssetImage('assets/img/logo/logo_nav_web.png'),
                 ),
                 boxShadow: const [
                   BoxShadow(

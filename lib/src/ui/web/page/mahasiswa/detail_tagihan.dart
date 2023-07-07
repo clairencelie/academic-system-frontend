@@ -126,38 +126,47 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                         // Deskripsi dari tagihan perkuliahan
                         Column(
                           children: [
-                            ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: title.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 10),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: Text(
-                                          title[index],
-                                          style: const TextStyle(fontSize: 16),
-                                        ),
-                                      ),
-                                      const Flexible(
-                                        flex: 1,
-                                        child: Text(
-                                          ': ',
-                                          style: TextStyle(fontSize: 16),
-                                        ),
-                                      ),
-                                      Flexible(
-                                        flex: 5,
-                                        child: Text(
-                                          value[index],
-                                          style: const TextStyle(fontSize: 16),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
+                            BlocBuilder<TagihanPerkuliahanBloc,
+                                TagihanPerkuliahanState>(
+                              builder: (context, state) {
+                                if (state is TagihanPerkuliahanLoaded) {
+                                  TagihanPerkuliahan newStatusTagihan = state
+                                      .listTagihan
+                                      .where((element) =>
+                                          element.idTagihanPerkuliahan ==
+                                          widget.tagihanPerkuliahan
+                                              .idTagihanPerkuliahan)
+                                      .first;
+
+                                  List<String> newValue = [
+                                    widget.student.name,
+                                    widget.student.id,
+                                    newStatusTagihan.kategori,
+                                    newStatusTagihan.metodePembayaran == 'full'
+                                        ? 'Pembayaran Full'
+                                        : 'Cicilan',
+                                    newStatusTagihan.tahunAkademik,
+                                    '${newStatusTagihan.semester[0].toUpperCase()}${newStatusTagihan.semester.substring(1)}',
+                                    NumberFormat.currency(
+                                      locale: 'id_ID',
+                                      symbol: 'Rp ',
+                                      decimalDigits: 0,
+                                    ).format(newStatusTagihan.totalTagihan),
+                                    NumberFormat.currency(
+                                      locale: 'id_ID',
+                                      symbol: 'Rp ',
+                                      decimalDigits: 0,
+                                    ).format(newStatusTagihan.sisaPembayaran),
+                                    newStatusTagihan.statusPembayaran ==
+                                            'belum_bayar'
+                                        ? 'Belum bayar'
+                                        : 'Lunas',
+                                  ];
+
+                                  return BillDetail(
+                                      title: title, value: newValue);
+                                }
+                                return BillDetail(title: title, value: value);
                               },
                             ),
                             transaksiPending.isNotEmpty
@@ -592,6 +601,55 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
   }
 }
 
+class BillDetail extends StatelessWidget {
+  const BillDetail({
+    Key? key,
+    required this.title,
+    required this.value,
+  }) : super(key: key);
+
+  final List<String> title;
+  final List<String> value;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: title.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Text(
+                  title[index],
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+              const Flexible(
+                flex: 1,
+                child: Text(
+                  ': ',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+              Flexible(
+                flex: 5,
+                child: Text(
+                  value[index],
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
 class HeaderDetailTagihan extends StatelessWidget {
   const HeaderDetailTagihan({
     Key? key,
@@ -720,21 +778,25 @@ class ListHistoriTransaksi extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: Text(
                   listHistoriTransaksi[index].idTransaksi,
-                  overflow: TextOverflow.fade,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                   ),
                 ),
+              ),
+              const SizedBox(
+                width: 10,
               ),
               const Expanded(
                 flex: 1,
                 child: Text(
                   'BNI Virtual Account',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                   ),
                 ),
               ),
@@ -748,7 +810,7 @@ class ListHistoriTransaksi extends StatelessWidget {
                   ).format(int.tryParse(
                       listHistoriTransaksi[index].totalPembayaran)!),
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                   ),
                 ),
               ),
@@ -757,9 +819,12 @@ class ListHistoriTransaksi extends StatelessWidget {
                 child: Text(
                   listHistoriTransaksi[index].noVA,
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                   ),
                 ),
+              ),
+              const SizedBox(
+                width: 20,
               ),
               Expanded(
                 flex: 1,
@@ -770,7 +835,7 @@ class ListHistoriTransaksi extends StatelessWidget {
                           ? 'Pending'
                           : 'Gagal',
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                   ),
                 ),
               ),
@@ -779,7 +844,7 @@ class ListHistoriTransaksi extends StatelessWidget {
                 child: Text(
                   listHistoriTransaksi[index].waktuTransaksi,
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                   ),
                 ),
               ),
@@ -788,7 +853,7 @@ class ListHistoriTransaksi extends StatelessWidget {
                 child: Text(
                   listHistoriTransaksi[index].waktuKedaluwarsa,
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                   ),
                 ),
               ),
@@ -871,13 +936,16 @@ class HeaderHistoriTransaksi extends StatelessWidget {
           Row(
             children: const [
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: Text(
                   'ID Transaksi',
                   style: TextStyle(
                     fontSize: 18,
                   ),
                 ),
+              ),
+              SizedBox(
+                width: 10,
               ),
               Expanded(
                 flex: 1,
@@ -905,6 +973,9 @@ class HeaderHistoriTransaksi extends StatelessWidget {
                     fontSize: 18,
                   ),
                 ),
+              ),
+              SizedBox(
+                width: 20,
               ),
               Expanded(
                 flex: 1,

@@ -70,7 +70,11 @@ flutter:
     - assets/img/logo/3d.png
     - assets/img/avatar/default-avatar.jpg
     - assets/img/about_us/gedung.jpg
+    - assets/img/about_us/pendaftaranbaru.jpg
     - assets/img/visi_misi/logo.png
+    - assets/img/article/eb.jpg
+    - assets/img/article/si.jpg
+    - assets/img/article/ti.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

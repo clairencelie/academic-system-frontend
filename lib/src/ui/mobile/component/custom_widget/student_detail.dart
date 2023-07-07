@@ -21,12 +21,14 @@ class _MobileStudentDetailState extends State<MobileStudentDetail> {
   Widget build(BuildContext context) {
     String maxSksFromTranskrip = widget.transkripLengkap.khs.isEmpty
         ? "20"
-        : widget.transkripLengkap.khs
-            .where((element) =>
-                element.semester ==
-                (int.tryParse(widget.mahasiswa.semester)! - 1).toString())
-            .toList()[0]
-            .maskSks;
+        : int.tryParse(widget.mahasiswa.semester)! == 1
+            ? "20"
+            : widget.transkripLengkap.khs
+                .where((element) =>
+                    element.semester ==
+                    (int.tryParse(widget.mahasiswa.semester)! - 1).toString())
+                .toList()[0]
+                .maskSks;
 
     int maxSks = int.tryParse(widget.mahasiswa.semester)! <= 4
         ? 20
@@ -283,7 +285,6 @@ class _MobileStudentDetailState extends State<MobileStudentDetail> {
           const SizedBox(
             height: 15,
           ),
-          // TODO: Beban mask sks
           Container(
             padding: const EdgeInsets.only(top: 15),
             decoration: const BoxDecoration(

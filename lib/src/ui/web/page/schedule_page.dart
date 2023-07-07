@@ -1,5 +1,9 @@
+import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
 import 'package:academic_system/src/bloc/schedule/schedule_bloc.dart';
+import 'package:academic_system/src/bloc/schedule_krs/schedule_krs_bloc.dart';
 import 'package:academic_system/src/helper/ina_day.dart';
+import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
+import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/lecturer.dart';
 import 'package:academic_system/src/model/schedule.dart';
 import 'package:academic_system/src/model/student.dart';
@@ -22,21 +26,8 @@ class _WebSchedulePageState extends State<WebSchedulePage> {
   @override
   void initState() {
     super.initState();
-    if (widget.user is Student) {
-      context.read<ScheduleBloc>().add(RequestStudentSchedules(
-            id: widget.user.id,
-            day: InaDay.getDayName(),
-          ));
-    } else if (widget.user is Lecturer) {
-      context.read<ScheduleBloc>().add(RequestLecturerSchedules(
-            id: widget.user.id,
-            day: InaDay.getDayName(),
-          ));
-    } else {
-      context.read<ScheduleBloc>().add(RequestSchedulesByDay(
-            day: InaDay.getDayName(),
-          ));
-    }
+
+    context.read<ScheduleKrsBloc>().add(GetScheduleKrs());
   }
 
   @override
@@ -45,39 +36,23 @@ class _WebSchedulePageState extends State<WebSchedulePage> {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Jadwal Hari Ini',
-                style: TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold,
-                ),
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Center(
+            child: FractionallySizedBox(
+              widthFactor: 0.7,
+              child: BlocBuilder<ScheduleKrsBloc, ScheduleKrsState>(
+                builder: (context, state) {
+                  if (state is ScheduleKrsLoaded) {
+                    return ScheduleBody(
+                      scrollController: scrollController,
+                      krsSchedule: state.krsSchedule,
+                      user: widget.user,
+                    );
+                  }
+                  return const CircularProgressIndicator();
+                },
               ),
-              WebDailyScheduleList(scrollController: scrollController),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                'Jadwal Ujian',
-                style: TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const WebNoSchedule(),
-              const Text(
-                'Jadwal Sidang',
-                style: TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const WebNoSchedule(),
-            ],
+            ),
           ),
         ),
       ),
@@ -85,13 +60,168 @@ class _WebSchedulePageState extends State<WebSchedulePage> {
   }
 }
 
-class WebDailyScheduleList extends StatelessWidget {
-  const WebDailyScheduleList({
+class ScheduleBody extends StatefulWidget {
+  final KrsSchedule krsSchedule;
+  final User user;
+
+  const ScheduleBody({
     Key? key,
     required this.scrollController,
+    required this.krsSchedule,
+    required this.user,
   }) : super(key: key);
 
   final ScrollController scrollController;
+
+  @override
+  State<ScheduleBody> createState() => _ScheduleBodyState();
+}
+
+class _ScheduleBodyState extends State<ScheduleBody> {
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.user is Student) {
+      context.read<KrsBloc>().add(
+            GetKrsLengkap(nim: widget.user.id),
+          );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Jadwal Perkuliahan Hari Ini - ${InaDay.getDayName()}',
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              'T.A ${widget.krsSchedule.tahunAkademik} - ${widget.krsSchedule.semester[0].toUpperCase()}${widget.krsSchedule.semester.substring(1)}',
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Text(
+          'Anda dapat mengunduh jadwal perkuliahan lengkap T.A ${widget.krsSchedule.tahunAkademik} - ${widget.krsSchedule.semester[0].toUpperCase()}${widget.krsSchedule.semester.substring(1)} disini: ',
+          style: const TextStyle(
+            fontSize: 18,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        TextButton(
+          onPressed: () {},
+          child: Text(
+            'Jadwal Perkuliahan Lengkap T.A ${widget.krsSchedule.tahunAkademik} - ${widget.krsSchedule.semester[0].toUpperCase()}${widget.krsSchedule.semester.substring(1)}',
+            style: const TextStyle(
+              fontSize: 18,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        const Text(
+          'Berikut dibawah ini adalah jadwal perkuliahan untuk hari ini :',
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        widget.user is Student
+            ? BlocBuilder<KrsBloc, KrsState>(
+                builder: (context, state) {
+                  if (state is KrsFound) {
+                    var krsSmtIni = state.krsLengkap
+                        .where((element) =>
+                            element.tahunAkademik ==
+                                widget.krsSchedule.tahunAkademik &&
+                            element.semester ==
+                                (widget.user as Student).semester)
+                        .first;
+
+                    return StudentWebDailyScheduleList(
+                      krsLengkap: krsSmtIni,
+                    );
+                  } else if (state is KrsNotFound) {
+                    return const SizedBox(
+                      height: 200,
+                      child: Center(
+                        child: Text(
+                          'Anda Belum Melakukan Pengisian KRS',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return const CircularProgressIndicator();
+                },
+              )
+            : widget.user is Lecturer
+                ? LecturerWebDailyScheduleList(
+                    dosen: widget.user as Lecturer,
+                    krsSchedule: widget.krsSchedule,
+                  )
+                : WebDailyScheduleList(
+                    krsSchedule: widget.krsSchedule,
+                  ),
+      ],
+    );
+  }
+}
+
+class StudentWebDailyScheduleList extends StatefulWidget {
+  final KartuRencanaStudiLengkap krsLengkap;
+
+  const StudentWebDailyScheduleList({
+    Key? key,
+    required this.krsLengkap,
+  }) : super(key: key);
+
+  @override
+  State<StudentWebDailyScheduleList> createState() =>
+      _StudentWebDailyScheduleListState();
+}
+
+class _StudentWebDailyScheduleListState
+    extends State<StudentWebDailyScheduleList> {
+  @override
+  void initState() {
+    super.initState();
+
+    context.read<ScheduleBloc>().add(RequestStudentSchedules(
+          id: widget.krsLengkap.nim,
+          idKrs: widget.krsLengkap.id,
+          day: InaDay.getDayName(),
+          tahunAkademik: widget.krsLengkap.tahunAkademik,
+          semester: int.tryParse(widget.krsLengkap.semester)! % 2 == 0
+              ? 'genap'
+              : 'ganjil',
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,33 +238,181 @@ class WebDailyScheduleList extends StatelessWidget {
           );
         } else if (state is ScheduleLoaded) {
           List<Schedule> schedules = state.schedules;
-          if (schedules.isNotEmpty) {
-            return SizedBox(
-              height: 240,
-              child: Scrollbar(
-                controller: scrollController,
-                interactive: true,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: ListView.builder(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    controller: scrollController,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return WebDailyScheduleCard(schedule: schedules[index]);
-                    },
-                    itemCount: schedules.length,
-                  ),
-                ),
-              ),
-            );
-          }
+
+          List<Schedule> schedulesByDay = schedules
+              .where((element) => element.day == InaDay.getDayName())
+              .toList();
+
+          return schedulesByDay.isEmpty
+              ? const WebNoSchedule()
+              : ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return WebDailyScheduleCard(
+                        schedule: schedulesByDay[index]);
+                  },
+                  itemCount: schedulesByDay.length,
+                );
         } else if (state is ScheduleEmpty) {
           return const WebNoSchedule();
-        } else if (state is ScheduleRequestFailed) {}
-        return const WebNoSchedule();
+        } else if (state is ScheduleRequestFailed) {
+          return const Text(
+              'Jadwal Gagal Didapatkan, mohon refresh halaman ini.');
+        }
+        return const SizedBox(
+          height: 300,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: Color.fromARGB(255, 0, 32, 96),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class LecturerWebDailyScheduleList extends StatefulWidget {
+  final Lecturer dosen;
+  final KrsSchedule krsSchedule;
+
+  const LecturerWebDailyScheduleList({
+    Key? key,
+    required this.dosen,
+    required this.krsSchedule,
+  }) : super(key: key);
+
+  @override
+  State<LecturerWebDailyScheduleList> createState() =>
+      _LecturerWebDailyScheduleListState();
+}
+
+class _LecturerWebDailyScheduleListState
+    extends State<LecturerWebDailyScheduleList> {
+  @override
+  void initState() {
+    super.initState();
+
+    context.read<ScheduleBloc>().add(RequestLecturerSchedules(
+          id: widget.dosen.id,
+          day: InaDay.getDayName(),
+          tahunAkademik: widget.krsSchedule.tahunAkademik,
+          semester: widget.krsSchedule.semester,
+        ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ScheduleBloc, ScheduleState>(
+      builder: (context, state) {
+        if (state is ScheduleInitial || state is RequestingSchedule) {
+          return const SizedBox(
+            height: 300,
+            child: Center(
+              child: CircularProgressIndicator(
+                color: Color.fromARGB(255, 0, 32, 96),
+              ),
+            ),
+          );
+        } else if (state is ScheduleLoaded) {
+          List<Schedule> schedules = state.schedules;
+
+          return ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return WebDailyScheduleCard(schedule: schedules[index]);
+            },
+            itemCount: schedules.length,
+          );
+        } else if (state is ScheduleEmpty) {
+          return const WebNoSchedule();
+        } else if (state is ScheduleRequestFailed) {
+          return const Text(
+              'Jadwal Gagal Didapatkan, mohon refresh halaman ini.');
+        }
+        return const SizedBox(
+          height: 300,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: Color.fromARGB(255, 0, 32, 96),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class WebDailyScheduleList extends StatefulWidget {
+  final KrsSchedule krsSchedule;
+
+  const WebDailyScheduleList({
+    Key? key,
+    required this.krsSchedule,
+  }) : super(key: key);
+
+  @override
+  State<WebDailyScheduleList> createState() => _WebDailyScheduleListState();
+}
+
+class _WebDailyScheduleListState extends State<WebDailyScheduleList> {
+  @override
+  void initState() {
+    super.initState();
+
+    context.read<ScheduleBloc>().add(RequestAllSchedule(
+          tahunAkademik: widget.krsSchedule.tahunAkademik,
+          semester: widget.krsSchedule.semester,
+        ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ScheduleBloc, ScheduleState>(
+      builder: (context, state) {
+        if (state is ScheduleInitial || state is RequestingSchedule) {
+          return const SizedBox(
+            height: 300,
+            child: Center(
+              child: CircularProgressIndicator(
+                color: Color.fromARGB(255, 0, 32, 96),
+              ),
+            ),
+          );
+        } else if (state is ScheduleLoaded) {
+          List<Schedule> schedules = state.schedules;
+
+          List<Schedule> schedulesByDay = schedules
+              .where((element) => element.day == InaDay.getDayName())
+              .toList();
+
+          return schedulesByDay.isEmpty
+              ? const WebNoSchedule()
+              : ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return WebDailyScheduleCard(
+                        schedule: schedulesByDay[index]);
+                  },
+                  itemCount: schedulesByDay.length,
+                );
+        } else if (state is ScheduleEmpty) {
+          return const WebNoSchedule();
+        } else if (state is ScheduleRequestFailed) {
+          return const Text(
+              'Data Jadwal Gagal Didapatkan, mohon refresh halaman ini.');
+        }
+        return const SizedBox(
+          height: 300,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: Color.fromARGB(255, 0, 32, 96),
+            ),
+          ),
+        );
       },
     );
   }
@@ -151,10 +429,8 @@ class WebDailyScheduleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(15),
-      margin: const EdgeInsets.only(top: 20, right: 10),
-      height: 100,
-      width: 300,
+      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 0, 32, 96),
         borderRadius: BorderRadius.circular(10),
@@ -167,14 +443,13 @@ class WebDailyScheduleCard extends StatelessWidget {
         ],
       ),
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            schedule.learningSubName,
+            '${schedule.learningSubName} - ${schedule.grade}',
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),
@@ -183,9 +458,9 @@ class WebDailyScheduleCard extends StatelessWidget {
             height: 10,
           ),
           const Text(
-            "Pengajar:",
+            "Pengajar :",
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 20,
               color: Colors.white,
             ),
           ),
@@ -196,7 +471,7 @@ class WebDailyScheduleCard extends StatelessWidget {
             schedule.lecturerName,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 20,
               color: Colors.white,
             ),
           ),
@@ -207,18 +482,7 @@ class WebDailyScheduleCard extends StatelessWidget {
             schedule.room,
             textAlign: TextAlign.end,
             style: const TextStyle(
-              fontSize: 16,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            schedule.grade,
-            textAlign: TextAlign.end,
-            style: const TextStyle(
-              fontSize: 16,
+              fontSize: 20,
               color: Colors.white,
             ),
           ),
@@ -231,22 +495,25 @@ class WebDailyScheduleCard extends StatelessWidget {
               Text(
                 schedule.startsAt,
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 21,
                   color: Colors.white,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               const Text(
                 ' - ',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 21,
                   color: Colors.white,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               Text(
                 schedule.endsAt,
                 style: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 21,
                   color: Colors.white,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],

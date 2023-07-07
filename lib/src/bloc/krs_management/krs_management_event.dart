@@ -43,3 +43,12 @@ class LockKrs extends KrsManagementEvent {
   @override
   List<Object> get props => [idKrs];
 }
+
+class ApproveKrs extends KrsManagementEvent {
+  final String idKrs;
+
+  const ApproveKrs({required this.idKrs});
+
+  @override
+  List<Object> get props => [idKrs];
+}

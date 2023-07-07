@@ -100,9 +100,7 @@ class _MobileDPMKPageState extends State<MobileDPMKPage> {
                                           border: Border.all(
                                               color: Colors.black, width: 1),
                                           borderRadius: const BorderRadius.all(
-                                              Radius.circular(
-                                                  5) //         <--- border radius here
-                                              ),
+                                              Radius.circular(5)),
                                         ),
                                         child: DropdownButtonHideUnderline(
                                           child: ButtonTheme(
@@ -263,7 +261,7 @@ class ListMatkulDosen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      filteredMatkul[index].idMataKuliah,
+                      filteredMatkul[index].idMataKuliahMaster,
                       style: const TextStyle(
                         fontSize: 16,
                       ),
