@@ -1,26 +1,28 @@
+import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/user.dart';
+import 'package:academic_system/src/ui/mobile/page/all_schedule_page.dart';
 import 'package:flutter/material.dart';
 
 class AllScheduleCard extends StatelessWidget {
+  final KrsSchedule krsSchedule;
+
   final User user;
   const AllScheduleCard({
     Key? key,
     required this.user,
+    required this.krsSchedule,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => AllSchedulePage(
-        //       role: role,
-        //       id: id,
-        //     ),
-        //   ),
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  AllSchedulePageMobile(krsSchedule: krsSchedule)),
+        );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 20),

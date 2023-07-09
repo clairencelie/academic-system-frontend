@@ -1,6 +1,7 @@
 import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
 import 'package:academic_system/src/bloc/schedule/schedule_bloc.dart';
 import 'package:academic_system/src/bloc/schedule_krs/schedule_krs_bloc.dart';
+import 'package:academic_system/src/constant/colors.dart';
 import 'package:academic_system/src/helper/ina_day.dart';
 import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
@@ -9,6 +10,7 @@ import 'package:academic_system/src/model/schedule.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/user.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/no_schedule.dart';
+import 'package:academic_system/src/ui/web/page/all_schedule_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -118,7 +120,7 @@ class _ScheduleBodyState extends State<ScheduleBody> {
           height: 20,
         ),
         Text(
-          'Anda dapat mengunduh jadwal perkuliahan lengkap T.A ${widget.krsSchedule.tahunAkademik} - ${widget.krsSchedule.semester[0].toUpperCase()}${widget.krsSchedule.semester.substring(1)} disini: ',
+          'Anda dapat melihat jadwal perkuliahan lengkap T.A ${widget.krsSchedule.tahunAkademik} - ${widget.krsSchedule.semester[0].toUpperCase()}${widget.krsSchedule.semester.substring(1)} disini: ',
           style: const TextStyle(
             fontSize: 18,
           ),
@@ -126,12 +128,28 @@ class _ScheduleBodyState extends State<ScheduleBody> {
         const SizedBox(
           height: 10,
         ),
-        TextButton(
-          onPressed: () {},
-          child: Text(
-            'Jadwal Perkuliahan Lengkap T.A ${widget.krsSchedule.tahunAkademik} - ${widget.krsSchedule.semester[0].toUpperCase()}${widget.krsSchedule.semester.substring(1)}',
-            style: const TextStyle(
-              fontSize: 18,
+        SizedBox(
+          height: 50,
+          child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateColor.resolveWith((states) => mainColor),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return AllSchedulePage(krsSchedule: widget.krsSchedule);
+                  },
+                ),
+              );
+            },
+            child: Text(
+              'Jadwal Perkuliahan Lengkap T.A ${widget.krsSchedule.tahunAkademik} - ${widget.krsSchedule.semester[0].toUpperCase()}${widget.krsSchedule.semester.substring(1)}',
+              style: const TextStyle(
+                fontSize: 18,
+              ),
             ),
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:academic_system/src/model/administrator.dart';
 import 'package:academic_system/src/model/user.dart';
 import 'package:flutter/material.dart';
 
@@ -64,7 +65,9 @@ class IdentityCard extends StatelessWidget {
                 ),
               ),
               Text(
-                '${user.role[0].toUpperCase()}${user.role.substring(1)}',
+                user is Administrator
+                    ? 'Tata Usaha'
+                    : '${user.role[0].toUpperCase()}${user.role.substring(1)}',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,

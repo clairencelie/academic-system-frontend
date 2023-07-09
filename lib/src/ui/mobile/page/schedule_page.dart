@@ -1,13 +1,26 @@
+import 'package:academic_system/src/bloc/schedule_krs/schedule_krs_bloc.dart';
 import 'package:academic_system/src/model/user.dart';
 import 'package:academic_system/src/ui/mobile/component/card/all_schedule_card.dart';
 import 'package:academic_system/src/ui/mobile/component/custom_widget/schedule_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SchedulePage extends StatelessWidget {
+class SchedulePage extends StatefulWidget {
   final User user;
 
   const SchedulePage({super.key, required this.user});
+
+  @override
+  State<SchedulePage> createState() => _SchedulePageState();
+}
+
+class _SchedulePageState extends State<SchedulePage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ScheduleKrsBloc>().add(GetScheduleKrs());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +55,31 @@ class SchedulePage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  AllScheduleCard(
-                    user: user,
-                  ),
-                  ScheduleList(
-                    user: user,
+                  BlocBuilder<ScheduleKrsBloc, ScheduleKrsState>(
+                    builder: (context, state) {
+                      if (state is ScheduleKrsLoaded) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AllScheduleCard(
+                              krsSchedule: state.krsSchedule,
+                              user: widget.user,
+                            ),
+                            ScheduleList(
+                              user: widget.user,
+                              krsSchedule: state.krsSchedule,
+                            ),
+                          ],
+                        );
+                      } else if (state is ScheduleKrsFailed) {
+                        return const Text(
+                            'gagal mendapatkan data tahun akademik');
+                      }
+                      return SizedBox(
+                          height: MediaQuery.of(context).size.height,
+                          child:
+                              const Center(child: CircularProgressIndicator()));
+                    },
                   ),
                 ],
               ),

@@ -66,7 +66,7 @@ class MobileKHSDetailPage extends StatelessWidget {
                             const Expanded(
                               flex: 2,
                               child: Text(
-                                'Total angka kualitas',
+                                'Total Angka Kualitas',
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -101,7 +101,7 @@ class MobileKHSDetailPage extends StatelessWidget {
                             const Expanded(
                               flex: 2,
                               child: Text(
-                                'Total sks diambil',
+                                'Total SKS Diambil',
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,

@@ -1,3 +1,4 @@
+import 'package:academic_system/src/helper/date_converter.dart';
 import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,7 @@ class MobileDetailKrsMhs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: SafeArea(
           child: Center(
             child: FractionallySizedBox(
@@ -67,7 +69,7 @@ class MobileDetailKrsMhs extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    krs.pilihanMataKuliah[index].id,
+                                    krs.pilihanMataKuliah[index].idMatkul,
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
@@ -81,6 +83,9 @@ class MobileDetailKrsMhs extends StatelessWidget {
                                     ),
                                   ),
                                 ],
+                              ),
+                              const SizedBox(
+                                height: 5,
                               ),
                               Text(
                                 krs.pilihanMataKuliah[index].name,
@@ -144,77 +149,96 @@ class KRSDetailInfo extends StatelessWidget {
           'Nama: ${krs.nama}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'NIM: ${krs.nim}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'Semester: ${krs.semester}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'Program Studi: ${krs.jurusan}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'IPK: ${krs.ipk}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'IPS: ${krs.ips}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'Kredit Diambil: ${krs.kreditDiambil}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'Beban Maks SKS: ${int.tryParse(krs.semester)! < 5 ? '20' : krs.bebanSksMaks}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
         ),
+        const SizedBox(
+          height: 5,
+        ),
         Text(
-          'Tanggal Pengisian KRS: ${krs.waktuPengisian}',
+          'Tanggal Pengisian KRS: ${DateConverter.mySQLToDartDateFormat(krs.waktuPengisian)}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'T.A Akademik: ${krs.tahunAkademik}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
         ),
+        const SizedBox(
+          height: 5,
+        ),
         Text(
-          'Status KRS: ${krs.commit == '1' ? "Dikunci" : "Belum dikunci"}',
+          'Status KRS: ${krs.commit == '1' ? "Sudah dikunci" : "Belum dikunci"}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
         ),
       ],

@@ -1,6 +1,5 @@
 import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
 import 'package:academic_system/src/bloc/schedule/schedule_bloc.dart';
-import 'package:academic_system/src/bloc/schedule_krs/schedule_krs_bloc.dart';
 import 'package:academic_system/src/helper/ina_day.dart';
 import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
@@ -14,11 +13,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ScheduleList extends StatefulWidget {
+  final KrsSchedule krsSchedule;
+
   final User user;
 
   const ScheduleList({
     Key? key,
     required this.user,
+    required this.krsSchedule,
   }) : super(key: key);
 
   @override
@@ -27,23 +29,10 @@ class ScheduleList extends StatefulWidget {
 
 class _ScheduleListState extends State<ScheduleList> {
   @override
-  void initState() {
-    super.initState();
-    context.read<ScheduleKrsBloc>().add(GetScheduleKrs());
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ScheduleKrsBloc, ScheduleKrsState>(
-      builder: (context, state) {
-        if (state is ScheduleKrsLoaded) {
-          return ScheduleBody(
-            krsSchedule: state.krsSchedule,
-            user: widget.user,
-          );
-        }
-        return const CircularProgressIndicator();
-      },
+    return ScheduleBody(
+      krsSchedule: widget.krsSchedule,
+      user: widget.user,
     );
   }
 }
@@ -190,6 +179,9 @@ class _MobileScheduleListState extends State<MobileScheduleList> {
                   .toList();
 
               if (schedules.isNotEmpty) {
+                if (schedulesByDay.isEmpty) {
+                  return const NoSchedule();
+                }
                 return ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,

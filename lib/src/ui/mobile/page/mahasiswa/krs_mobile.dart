@@ -209,7 +209,7 @@ class _MobileKRSPageState extends State<MobileKRSPage> {
                                                   2,
                                               child: const Center(
                                                 child: Text(
-                                                  'Maaf, anda belum memenuhi persyaratan untuk pengisian KRS.\nMohon cek halaman tagihan dan pastikan tidak ada tunggakan pembayaran semester sebelumnya dan sudah melunasi uang muka KRS',
+                                                  'Maaf, anda belum memenuhi persyaratan untuk pengisian KRS.\nMohon cek halaman tagihan dan pastikan tidak ada tunggakan pembayaran semester sebelumnya dan sudah melunasi uang muka pengisian KRS',
                                                 ),
                                               ),
                                             );

@@ -3,6 +3,7 @@ import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/tagihan_perkuliahan.dart';
 import 'package:academic_system/src/model/user.dart';
 import 'package:academic_system/src/ui/mobile/page/mahasiswa/detail_tagihan.dart';
+import 'package:academic_system/src/ui/mobile/page/mahasiswa/histori_transaksi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -89,7 +90,17 @@ class _MobileTagihanPembayaranState extends State<MobileTagihanPembayaran> {
                     Container(
                       alignment: Alignment.centerRight,
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return MobileHistoriTransakasi(
+                                    mahasiswa: student);
+                              },
+                            ),
+                          );
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(

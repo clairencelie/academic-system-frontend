@@ -1,5 +1,7 @@
 import 'package:academic_system/src/bloc/schedule_krs/schedule_krs_bloc.dart';
+import 'package:academic_system/src/helper/date_converter.dart';
 import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
+import 'package:academic_system/src/model/penasehat_akademik.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/ui/mobile/page/mahasiswa/krs_edit.dart';
 import 'package:flutter/material.dart';
@@ -232,6 +234,37 @@ class KRSDetailInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<PenasehatAkademik> listPA = [
+      PenasehatAkademik(
+        id: '151190003',
+        name: 'Sugesti, S.Si., M.Kom.',
+      ),
+      PenasehatAkademik(
+        id: '151190006',
+        name: 'Hari Santoso, S.Kom., M.Kom.',
+      ),
+      PenasehatAkademik(
+        id: '151190010',
+        name: 'Hans Saputra, S.Kom., MMSI.',
+      ),
+      PenasehatAkademik(
+        id: '151190012',
+        name: 'Desy Mora Daulay, S.Kom., M.Kom.',
+      ),
+      PenasehatAkademik(
+        id: '151190013',
+        name: 'Syarah, S.Kom., M.Kom.',
+      ),
+      PenasehatAkademik(
+        id: '151190009',
+        name: 'Sobiyanto, S.E., S.Kom., M.Kom., MTA.',
+      ),
+      PenasehatAkademik(
+        id: '151190018',
+        name: 'Rama Putra, S.Kom., M.Kom.',
+      ),
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -239,77 +272,105 @@ class KRSDetailInfo extends StatelessWidget {
           'Nama: ${student.name}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'NIM: ${student.id}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'Semester: ${krs.semester}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'Program Studi: ${krs.jurusan}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'IPK: ${krs.ipk}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'IPS: ${krs.ips}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'Kredit Diambil: ${krs.kreditDiambil}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'Beban Maks SKS: ${int.tryParse(krs.semester)! < 5 ? '20' : krs.bebanSksMaks}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
         ),
-        Text(
-          'Tanggal Pengisian KRS: ${krs.waktuPengisian}',
-          style: const TextStyle(
-            fontSize: 19,
-            fontWeight: FontWeight.w500,
-          ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
-          'T.A Akademik: ${krs.tahunAkademik}',
+          'Tanggal Pengisian KRS: ${DateConverter.mySQLToDartDateFormat(krs.waktuPengisian)}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
           ),
         ),
+        const SizedBox(
+          height: 5,
+        ),
         Text(
-          'Status KRS: ${krs.commit == '1' ? "Dikunci" : "Belum dikunci"}',
+          'T.A: ${krs.tahunAkademik}',
           style: const TextStyle(
             fontSize: 19,
-            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Text(
+          'P.A: ${listPA.where((element) => element.id == krs.idDosen).first.name}',
+          style: const TextStyle(
+            fontSize: 19,
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        Text(
+          'Status KRS: ${krs.commit == '1' ? "Sudah dikunci" : "Belum dikunci"}',
+          style: const TextStyle(
+            fontSize: 19,
           ),
         ),
       ],

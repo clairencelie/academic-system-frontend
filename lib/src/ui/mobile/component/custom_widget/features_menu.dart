@@ -1,3 +1,4 @@
+import 'package:academic_system/src/model/administrator.dart';
 import 'package:academic_system/src/model/lecturer.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/user.dart';
@@ -77,19 +78,44 @@ class FeaturesMenu extends StatelessWidget {
       ),
     ];
 
+    final List<Widget> administratorFeatures = [
+      FeatureCard(
+        page: SchedulePage(user: user),
+        color: const Color.fromARGB(255, 255, 245, 213),
+        title: 'Jadwal',
+        icon: Icons.schedule,
+      ),
+    ];
+
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 15, 10, 20),
-      child: Wrap(
-        alignment: WrapAlignment.spaceBetween,
-        direction: Axis.horizontal,
-        spacing: 20,
-        runSpacing: 30,
-        children: (user is Student)
-            ? studentFeatures
-            : (user is Lecturer)
-                ? lecturerFeatures
-                : academicFeatures,
-      ),
+      child: user is Administrator
+          ? Wrap(
+              direction: Axis.horizontal,
+              spacing: 40,
+              runSpacing: 30,
+              children: (user is Student)
+                  ? studentFeatures
+                  : (user is Lecturer)
+                      ? lecturerFeatures
+                      : user is Administrator
+                          ? administratorFeatures
+                          : academicFeatures,
+            )
+          : Center(
+              child: Wrap(
+                direction: Axis.horizontal,
+                spacing: 40,
+                runSpacing: 30,
+                children: (user is Student)
+                    ? studentFeatures
+                    : (user is Lecturer)
+                        ? lecturerFeatures
+                        : user is Administrator
+                            ? administratorFeatures
+                            : academicFeatures,
+              ),
+            ),
     );
   }
 }

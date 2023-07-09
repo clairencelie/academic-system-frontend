@@ -36,19 +36,28 @@ class _MobileDPMKDetailPageState extends State<MobileDPMKDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: FractionallySizedBox(
-              widthFactor: 0.9,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                child: DetailKelas(
-                  idDosen: widget.idDosen,
-                  idMataKuliah: widget.idMataKuliah,
-                  namaMataKuliah: widget.namaMataKuliah,
-                  tahunAkademik: widget.tahunAkademik,
+    return WillPopScope(
+      onWillPop: () async {
+        context.read<DosenBloc>().add(
+              GetMatkulDosen(idDosen: widget.idDosen),
+            );
+        return true;
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Center(
+              child: FractionallySizedBox(
+                widthFactor: 0.9,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: DetailKelas(
+                    idDosen: widget.idDosen,
+                    idMataKuliah: widget.idMataKuliah,
+                    namaMataKuliah: widget.namaMataKuliah,
+                    tahunAkademik: widget.tahunAkademik,
+                  ),
                 ),
               ),
             ),
@@ -98,26 +107,21 @@ class DetailKelas extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'List Nilai Kelas',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Jumlah peserta: ${state.nilaiMhsList.length}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
+              Text(
+                'Jumlah peserta kelas: ${state.nilaiMhsList.length}',
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
               ),
               const SizedBox(
                 height: 20,
+              ),
+              const Text(
+                'List Peserta',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(
                 height: 20,
@@ -141,7 +145,7 @@ class DetailKelas extends StatelessWidget {
                   namaMataKuliah: namaMataKuliah,
                 ),
                 const SizedBox(
-                  width: 5,
+                  height: 20,
                 ),
                 Text(
                   namaMataKuliah,
@@ -168,7 +172,9 @@ class DetailKelas extends StatelessWidget {
           );
         }
 
-        return const CircularProgressIndicator();
+        return SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: const Center(child: CircularProgressIndicator()));
       },
     );
   }
@@ -252,66 +258,80 @@ class ListNilaiMahasiswa extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          listNilaiMhs[index].nama,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          listNilaiMhs[index].nim,
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Text(
-                    listNilaiMhs[index].nim,
+                    'Jurusan: ${listNilaiMhs[index].jurusan}',
                     style: const TextStyle(
                       fontSize: 16,
                     ),
                   ),
-                  Text(
-                    listNilaiMhs[index].nama,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    listNilaiMhs[index].jurusan,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    listNilaiMhs[index].kehadiran.toString(),
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    listNilaiMhs[index].tugas.toString(),
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    listNilaiMhs[index].uts.toString(),
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    listNilaiMhs[index].uas.toString(),
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    listNilaiMhs[index].nilai.toString(),
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    listNilaiMhs[index].angkaKualitas.toString(),
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    listNilaiMhs[index].status,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
+                  // Text(
+                  //   listNilaiMhs[index].kehadiran.toString(),
+                  //   style: const TextStyle(
+                  //     fontSize: 16,
+                  //   ),
+                  // ),
+                  // Text(
+                  //   listNilaiMhs[index].tugas.toString(),
+                  //   style: const TextStyle(
+                  //     fontSize: 16,
+                  //   ),
+                  // ),
+                  // Text(
+                  //   listNilaiMhs[index].uts.toString(),
+                  //   style: const TextStyle(
+                  //     fontSize: 16,
+                  //   ),
+                  // ),
+                  // Text(
+                  //   listNilaiMhs[index].uas.toString(),
+                  //   style: const TextStyle(
+                  //     fontSize: 16,
+                  //   ),
+                  // ),
+                  // Text(
+                  //   listNilaiMhs[index].nilai.toString(),
+                  //   style: const TextStyle(
+                  //     fontSize: 16,
+                  //   ),
+                  // ),
+                  // Text(
+                  //   listNilaiMhs[index].angkaKualitas.toString(),
+                  //   style: const TextStyle(
+                  //     fontSize: 16,
+                  //   ),
+                  // ),
+                  // Text(
+                  //   listNilaiMhs[index].status,
+                  //   style: const TextStyle(
+                  //     fontSize: 16,
+                  //   ),
+                  // ),
                 ],
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:academic_system/src/model/schedule.dart';
+import 'package:academic_system/src/ui/mobile/page/schedule_detail.dart';
 import 'package:flutter/material.dart';
 
 class DailyScheduleCard extends StatelessWidget {
@@ -16,15 +17,15 @@ class DailyScheduleCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: GestureDetector(
         onTap: () {
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) {
-          //       return ScheduleDetailPage(
-          //         schedule: schedule,
-          //       );
-          //     },
-          //   ),
-          // );
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return ScheduleDetailPage(
+                  jadwal: schedule,
+                );
+              },
+            ),
+          );
         },
         child: Container(
           // height: 100,
@@ -43,20 +44,6 @@ class DailyScheduleCard extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
             child: Row(
               children: [
-                Container(
-                  height: 65,
-                  width: 65,
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 224, 224, 224),
-                    // image: const DecorationImage(
-                    //   image: AssetImage('assets/img/avatar/default-avatar.jpg'),
-                    // ),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,26 +52,70 @@ class DailyScheduleCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Flexible(
-                            child: SizedBox(
-                              width: 150,
-                              child: Text(
-                                schedule.learningSubName,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                          Expanded(
+                            flex: 2,
+                            child: Text(
+                              schedule.learningSubName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
-                          Text(
-                            schedule.grade,
-                            style: const TextStyle(
-                              fontSize: 14,
+                          Expanded(
+                            child: Text(
+                              schedule.grade,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              textAlign: TextAlign.end,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      // Nama Dosen
+                      Row(
+                        children: [
+                          const Expanded(
+                            child: Text(
+                              'Pengajar',
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            ': ',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
                               color: Colors.white,
+                              fontSize: 15,
                               fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              schedule.lecturerName,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ],
@@ -92,33 +123,45 @@ class DailyScheduleCard extends StatelessWidget {
                       const SizedBox(
                         height: 5,
                       ),
-                      // Nama Dosen
-                      SizedBox(
-                        width: 170,
-                        child: Text(
-                          'Dosen: ${schedule.lecturerName}',
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
                       // Ruang
-                      Text(
-                        'Ruang: ${schedule.room}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      Row(
+                        children: [
+                          const Expanded(
+                            child: Text(
+                              'Ruangan',
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            ': ',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              schedule.room,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(
-                        height: 5,
+                        height: 10,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -126,7 +169,7 @@ class DailyScheduleCard extends StatelessWidget {
                           Text(
                             '$startsAt - $endsAt',
                             style: const TextStyle(
-                              fontSize: 13,
+                              fontSize: 15,
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
                             ),

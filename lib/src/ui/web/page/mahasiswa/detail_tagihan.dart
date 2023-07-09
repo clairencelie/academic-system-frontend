@@ -391,6 +391,7 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                                               flex: 1,
                                               child: Text(
                                                 'Total tagihan:',
+                                                textAlign: TextAlign.end,
                                                 style: TextStyle(
                                                     fontSize: 18,
                                                     fontWeight:
@@ -408,6 +409,7 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                                                   widget.tagihanPerkuliahan
                                                       .totalTagihan,
                                                 ),
+                                                textAlign: TextAlign.end,
                                                 style: const TextStyle(
                                                     fontSize: 18,
                                                     fontWeight:
@@ -714,6 +716,7 @@ class ListRincianTagihan extends StatelessWidget {
                 flex: 1,
                 child: Text(
                   listRincianTagihan[index].jumlahItem.toString(),
+                  textAlign: TextAlign.end,
                   style: const TextStyle(
                     fontSize: 18,
                   ),
@@ -727,6 +730,7 @@ class ListRincianTagihan extends StatelessWidget {
                     symbol: 'Rp ',
                     decimalDigits: 0,
                   ).format(listRincianTagihan[index].hargaItem),
+                  textAlign: TextAlign.end,
                   style: const TextStyle(
                     fontSize: 18,
                   ),
@@ -740,6 +744,7 @@ class ListRincianTagihan extends StatelessWidget {
                     symbol: 'Rp ',
                     decimalDigits: 0,
                   ).format(listRincianTagihan[index].totalHargaItem),
+                  textAlign: TextAlign.end,
                   style: const TextStyle(
                     fontSize: 18,
                   ),
@@ -890,6 +895,7 @@ class DetailItemHeader extends StatelessWidget {
                 flex: 1,
                 child: Text(
                   'Jumlah Item',
+                  textAlign: TextAlign.end,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -899,7 +905,8 @@ class DetailItemHeader extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Text(
-                  'Harga Item',
+                  'Harga Satuan',
+                  textAlign: TextAlign.end,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -910,6 +917,7 @@ class DetailItemHeader extends StatelessWidget {
                 flex: 1,
                 child: Text(
                   'Total Harga Item',
+                  textAlign: TextAlign.end,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

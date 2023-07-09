@@ -68,7 +68,7 @@ class _MobileKrsHistoryPageState extends State<MobileKrsHistoryPage> {
                       height: 20,
                     ),
                     const Text(
-                      'Anda dapat mengajukan perubahan pemilihan mata kuliah pada KRS selama KRS anda belum dikunci oleh bagian akademik.',
+                      'Anda dapat mengajukan perubahan pilihan mata kuliah pada KRS yang sudah diajukan selama KRS anda belum dikunci oleh bagian akademik.',
                       textAlign: TextAlign.justify,
                       style: TextStyle(fontSize: 16),
                     ),
@@ -97,7 +97,10 @@ class _MobileKrsHistoryPageState extends State<MobileKrsHistoryPage> {
                             ],
                           );
                         } else if (state is KrsLoading) {
-                          return const CircularProgressIndicator();
+                          return SizedBox(
+                              height: MediaQuery.of(context).size.height / 1.7,
+                              child: const Center(
+                                  child: CircularProgressIndicator()));
                         }
 
                         return const SizedBox();

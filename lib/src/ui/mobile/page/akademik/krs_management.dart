@@ -172,6 +172,7 @@ class _MobileKRSManagementPageState extends State<MobileKRSManagementPage> {
                             );
                           }
                           return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               IconButton(
                                 onPressed: () {
@@ -179,7 +180,12 @@ class _MobileKRSManagementPageState extends State<MobileKRSManagementPage> {
                                 },
                                 icon: const Icon(Icons.arrow_back),
                               ),
-                              const CircularProgressIndicator(),
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height,
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
                             ],
                           );
                         },
@@ -199,14 +205,34 @@ class _MobileKRSManagementPageState extends State<MobileKRSManagementPage> {
                     }
 
                     return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(Icons.arrow_back),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                icon: const Icon(Icons.arrow_back),
+                              ),
+                              const Text(
+                                'Manajemen KRS',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        const CircularProgressIndicator(),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 1.4,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ),
                       ],
                     );
                   },
@@ -285,49 +311,33 @@ class KrsManagementList extends StatelessWidget {
                   ],
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      filterTahunAkademikKrs[index].nim,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
                     Text(
                       filterTahunAkademikKrs[index].nama,
                       style: const TextStyle(
                         fontSize: 16,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     Text(
-                      filterTahunAkademikKrs[index].semester,
+                      filterTahunAkademikKrs[index].nim,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'Semester: ${filterTahunAkademikKrs[index].semester}',
                       style: const TextStyle(
                         fontSize: 16,
                       ),
                     ),
                     Text(
-                      filterTahunAkademikKrs[index].kreditDiambil,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    Text(
-                      DateConverter.mySQLToDartDateFormat(
-                          filterTahunAkademikKrs[index].waktuPengisian),
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    Text(
-                      filterTahunAkademikKrs[index].tahunAkademik,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    Text(
-                      filterTahunAkademikKrs[index].commit == "1"
-                          ? "Dikunci"
-                          : "Belum dikunci",
+                      'Kredit diambil: ${filterTahunAkademikKrs[index].kreditDiambil}',
                       style: const TextStyle(
                         fontSize: 16,
                       ),
@@ -335,6 +345,18 @@ class KrsManagementList extends StatelessWidget {
                     const Text(
                       'P.A: Sandi Budiman S.Kom., M.Kom.',
                       style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      filterTahunAkademikKrs[index].approve == "1"
+                          ? "Diapprove"
+                          : "Belum diapprove",
+                      textAlign: TextAlign.end,
+                      style: const TextStyle(
                         fontSize: 16,
                       ),
                     ),

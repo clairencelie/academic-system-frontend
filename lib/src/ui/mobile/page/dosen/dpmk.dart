@@ -50,6 +50,7 @@ class _MobileDPMKPageState extends State<MobileDPMKPage> {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Center(
             child: FractionallySizedBox(
               widthFactor: 0.9,
@@ -145,15 +146,24 @@ class _MobileDPMKPageState extends State<MobileDPMKPage> {
                                     ],
                                   );
                                 }
-                                return const CircularProgressIndicator();
+                                return SizedBox(
+                                    height: MediaQuery.of(context).size.height,
+                                    child: const Center(
+                                        child: CircularProgressIndicator()));
                               },
                             );
                           }
-                          return const CircularProgressIndicator();
+                          return SizedBox(
+                              height: MediaQuery.of(context).size.height,
+                              child: const Center(
+                                  child: CircularProgressIndicator()));
                         },
                       );
                     }
-                    return const CircularProgressIndicator();
+                    return SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        child:
+                            const Center(child: CircularProgressIndicator()));
                   },
                 ),
               ),
@@ -260,26 +270,45 @@ class ListMatkulDosen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      filteredMatkul[index].idMataKuliahMaster,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            filteredMatkul[index].nama,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            filteredMatkul[index].idMataKuliahMaster,
+                            textAlign: TextAlign.end,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      filteredMatkul[index].nama,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
+                    const SizedBox(
+                      height: 10,
                     ),
                     Text(
                       filteredMatkul[index].kelas,
+                      textAlign: TextAlign.end,
                       style: const TextStyle(
                         fontSize: 16,
                       ),
                     ),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Text(
-                      filteredMatkul[index].jumlahSks,
+                      '${filteredMatkul[index].jumlahSks} SKS',
+                      textAlign: TextAlign.end,
                       style: const TextStyle(
                         fontSize: 16,
                       ),

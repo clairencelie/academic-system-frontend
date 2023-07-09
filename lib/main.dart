@@ -9,6 +9,7 @@ import 'package:academic_system/src/bloc/master_mata_kuliah/master_mata_kuliah_b
 import 'package:academic_system/src/bloc/mata_kuliah/mata_kuliah_bloc.dart';
 import 'package:academic_system/src/bloc/matkul_management/matkul_management_bloc.dart';
 import 'package:academic_system/src/bloc/nilai/nilai_bloc.dart';
+import 'package:academic_system/src/bloc/pdf_export/schedule_pdf_bloc.dart';
 import 'package:academic_system/src/bloc/rincian_tagihan/rincian_tagihan_bloc.dart';
 import 'package:academic_system/src/bloc/schedule/schedule_bloc.dart';
 import 'package:academic_system/src/bloc/schedule_krs/schedule_krs_bloc.dart';
@@ -161,6 +162,11 @@ class MyApp extends StatelessWidget {
             create: (context) => MatkulManagementBloc(
               mataKuliahRepository:
                   RepositoryProvider.of<MataKuliahRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => SchedulePdfBloc(
+              repository: RepositoryProvider.of<ScheduleRepository>(context),
             ),
           ),
         ],
