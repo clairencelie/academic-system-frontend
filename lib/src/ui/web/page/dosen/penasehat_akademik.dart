@@ -1,5 +1,4 @@
 import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
-import 'package:academic_system/src/bloc/krs_management/krs_management_bloc.dart';
 import 'package:academic_system/src/bloc/schedule_krs/schedule_krs_bloc.dart';
 import 'package:academic_system/src/bloc/tahun_akademik/tahun_akademik_bloc.dart';
 import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
@@ -7,8 +6,7 @@ import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/lecturer.dart';
 import 'package:academic_system/src/model/tahun_akademik.dart';
 import 'package:academic_system/src/model/user.dart';
-import 'package:academic_system/src/ui/web/component/custom_widget/info_dialog.dart';
-import 'package:academic_system/src/ui/web/page/akademik/detail_krs_mhs.dart';
+import 'package:academic_system/src/ui/web/page/dosen/detail_krs_mhs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -123,64 +121,23 @@ class _PenasehatAkademikPageState extends State<PenasehatAkademikPage> {
                               ),
                               const KrsListHeader(),
                               const Divider(),
-                              BlocListener<KrsManagementBloc,
-                                  KrsManagementState>(
-                                listener: (context, state) {
-                                  if (state is ApproveKrsSuccess) {
-                                    showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (context) {
-                                        return InfoDialog(
-                                          title: 'Informasi',
-                                          body: state.message,
-                                          onClose: () {
-                                            Navigator.pop(context);
-                                            context
-                                                .read<KrsBloc>()
-                                                .add(GetAllKrs());
-                                          },
-                                        );
-                                      },
-                                    );
-                                  } else if (state is ApproveKrsFailed) {
-                                    showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (context) {
-                                        return InfoDialog(
-                                          title: 'Informasi',
-                                          body: state.message,
-                                          onClose: () {
-                                            Navigator.pop(context);
-                                            context
-                                                .read<KrsBloc>()
-                                                .add(GetAllKrs());
-                                          },
-                                        );
-                                      },
+                              BlocBuilder<KrsBloc, KrsState>(
+                                builder: (context, state) {
+                                  if (state is KrsFound) {
+                                    return KrsManagementList(
+                                      krsSchedule: jadwalKrs,
+                                      dosen: widget.dosen as Lecturer,
+                                      krsLengkap: state.krsLengkap,
+                                      tahunAkademik: tahunAkademikDropDownValue,
                                     );
                                   }
+                                  return Container(
+                                    alignment: Alignment.center,
+                                    height:
+                                        MediaQuery.of(context).size.height / 2,
+                                    child: const CircularProgressIndicator(),
+                                  );
                                 },
-                                child: BlocBuilder<KrsBloc, KrsState>(
-                                  builder: (context, state) {
-                                    if (state is KrsFound) {
-                                      return KrsManagementList(
-                                        dosen: widget.dosen as Lecturer,
-                                        krsLengkap: state.krsLengkap,
-                                        tahunAkademik:
-                                            tahunAkademikDropDownValue,
-                                      );
-                                    }
-                                    return Container(
-                                      alignment: Alignment.center,
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              2,
-                                      child: const CircularProgressIndicator(),
-                                    );
-                                  },
-                                ),
                               ),
                             ],
                           );
@@ -228,12 +185,14 @@ class KrsManagementList extends StatelessWidget {
   final Lecturer dosen;
   final List<KartuRencanaStudiLengkap> krsLengkap;
   final String tahunAkademik;
+  final KrsSchedule krsSchedule;
 
   const KrsManagementList({
     Key? key,
     required this.krsLengkap,
     required this.tahunAkademik,
     required this.dosen,
+    required this.krsSchedule,
   }) : super(key: key);
 
   @override
@@ -288,6 +247,7 @@ class KrsManagementList extends StatelessWidget {
                         builder: (context) {
                           return DetailKrsMhs(
                             krs: listKrsBimbinganPenasehatAkademik[index],
+                            krsSchedule: krsSchedule,
                           );
                         },
                       ),
@@ -392,29 +352,6 @@ class KrsManagementList extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: ElevatedButton(
-                                onPressed:
-                                    listKrsBimbinganPenasehatAkademik[index]
-                                                .approve ==
-                                            "1"
-                                        ? null
-                                        : () {
-                                            // Call approve krs
-                                            context
-                                                .read<KrsManagementBloc>()
-                                                .add(
-                                                  ApproveKrs(
-                                                      idKrs:
-                                                          listKrsBimbinganPenasehatAkademik[
-                                                                  index]
-                                                              .id),
-                                                );
-                                          },
-                                child: const Text('Approve KRS'),
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -513,10 +450,6 @@ class KrsListHeader extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: SizedBox(),
           ),
         ],
       ),

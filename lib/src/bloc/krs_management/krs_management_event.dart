@@ -52,3 +52,12 @@ class ApproveKrs extends KrsManagementEvent {
   @override
   List<Object> get props => [idKrs];
 }
+
+class UnApproveKrs extends KrsManagementEvent {
+  final String idKrs;
+
+  const UnApproveKrs({required this.idKrs});
+
+  @override
+  List<Object> get props => [idKrs];
+}

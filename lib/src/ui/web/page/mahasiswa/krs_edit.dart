@@ -38,7 +38,7 @@ class _EditKRSPageState extends State<EditKRSPage> {
       body: SingleChildScrollView(
         child: Center(
           child: FractionallySizedBox(
-            widthFactor: 0.6,
+            widthFactor: 0.8,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
               child: BlocBuilder<KhsBloc, KhsState>(

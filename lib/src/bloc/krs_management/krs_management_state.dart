@@ -88,6 +88,28 @@ class ApproveKrsSuccess extends KrsManagementState {
   List<Object> get props => [message];
 }
 
+class UnApproveKrsFailed extends KrsManagementState {
+  final String message;
+
+  const UnApproveKrsFailed({
+    required this.message,
+  });
+
+  @override
+  List<Object> get props => [message];
+}
+
+class UnApproveKrsSuccess extends KrsManagementState {
+  final String message;
+
+  const UnApproveKrsSuccess({
+    required this.message,
+  });
+
+  @override
+  List<Object> get props => [message];
+}
+
 class CreateKrsFailed extends KrsManagementState {
   final String message;
 

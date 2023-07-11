@@ -63,5 +63,18 @@ class KrsManagementBloc extends Bloc<KrsManagementEvent, KrsManagementState> {
         emit(ApproveKrsFailed(message: message));
       }
     });
+
+    on<UnApproveKrs>((event, emit) async {
+      emit(KrsManagementLoading());
+
+      String message = await repository.unApproveKrs(event.idKrs);
+
+      if (message == "krs unapproved successfuly") {
+        emit(const UnApproveKrsSuccess(
+            message: "Approval KRS Berhasil dibatalkan"));
+      } else {
+        emit(UnApproveKrsFailed(message: message));
+      }
+    });
   }
 }

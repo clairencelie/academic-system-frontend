@@ -1,7 +1,5 @@
 import 'package:academic_system/src/bloc/pdf_export/schedule_pdf_bloc.dart';
 import 'package:academic_system/src/bloc/schedule/schedule_bloc.dart';
-import 'package:academic_system/src/helper/pdf_generate.dart';
-import 'package:academic_system/src/helper/pdf_web_generate.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/schedule.dart';
 import 'package:academic_system/src/ui/web/page/schedule_pdf_view.dart';

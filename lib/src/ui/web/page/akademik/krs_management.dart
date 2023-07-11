@@ -26,6 +26,14 @@ class KRSManagementPage extends StatefulWidget {
 class _KRSManagementPageState extends State<KRSManagementPage> {
   String tahunAkademikDropDownValue = '';
 
+  int count = 0;
+
+  void countUpdate(int newData) {
+    setState(() {
+      count = newData;
+    });
+  }
+
   List<DropdownMenuItem> dropDownMenuList(List<TahunAkademik> listTA) {
     return listTA.map((tahunAkademik) {
       return DropdownMenuItem(
@@ -172,6 +180,7 @@ class _KRSManagementPageState extends State<KRSManagementPage> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+                              Text('Total krs yang sudah diajukan: $count'),
                               const SizedBox(
                                 height: 20,
                               ),
@@ -219,6 +228,47 @@ class _KRSManagementPageState extends State<KRSManagementPage> {
                                 child: BlocBuilder<KrsBloc, KrsState>(
                                   builder: (context, state) {
                                     if (state is KrsFound) {
+                                      final String tahunAkdm =
+                                          tahunAkademikDropDownValue
+                                              .split(" ")
+                                              .toList()[0];
+                                      final String semester =
+                                          tahunAkademikDropDownValue
+                                              .split(" ")
+                                              .toList()[1];
+
+                                      final List<KartuRencanaStudiLengkap>
+                                          filterSemesterKrsLengkap =
+                                          semester == 'genap'
+                                              ? state.krsLengkap
+                                                  .where((krs) =>
+                                                      int.tryParse(
+                                                              krs.semester)! %
+                                                          2 ==
+                                                      0)
+                                                  .toList()
+                                              : state.krsLengkap
+                                                  .where((krs) =>
+                                                      int.tryParse(
+                                                              krs.semester)! %
+                                                          2 ==
+                                                      1)
+                                                  .toList();
+
+                                      final List<KartuRencanaStudiLengkap>
+                                          filterTahunAkademikKrs =
+                                          filterSemesterKrsLengkap
+                                              .where((krs) =>
+                                                  krs.tahunAkademik ==
+                                                  tahunAkdm)
+                                              .toList();
+
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        countUpdate(
+                                            filterTahunAkademikKrs.length);
+                                      });
+
                                       return KrsManagementList(
                                         krsLengkap: state.krsLengkap,
                                         tahunAkademik:
@@ -425,6 +475,9 @@ class _KrsManagementListState extends State<KrsManagementList> {
                                 ),
                               ),
                             ),
+                            const SizedBox(
+                              width: 20,
+                            ),
                             Expanded(
                               flex: 1,
                               child: Text(
@@ -439,38 +492,38 @@ class _KrsManagementListState extends State<KrsManagementList> {
                                 ),
                               ),
                             ),
-                            Expanded(
-                              flex: 1,
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      filterTahunAkademikKrs[index].approve ==
-                                                  "0" ||
-                                              filterTahunAkademikKrs[index]
-                                                      .commit ==
-                                                  "1"
-                                          ? null
-                                          : MaterialStateColor.resolveWith(
-                                              (states) => mainColor),
-                                ),
-                                onPressed: filterTahunAkademikKrs[index]
-                                                .approve ==
-                                            "0" ||
-                                        filterTahunAkademikKrs[index].commit ==
-                                            "1"
-                                    ? null
-                                    : () {
-                                        // Call commit krs
-                                        context.read<KrsManagementBloc>().add(
-                                              LockKrs(
-                                                  idKrs: filterTahunAkademikKrs[
-                                                          index]
-                                                      .id),
-                                            );
-                                      },
-                                child: const Text('Kunci KRS'),
-                              ),
-                            ),
+                            // Expanded(
+                            //   flex: 1,
+                            //   child: ElevatedButton(
+                            //     style: ButtonStyle(
+                            //       backgroundColor:
+                            //           filterTahunAkademikKrs[index].approve ==
+                            //                       "0" ||
+                            //                   filterTahunAkademikKrs[index]
+                            //                           .commit ==
+                            //                       "1"
+                            //               ? null
+                            //               : MaterialStateColor.resolveWith(
+                            //                   (states) => mainColor),
+                            //     ),
+                            //     onPressed: filterTahunAkademikKrs[index]
+                            //                     .approve ==
+                            //                 "0" ||
+                            //             filterTahunAkademikKrs[index].commit ==
+                            //                 "1"
+                            //         ? null
+                            //         : () {
+                            //             // Call commit krs
+                            //             context.read<KrsManagementBloc>().add(
+                            //                   LockKrs(
+                            //                       idKrs: filterTahunAkademikKrs[
+                            //                               index]
+                            //                           .id),
+                            //                 );
+                            //           },
+                            //     child: const Text('Kunci KRS'),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -571,6 +624,9 @@ class KrsListHeader extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(
+            width: 20,
+          ),
           Expanded(
             flex: 1,
             child: Text(
@@ -581,10 +637,10 @@ class KrsListHeader extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: SizedBox(),
-          ),
+          // Expanded(
+          //   flex: 1,
+          //   child: SizedBox(),
+          // ),
         ],
       ),
     );
