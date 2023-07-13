@@ -1,4 +1,5 @@
 import 'package:academic_system/src/bloc/schedule_krs/schedule_krs_bloc.dart';
+import 'package:academic_system/src/helper/date_converter.dart';
 import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/ui/web/page/mahasiswa/krs_edit.dart';
@@ -98,6 +99,10 @@ class _KRSDetailPageState extends State<KRSDetailPage> {
                     height: 20,
                   ),
 
+                  const PilihanMatkulHeader(),
+
+                  const Divider(),
+
                   // List Matkul yang diambil
                   ListView.builder(
                     shrinkWrap: true,
@@ -189,6 +194,9 @@ class KRSDetailInfo extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
+            const SizedBox(
+              height: 5,
+            ),
             Text(
               'NIM: ${student.id}',
               style: const TextStyle(
@@ -196,12 +204,18 @@ class KRSDetailInfo extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
+            const SizedBox(
+              height: 5,
+            ),
             Text(
               'Semester: ${krs.semester}',
               style: const TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w500,
               ),
+            ),
+            const SizedBox(
+              height: 5,
             ),
             Text(
               'Program Studi: ${krs.jurusan}',
@@ -222,6 +236,9 @@ class KRSDetailInfo extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
+            const SizedBox(
+              height: 5,
+            ),
             Text(
               'IPS: ${krs.ips}',
               style: const TextStyle(
@@ -229,12 +246,18 @@ class KRSDetailInfo extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
+            const SizedBox(
+              height: 5,
+            ),
             Text(
               'Kredit Diambil: ${krs.kreditDiambil}',
               style: const TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w500,
               ),
+            ),
+            const SizedBox(
+              height: 5,
             ),
             Text(
               'Beban Maks SKS: ${int.tryParse(krs.semester)! < 5 ? '20' : krs.bebanSksMaks}',
@@ -249,11 +272,14 @@ class KRSDetailInfo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Tanggal Pengisian KRS: ${krs.waktuPengisian}',
+              'Tanggal Pengisian KRS: ${DateConverter.mySQLToDartDateFormat(krs.waktuPengisian)}',
               style: const TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w500,
               ),
+            ),
+            const SizedBox(
+              height: 5,
             ),
             Text(
               'T.A Akademik: ${krs.tahunAkademik}',
@@ -261,6 +287,19 @@ class KRSDetailInfo extends StatelessWidget {
                 fontSize: 19,
                 fontWeight: FontWeight.w500,
               ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Text(
+              'Approval: ${krs.approve == '1' ? "Diapprove" : "Belum diapprove"}',
+              style: const TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(
+              height: 5,
             ),
             Text(
               'Status KRS: ${krs.commit == '1' ? "Dikunci" : "Belum dikunci"}',
@@ -299,6 +338,66 @@ class KRSDetailHeader extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class PilihanMatkulHeader extends StatelessWidget {
+  const PilihanMatkulHeader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Center(
+        child: ListTile(
+          title: Row(
+            children: const [
+              Expanded(
+                child: Text(
+                  'Kode MK',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Text(
+                  'Nama MK',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'SKS',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'Kelas',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  'Jenis',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

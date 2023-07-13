@@ -1,5 +1,5 @@
-// import 'package:academic_system/src/model/academic.dart';
 import 'package:academic_system/src/model/academic.dart';
+import 'package:academic_system/src/model/lecturer.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/user.dart';
 import 'package:academic_system/src/ui/web/page/akademik/cms.dart';
@@ -48,7 +48,18 @@ class _WebMainPageState extends State<WebMainPage> {
     List<Widget> academicOptions = <Widget>[
       WebHomePage(user: widget.user),
       WebSchedulePage(user: widget.user),
-      const CMSPage(),
+      CMSPage(
+        user: widget.user,
+      ),
+      WebConfigurationPage(user: widget.user),
+    ];
+
+    List<Widget> aadministratorOptions = <Widget>[
+      WebHomePage(user: widget.user),
+      WebSchedulePage(user: widget.user),
+      CMSPage(
+        user: widget.user,
+      ),
       WebConfigurationPage(user: widget.user),
     ];
 
@@ -256,6 +267,61 @@ class _WebMainPageState extends State<WebMainPage> {
       ),
     ];
 
+    const List<NavigationRailDestination> administratorNavigation = [
+      NavigationRailDestination(
+        icon: Icon(
+          Icons.home,
+          color: Colors.white,
+        ),
+        selectedIcon: Icon(
+          Icons.home,
+          color: Colors.yellow,
+        ),
+        label: Text(
+          'Beranda',
+        ),
+      ),
+      NavigationRailDestination(
+        icon: Icon(
+          Icons.schedule,
+          color: Colors.white,
+        ),
+        selectedIcon: Icon(
+          Icons.schedule,
+          color: Colors.yellow,
+        ),
+        label: Text(
+          'Jadwal',
+        ),
+      ),
+      NavigationRailDestination(
+        icon: Icon(
+          Icons.edit_calendar_outlined,
+          color: Colors.white,
+        ),
+        selectedIcon: Icon(
+          Icons.edit_calendar_rounded,
+          color: Colors.yellow,
+        ),
+        label: Text(
+          'CMS',
+        ),
+      ),
+      NavigationRailDestination(
+        icon: Icon(
+          Icons.settings_applications_outlined,
+          color: Colors.white,
+        ),
+        selectedIcon: Icon(
+          Icons.settings_applications_rounded,
+          color: Colors.yellow,
+        ),
+        label: Text(
+          'Pengaturan',
+        ),
+      ),
+    ];
+
     return Scaffold(
       body: Row(
         children: [
@@ -296,7 +362,9 @@ class _WebMainPageState extends State<WebMainPage> {
                 ? academicNavigation
                 : widget.user is Student
                     ? studentNavigation
-                    : lecturerNavigation,
+                    : widget.user is Lecturer
+                        ? lecturerNavigation
+                        : administratorNavigation,
           ),
           const VerticalDivider(thickness: 1, width: 1),
           // This is the main content.
@@ -305,7 +373,9 @@ class _WebMainPageState extends State<WebMainPage> {
                 ? academicOptions[_selectedIndex]
                 : widget.user is Student
                     ? studentOptions[_selectedIndex]
-                    : lecturerOptions[_selectedIndex],
+                    : widget.user is Lecturer
+                        ? lecturerOptions[_selectedIndex]
+                        : aadministratorOptions[_selectedIndex],
           )
         ],
       ),

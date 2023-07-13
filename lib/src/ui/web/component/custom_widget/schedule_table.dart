@@ -1,7 +1,9 @@
 import 'package:academic_system/src/bloc/schedule/schedule_bloc.dart';
 import 'package:academic_system/src/bloc/schedule_management/schedule_management_bloc.dart';
+import 'package:academic_system/src/model/administrator.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/schedule.dart';
+import 'package:academic_system/src/model/user.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/cms_item.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/schedule_detail_text.dart';
 import 'package:academic_system/src/ui/web/page/akademik/update_schedule.dart';
@@ -9,10 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ScheduleTable extends StatefulWidget {
+  final User user;
   final KrsSchedule krsSchedule;
   const ScheduleTable({
     super.key,
     required this.krsSchedule,
+    required this.user,
   });
 
   @override
@@ -169,14 +173,11 @@ class _ScheduleTableState extends State<ScheduleTable> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 15),
+        widget.user is Administrator
+            ? Container(
+                alignment: Alignment.centerRight,
+                child: SizedBox(
+                  width: 300,
                   child: TextField(
                     controller: searchController,
                     decoration: const InputDecoration(
@@ -193,85 +194,110 @@ class _ScheduleTableState extends State<ScheduleTable> {
                     },
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 15),
-                child: CMSItem(
-                  height: 65,
-                  width: 65,
-                  title: 'Seleksi',
-                  icons: Icons.select_all_rounded,
-                  onTap: () {
-                    setState(() {
-                      selectedSchedule = [];
-                      isEdit = !isEdit;
-                    });
-                  },
-                  color:
-                      isEdit ? const Color.fromARGB(255, 214, 232, 248) : null,
-                ),
-              ),
-              CMSItem(
-                height: 65,
-                width: 65,
-                title: 'Delete',
-                icons: Icons.delete_forever_rounded,
-                onTap: isEdit
-                    ? () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            if (selectedSchedule.isEmpty) {
-                              return AlertDialog(
-                                title: const Text('Info'),
-                                content: const Text(
-                                    'Belum ada jadwal yang dipilih untuk dihapus, mohon pilih minimal 1 jadwal.'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('Tutup'),
-                                  ),
-                                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 15),
+                      child: TextField(
+                        controller: searchController,
+                        decoration: const InputDecoration(
+                          hintText: 'Cari jadwal...',
+                          suffixIcon: Icon(Icons.search),
+                        ),
+                        onSubmitted: (value) {
+                          context.read<ScheduleBloc>().add(
+                                SearchSchedule(
+                                  keyword: searchController.text,
+                                  schedules: tempSchedules,
+                                ),
                               );
-                            }
-                            return AlertDialog(
-                              title: const Text('Konfirmasi'),
-                              content: const Text('Yakin ingin hapus?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('Batal'),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    context.read<ScheduleManagementBloc>().add(
-                                          DeleteSchedule(
-                                            scheduleIds: selectedSchedule,
-                                          ),
-                                        );
-                                    selectedSchedule = [];
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text(
-                                    'Hapus',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ),
-                              ],
+                        },
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: CMSItem(
+                      height: 65,
+                      width: 65,
+                      title: 'Seleksi',
+                      icons: Icons.select_all_rounded,
+                      onTap: () {
+                        setState(() {
+                          selectedSchedule = [];
+                          isEdit = !isEdit;
+                        });
+                      },
+                      color: isEdit
+                          ? const Color.fromARGB(255, 214, 232, 248)
+                          : null,
+                    ),
+                  ),
+                  CMSItem(
+                    height: 65,
+                    width: 65,
+                    title: 'Delete',
+                    icons: Icons.delete_forever_rounded,
+                    onTap: isEdit
+                        ? () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                if (selectedSchedule.isEmpty) {
+                                  return AlertDialog(
+                                    title: const Text('Info'),
+                                    content: const Text(
+                                        'Belum ada jadwal yang dipilih untuk dihapus, mohon pilih minimal 1 jadwal.'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Tutup'),
+                                      ),
+                                    ],
+                                  );
+                                }
+                                return AlertDialog(
+                                  title: const Text('Konfirmasi'),
+                                  content: const Text('Yakin ingin hapus?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('Batal'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        context
+                                            .read<ScheduleManagementBloc>()
+                                            .add(
+                                              DeleteSchedule(
+                                                scheduleIds: selectedSchedule,
+                                              ),
+                                            );
+                                        selectedSchedule = [];
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text(
+                                        'Hapus',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
                             );
-                          },
-                        );
-                      }
-                    : null,
-                contentColor: isEdit ? Colors.red : Colors.grey,
+                          }
+                        : null,
+                    contentColor: isEdit ? Colors.red : Colors.grey,
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
         const SizedBox(
           height: 20,
         ),

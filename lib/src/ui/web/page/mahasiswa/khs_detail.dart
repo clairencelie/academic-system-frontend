@@ -73,11 +73,17 @@ class DetailInfoKhs extends StatelessWidget {
             fontSize: 18,
           ),
         ),
+        const SizedBox(
+          height: 5,
+        ),
         Text(
           'NIM: ${student.id}',
           style: const TextStyle(
             fontSize: 18,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'KHS Semester: ${khs.semester} ${int.tryParse(khs.semester)! % 2 == 0 ? '(Genap)' : '(Ganjil)'}',
@@ -85,11 +91,17 @@ class DetailInfoKhs extends StatelessWidget {
             fontSize: 18,
           ),
         ),
+        const SizedBox(
+          height: 5,
+        ),
         Text(
           'Tahun akademik: ${khs.tahunAkademik}',
           style: const TextStyle(
             fontSize: 18,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'IPS: ${khs.ips}',
@@ -97,17 +109,26 @@ class DetailInfoKhs extends StatelessWidget {
             fontSize: 18,
           ),
         ),
+        const SizedBox(
+          height: 5,
+        ),
         Text(
           'Kredit diambil: ${khs.kreditDiambil}',
           style: const TextStyle(
             fontSize: 18,
           ),
         ),
+        const SizedBox(
+          height: 5,
+        ),
         Text(
           'Kredit diperoleh: ${khs.kreditDiperoleh}',
           style: const TextStyle(
             fontSize: 18,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'Maks beban sks semester selanjutnya: ${khs.maskSks}',
@@ -173,6 +194,9 @@ class ListNilaiMahasiswa extends StatelessWidget {
               Expanded(
                 child: Text(
                   (index + 1).toString(),
+                  style: const TextStyle(
+                    fontSize: 17,
+                  ),
                 ),
               ),
               Expanded(
@@ -277,7 +301,7 @@ class HeaderListNilaiMahasiswa extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Text(
-              'Sks',
+              'SKS',
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,

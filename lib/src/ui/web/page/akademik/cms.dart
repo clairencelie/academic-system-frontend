@@ -1,4 +1,6 @@
 import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
+import 'package:academic_system/src/model/academic.dart';
+import 'package:academic_system/src/model/user.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/cms_item.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/schedule_table.dart';
 import 'package:academic_system/src/ui/web/page/akademik/create_schedule.dart';
@@ -9,7 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CMSPage extends StatefulWidget {
-  const CMSPage({super.key});
+  final User user;
+
+  const CMSPage({
+    super.key,
+    required this.user,
+  });
 
   @override
   State<CMSPage> createState() => _CMSPageState();
@@ -52,96 +59,112 @@ class _CMSPageState extends State<CMSPage> {
                         const SizedBox(
                           height: 30,
                         ),
-                        Wrap(
-                          direction: Axis.horizontal,
-                          alignment: WrapAlignment.spaceBetween,
-                          children: [
-                            CMSItem(
-                              width: MediaQuery.of(context).size.width / 6,
-                              height: MediaQuery.of(context).size.width < 700
-                                  ? MediaQuery.of(context).size.width / 6
-                                  : MediaQuery.of(context).size.width / 8.5,
-                              title: 'Tambah Jadwal',
-                              fontSize: 15,
-                              icons: Icons.post_add_rounded,
-                              iconSize: 35,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => CreateSchedulePage(
-                                        krsSchedule: state.krsSchedule),
-                                  ),
-                                );
-                              },
-                            ),
-                            CMSItem(
-                              width: MediaQuery.of(context).size.width / 6,
-                              height: MediaQuery.of(context).size.width < 700
-                                  ? MediaQuery.of(context).size.width / 6
-                                  : MediaQuery.of(context).size.width / 8.5,
-                              title: 'Manajemen KRS',
-                              fontSize: 15,
-                              iconSize: 35,
-                              icons: Icons.library_books,
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const KRSManagementPage(),
-                                    ));
-                              },
-                            ),
-                            CMSItem(
-                              width: MediaQuery.of(context).size.width / 6,
-                              height: MediaQuery.of(context).size.width < 700
-                                  ? MediaQuery.of(context).size.width / 6
-                                  : MediaQuery.of(context).size.width / 8.5,
-                              title: 'Tahun Akademik',
-                              fontSize: 15,
-                              icons: Icons.view_timeline,
-                              iconSize: 35,
-                              onTap: () async {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      content: SizedBox(
-                                        width: 430,
-                                        child: FormTahunAkademik(
-                                          krsSchedule: state.krsSchedule,
+                        widget.user is Academic
+                            ? Wrap(
+                                direction: Axis.horizontal,
+                                alignment: WrapAlignment.spaceBetween,
+                                children: [
+                                  CMSItem(
+                                    width:
+                                        MediaQuery.of(context).size.width / 6,
+                                    height: MediaQuery.of(context).size.width <
+                                            700
+                                        ? MediaQuery.of(context).size.width / 6
+                                        : MediaQuery.of(context).size.width /
+                                            8.5,
+                                    title: 'Tambah Jadwal',
+                                    fontSize: 15,
+                                    icons: Icons.post_add_rounded,
+                                    iconSize: 35,
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              CreateSchedulePage(
+                                                  krsSchedule:
+                                                      state.krsSchedule),
                                         ),
-                                      ), //
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                            CMSItem(
-                              width: MediaQuery.of(context).size.width / 6,
-                              height: MediaQuery.of(context).size.width < 700
-                                  ? MediaQuery.of(context).size.width / 6
-                                  : MediaQuery.of(context).size.width / 8.5,
-                              title: 'Manajemen Mata Kuliah',
-                              fontSize: 15,
-                              icons: Icons.list_alt_sharp,
-                              iconSize: 35,
-                              onTap: () async {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return MatkulManagementPage(
-                                        krsSchedule: state.krsSchedule,
                                       );
                                     },
                                   ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
+                                  CMSItem(
+                                    width:
+                                        MediaQuery.of(context).size.width / 6,
+                                    height: MediaQuery.of(context).size.width <
+                                            700
+                                        ? MediaQuery.of(context).size.width / 6
+                                        : MediaQuery.of(context).size.width /
+                                            8.5,
+                                    title: 'Manajemen KRS',
+                                    fontSize: 15,
+                                    iconSize: 35,
+                                    icons: Icons.library_books,
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const KRSManagementPage(),
+                                          ));
+                                    },
+                                  ),
+                                  CMSItem(
+                                    width:
+                                        MediaQuery.of(context).size.width / 6,
+                                    height: MediaQuery.of(context).size.width <
+                                            700
+                                        ? MediaQuery.of(context).size.width / 6
+                                        : MediaQuery.of(context).size.width /
+                                            8.5,
+                                    title: 'Tahun Akademik',
+                                    fontSize: 15,
+                                    icons: Icons.view_timeline,
+                                    iconSize: 35,
+                                    onTap: () async {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            content: SizedBox(
+                                              width: 430,
+                                              child: FormTahunAkademik(
+                                                krsSchedule: state.krsSchedule,
+                                              ),
+                                            ), //
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                  CMSItem(
+                                    width:
+                                        MediaQuery.of(context).size.width / 6,
+                                    height: MediaQuery.of(context).size.width <
+                                            700
+                                        ? MediaQuery.of(context).size.width / 6
+                                        : MediaQuery.of(context).size.width /
+                                            8.5,
+                                    title: 'Manajemen Mata Kuliah',
+                                    fontSize: 15,
+                                    icons: Icons.list_alt_sharp,
+                                    iconSize: 35,
+                                    onTap: () async {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return MatkulManagementPage(
+                                              krsSchedule: state.krsSchedule,
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              )
+                            : const SizedBox(),
                         const SizedBox(
                           height: 40,
                         ),
@@ -153,6 +176,7 @@ class _CMSPageState extends State<CMSPage> {
                           ),
                         ),
                         ScheduleTable(
+                          user: widget.user,
                           krsSchedule: state.krsSchedule,
                         ),
                       ],

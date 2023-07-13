@@ -71,39 +71,35 @@ class _KRSWebPageState extends State<KRSWebPage> {
                         const SizedBox(
                           height: 20,
                         ),
-                        StudentDetail(
-                          user: (widget.user as Student),
-                          transkripLengkap: tranksripLengkap,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return KrsHistoryPage(
-                                    student: (widget.user as Student),
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  bottom:
-                                      BorderSide(color: Colors.blue, width: 1),
+                        Container(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return KrsHistoryPage(
+                                      student: (widget.user as Student),
+                                    );
+                                  },
                                 ),
-                              ),
-                              child: const Text(
-                                'Histori Pengisian KRS',
-                                style: TextStyle(
-                                  fontSize: 18,
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                        color: Colors.blue, width: 1),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Histori Pengisian KRS',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
                                 ),
                               ),
                             ),
@@ -187,11 +183,25 @@ class _KRSWebPageState extends State<KRSWebPage> {
 
                                           if (tunggakanSemester.isEmpty &&
                                               tunggakanDPKrs.isEmpty) {
-                                            return ListMatkulKRS(
-                                              user: (widget.user as Student),
-                                              tranksripLengkap:
-                                                  tranksripLengkap,
-                                              krsSchedule: krsSchedule,
+                                            return Column(
+                                              children: [
+                                                StudentDetail(
+                                                  user:
+                                                      (widget.user as Student),
+                                                  transkripLengkap:
+                                                      tranksripLengkap,
+                                                ),
+                                                const SizedBox(
+                                                  height: 20,
+                                                ),
+                                                ListMatkulKRS(
+                                                  user:
+                                                      (widget.user as Student),
+                                                  tranksripLengkap:
+                                                      tranksripLengkap,
+                                                  krsSchedule: krsSchedule,
+                                                ),
+                                              ],
                                             );
                                           }
                                           return SizedBox(

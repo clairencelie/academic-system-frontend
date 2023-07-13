@@ -113,8 +113,8 @@ class _FormNilaiState extends State<FormNilai> {
                           return 'Tidak boleh ada angka lain dibelakang 0';
                         } else if (int.tryParse(value)! < 0) {
                           return 'Nilai tidak boleh lebih kecil dari 0!';
-                        } else if (int.tryParse(value)! > 100) {
-                          return 'Nilai tidak boleh lebih besar dari 100!';
+                        } else if (int.tryParse(value)! > 14) {
+                          return 'Nilai tidak boleh lebih besar dari 14!';
                         } else {
                           return null;
                         }

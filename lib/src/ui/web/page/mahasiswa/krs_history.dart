@@ -1,4 +1,5 @@
 import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
+import 'package:academic_system/src/helper/date_converter.dart';
 import 'package:academic_system/src/model/kartu_rencana_studi_lengkap.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/ui/web/page/mahasiswa/krs_detail.dart';
@@ -164,7 +165,8 @@ class KrsList extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: Text(
-                          krsLengkap[index].waktuPengisian,
+                          DateConverter.mySQLToDartDateFormat(
+                              krsLengkap[index].waktuPengisian),
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -173,7 +175,9 @@ class KrsList extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: Text(
-                          krsLengkap[index].tahunAkademik,
+                          krsLengkap[index].approve == "1"
+                              ? "Diapprove"
+                              : "Belum diapprove",
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -185,6 +189,15 @@ class KrsList extends StatelessWidget {
                           krsLengkap[index].commit == "1"
                               ? "Dikunci"
                               : "Belum dikunci",
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          krsLengkap[index].tahunAkademik,
                           style: const TextStyle(
                             fontSize: 16,
                           ),
@@ -239,7 +252,7 @@ class KrsListHeader extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Text(
-              'Tanggal Pengajuan KRS',
+              'Tanggal Pengajuan',
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
@@ -249,7 +262,7 @@ class KrsListHeader extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Text(
-              'T.A Akademik',
+              'Approval',
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
@@ -259,7 +272,17 @@ class KrsListHeader extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Text(
-              'Status KRS',
+              'Status',
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Text(
+              'T.A',
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,

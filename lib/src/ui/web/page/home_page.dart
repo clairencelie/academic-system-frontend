@@ -1,3 +1,4 @@
+import 'package:academic_system/src/model/administrator.dart';
 import 'package:academic_system/src/model/user.dart';
 import 'package:flutter/material.dart';
 
@@ -307,6 +308,9 @@ class IdentityWidget extends StatelessWidget {
   }
 
   String getRole(User user) {
+    if (user is Administrator) {
+      return 'Tata Usaha';
+    }
     return '${user.role[0].toUpperCase()}${user.role.substring(1).toLowerCase()}';
   }
 
@@ -320,11 +324,14 @@ class IdentityWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                getFirstName(user),
+                user.name,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w500,
                 ),
+              ),
+              const SizedBox(
+                height: 6,
               ),
               Text(
                 user.id,
@@ -332,6 +339,9 @@ class IdentityWidget extends StatelessWidget {
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
+              ),
+              const SizedBox(
+                height: 5,
               ),
               Text(
                 getRole(user),
@@ -343,11 +353,11 @@ class IdentityWidget extends StatelessWidget {
             ],
           ),
           const SizedBox(
-            width: 10,
+            width: 20,
           ),
           Container(
-            height: 50,
-            width: 50,
+            height: 60,
+            width: 60,
             decoration: BoxDecoration(
               color: const Color.fromARGB(255, 224, 224, 224),
               image: const DecorationImage(

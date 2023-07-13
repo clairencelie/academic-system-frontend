@@ -311,19 +311,10 @@ class ListNilaiMahasiswa extends StatelessWidget {
                               ),
                             ),
                           ),
-                          // Expanded(
-                          //   flex: 1,
-                          //   child: Text(
-                          //     listNilaiMhs[index].angkaKualitas.toString(),
-                          //     style: const TextStyle(
-                          //       fontSize: 16,
-                          //     ),
-                          //   ),
-                          // ),
                           Expanded(
                             flex: 1,
                             child: Text(
-                              listNilaiMhs[index].status,
+                              listNilaiMhs[index].status.toUpperCase(),
                               style: const TextStyle(
                                 fontSize: 16,
                               ),
@@ -440,16 +431,6 @@ class ListNilaiHeader extends StatelessWidget {
               ),
             ),
           ),
-          // Expanded(
-          //   flex: 1,
-          //   child: Text(
-          //     'Kualitas',
-          //     style: TextStyle(
-          //       fontSize: 17,
-          //       fontWeight: FontWeight.bold,
-          //     ),
-          //   ),
-          // ),
           Expanded(
             flex: 1,
             child: Text(

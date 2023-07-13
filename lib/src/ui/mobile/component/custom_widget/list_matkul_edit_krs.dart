@@ -117,14 +117,6 @@ class _MobileListMatkulEditKRSState extends State<MobileListMatkulEditKRS> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              // TODO: Jadwal Pengisian KRS
-              // Text(
-              //   '${DateConverter.convertToDartDateFormat(widget.krsSchedule.tanggalMulai)} - ${DateConverter.convertToDartDateFormat(widget.krsSchedule.tanggalSelesai)}',
-              //   style: const TextStyle(
-              //     fontSize: 20,
-              //     fontWeight: FontWeight.bold,
-              //   ),
-              // ),
               const SizedBox(
                 height: 20,
               ),
