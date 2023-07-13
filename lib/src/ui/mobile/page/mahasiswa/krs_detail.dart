@@ -73,8 +73,8 @@ class _MobileKRSDetailPageState extends State<MobileKRSDetailPage> {
                           margin: const EdgeInsets.only(bottom: 15),
                           decoration: BoxDecoration(
                             color: index % 2 == 1
-                                ? const Color.fromARGB(255, 251, 251, 251)
-                                : const Color.fromARGB(255, 245, 247, 251),
+                                ? const Color.fromARGB(255, 247, 249, 253)
+                                : const Color.fromARGB(255, 227, 238, 255),
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: const [
                               BoxShadow(
@@ -271,7 +271,7 @@ class KRSDetailInfo extends StatelessWidget {
         Text(
           'Nama: ${student.name}',
           style: const TextStyle(
-            fontSize: 19,
+            fontSize: 18,
           ),
         ),
         const SizedBox(
@@ -280,16 +280,7 @@ class KRSDetailInfo extends StatelessWidget {
         Text(
           'NIM: ${student.id}',
           style: const TextStyle(
-            fontSize: 19,
-          ),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        Text(
-          'Semester: ${krs.semester}',
-          style: const TextStyle(
-            fontSize: 19,
+            fontSize: 18,
           ),
         ),
         const SizedBox(
@@ -298,16 +289,25 @@ class KRSDetailInfo extends StatelessWidget {
         Text(
           'Program Studi: ${krs.jurusan}',
           style: const TextStyle(
-            fontSize: 19,
+            fontSize: 18,
           ),
         ),
         const SizedBox(
           height: 5,
         ),
         Text(
+          'Semester: ${krs.semester}',
+          style: const TextStyle(
+            fontSize: 18,
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Text(
           'IPK: ${krs.ipk}',
           style: const TextStyle(
-            fontSize: 19,
+            fontSize: 18,
           ),
         ),
         const SizedBox(
@@ -316,16 +316,16 @@ class KRSDetailInfo extends StatelessWidget {
         Text(
           'IPS: ${krs.ips}',
           style: const TextStyle(
-            fontSize: 19,
+            fontSize: 18,
           ),
         ),
         const SizedBox(
-          height: 5,
+          height: 20,
         ),
         Text(
           'Kredit Diambil: ${krs.kreditDiambil}',
           style: const TextStyle(
-            fontSize: 19,
+            fontSize: 18,
           ),
         ),
         const SizedBox(
@@ -334,16 +334,16 @@ class KRSDetailInfo extends StatelessWidget {
         Text(
           'Beban Maks SKS: ${int.tryParse(krs.semester)! < 5 ? '20' : krs.bebanSksMaks}',
           style: const TextStyle(
-            fontSize: 19,
+            fontSize: 18,
           ),
         ),
         const SizedBox(
-          height: 5,
+          height: 20,
         ),
         Text(
           'Tanggal Pengisian KRS: ${DateConverter.mySQLToDartDateFormat(krs.waktuPengisian)}',
           style: const TextStyle(
-            fontSize: 19,
+            fontSize: 18,
           ),
         ),
         const SizedBox(
@@ -352,16 +352,25 @@ class KRSDetailInfo extends StatelessWidget {
         Text(
           'T.A: ${krs.tahunAkademik}',
           style: const TextStyle(
-            fontSize: 19,
+            fontSize: 18,
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Text(
+          'P.A: ${listPA.where((element) => element.id == krs.idDosen).first.name}',
+          style: const TextStyle(
+            fontSize: 18,
           ),
         ),
         const SizedBox(
           height: 5,
         ),
         Text(
-          'P.A: ${listPA.where((element) => element.id == krs.idDosen).first.name}',
+          'Approval: ${krs.approve == '1' ? "Sudah diapprove" : "Belum diapprove"}',
           style: const TextStyle(
-            fontSize: 19,
+            fontSize: 18,
           ),
         ),
         const SizedBox(
@@ -370,7 +379,7 @@ class KRSDetailInfo extends StatelessWidget {
         Text(
           'Status KRS: ${krs.commit == '1' ? "Sudah dikunci" : "Belum dikunci"}',
           style: const TextStyle(
-            fontSize: 19,
+            fontSize: 18,
           ),
         ),
       ],

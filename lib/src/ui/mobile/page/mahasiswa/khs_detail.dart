@@ -38,7 +38,7 @@ class MobileKHSDetailPage extends StatelessWidget {
                   children: [
                     const HeaderKhsDetail(),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     DetailInfoKhs(student: student, khs: khs),
                     const SizedBox(
@@ -95,6 +95,9 @@ class MobileKHSDetailPage extends StatelessWidget {
                               ),
                             ),
                           ],
+                        ),
+                        const SizedBox(
+                          height: 5,
                         ),
                         Row(
                           children: [
@@ -165,11 +168,17 @@ class DetailInfoKhs extends StatelessWidget {
             fontSize: 18,
           ),
         ),
+        const SizedBox(
+          height: 5,
+        ),
         Text(
           'NIM: ${student.id}',
           style: const TextStyle(
             fontSize: 18,
           ),
+        ),
+        const SizedBox(
+          height: 15,
         ),
         Text(
           'KHS Semester: ${khs.semester} ${int.tryParse(khs.semester)! % 2 == 0 ? '(Genap)' : '(Ganjil)'}',
@@ -177,11 +186,17 @@ class DetailInfoKhs extends StatelessWidget {
             fontSize: 18,
           ),
         ),
+        const SizedBox(
+          height: 5,
+        ),
         Text(
           'Tahun akademik: ${khs.tahunAkademik}',
           style: const TextStyle(
             fontSize: 18,
           ),
+        ),
+        const SizedBox(
+          height: 15,
         ),
         Text(
           'IPS: ${khs.ips}',
@@ -189,17 +204,26 @@ class DetailInfoKhs extends StatelessWidget {
             fontSize: 18,
           ),
         ),
+        const SizedBox(
+          height: 5,
+        ),
         Text(
           'Kredit diambil: ${khs.kreditDiambil}',
           style: const TextStyle(
             fontSize: 18,
           ),
         ),
+        const SizedBox(
+          height: 5,
+        ),
         Text(
           'Kredit diperoleh: ${khs.kreditDiperoleh}',
           style: const TextStyle(
             fontSize: 18,
           ),
+        ),
+        const SizedBox(
+          height: 5,
         ),
         Text(
           'Maks beban sks semester selanjutnya: ${khs.maskSks}',

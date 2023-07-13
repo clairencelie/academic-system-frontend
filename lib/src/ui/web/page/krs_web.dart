@@ -202,6 +202,11 @@ class _KRSWebPageState extends State<KRSWebPage> {
                                             child: const Center(
                                               child: Text(
                                                 'Maaf, anda belum memenuhi persyaratan untuk pengisian KRS.\nMohon cek halaman tagihan dan pastikan tidak ada tunggakan pembayaran semester sebelumnya dan sudah melunasi uang muka KRS',
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  color: Colors.grey,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
                                           );

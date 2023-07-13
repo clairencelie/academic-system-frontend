@@ -1,8 +1,8 @@
 import 'package:academic_system/src/bloc/all_schedule/all_schedule_bloc.dart';
 import 'package:academic_system/src/bloc/pdf_export/schedule_pdf_bloc.dart';
-import 'package:academic_system/src/bloc/schedule/schedule_bloc.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/schedule.dart';
+import 'package:academic_system/src/ui/web/component/custom_widget/web_schedule_not_available.dart';
 import 'package:academic_system/src/ui/web/page/schedule_pdf_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -81,7 +81,7 @@ class _AllSchedulePageState extends State<AllSchedulePage> {
                           ],
                         );
                       } else if (state is AllScheduleEmpty) {
-                        return const Text('Jadwal Kosong');
+                        return const WebScheduleNotAvailable();
                       } else if (state is AllScheduleRequestFailed) {
                         return const Text(
                             'Gagal mendapatkan data jadwal perkuliahan');

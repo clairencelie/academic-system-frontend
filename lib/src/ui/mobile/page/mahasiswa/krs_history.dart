@@ -68,7 +68,15 @@ class _MobileKrsHistoryPageState extends State<MobileKrsHistoryPage> {
                       height: 20,
                     ),
                     const Text(
-                      'Anda dapat mengajukan perubahan pilihan mata kuliah pada KRS yang sudah diajukan selama KRS anda belum dikunci oleh bagian akademik.',
+                      'Anda dapat mengajukan perubahan pilihan mata kuliah pada KRS yang sudah diajukan selama KRS anda belum dikunci.',
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      'Hubungi penasehat akademik anda terlebih dahulu untuk mengajukan perubahan pilihan mata kuliah.',
                       textAlign: TextAlign.justify,
                       style: TextStyle(fontSize: 16),
                     ),
@@ -185,8 +193,8 @@ class KrsList extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
                   color: index % 2 == 1
-                      ? const Color.fromARGB(255, 249, 251, 255)
-                      : const Color.fromARGB(255, 239, 244, 252),
+                      ? const Color.fromARGB(255, 247, 249, 253)
+                      : const Color.fromARGB(255, 227, 238, 255),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: const [
                     BoxShadow(
@@ -266,6 +274,18 @@ class KrsList extends StatelessWidget {
                         'P.A: ${listPA.where((element) => element.id == krsLengkap[index].idDosen).first.name}',
                         style: const TextStyle(
                           fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Text(
+                        krsLengkap[index].approve == '1'
+                            ? 'Sudah Diapprove'
+                            : 'Belum Diapprove',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],

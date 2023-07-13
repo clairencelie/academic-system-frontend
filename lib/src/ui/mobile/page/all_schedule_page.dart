@@ -5,6 +5,8 @@ import 'package:academic_system/src/helper/pdf_generate.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/schedule.dart';
 import 'package:academic_system/src/ui/mobile/component/card/simple_schedule_card.dart';
+import 'package:academic_system/src/ui/mobile/component/custom_widget/no_schedule.dart';
+import 'package:academic_system/src/ui/mobile/component/custom_widget/schedule_not_available.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -100,7 +102,7 @@ class _AllSchedulePageMobileState extends State<AllSchedulePageMobile> {
                             ],
                           );
                         } else if (state is AllScheduleEmpty) {
-                          return const Text('Jadwal Kosong');
+                          return const ScheduleNotAvailable();
                         } else if (state is AllScheduleRequestFailed) {
                           return const Text(
                               'Gagal mendapatkan data jadwal perkuliahan');
@@ -267,7 +269,7 @@ class HeaderAllSchedulePage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
         ),
         const Text(
-          'Detail Kelas',
+          'Jadwal Perkuliahan Lengkap',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,

@@ -76,15 +76,26 @@ class _MobileHistoriTransakasiState extends State<MobileHistoriTransakasi> {
                       builder: (context, state) {
                         if (state is AllHistoriTransaksiLoaded) {
                           if (state.listHistoriTransaksi.isEmpty) {
-                            return const Text(
-                                'Anda belum pernah melakukan transaksi.');
+                            return SizedBox(
+                              height: MediaQuery.of(context).size.height / 3,
+                              child: const Center(
+                                child: Text(
+                                  'Anda belum pernah melakukan transaksi.',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            );
                           }
                           return ListHistoriTransaksi(
                               listHistoriTransaksi: state.listHistoriTransaksi);
                         }
-                        return const SizedBox(
-                          height: 100,
-                          child: Center(
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height / 3,
+                          child: const Center(
                             child: CircularProgressIndicator(),
                           ),
                         );
@@ -124,8 +135,11 @@ class ListHistoriTransaksi extends StatelessWidget {
             horizontal: 20,
             vertical: 20,
           ),
+          margin: const EdgeInsets.only(bottom: 20),
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 252, 253, 255),
+            color: index % 2 == 1
+                ? const Color.fromARGB(255, 247, 249, 253)
+                : const Color.fromARGB(255, 227, 238, 255),
             borderRadius: BorderRadius.circular(10),
             boxShadow: const [
               BoxShadow(
@@ -155,7 +169,14 @@ class ListHistoriTransaksi extends StatelessWidget {
                                 'pending'
                             ? 'Pending'
                             : 'Gagal',
-                    style: const TextStyle(
+                    style: TextStyle(
+                      color: listHistoriTransaksi[index].statusTransaksi ==
+                              'settlement'
+                          ? const Color.fromARGB(255, 8, 164, 86)
+                          : listHistoriTransaksi[index].statusTransaksi ==
+                                  'pending'
+                              ? Colors.orange
+                              : const Color.fromARGB(255, 188, 43, 32),
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),

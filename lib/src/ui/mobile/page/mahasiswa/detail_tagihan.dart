@@ -707,7 +707,6 @@ class HeaderDetailTagihan extends StatelessWidget {
     return Row(
       children: [
         IconButton(
-          padding: const EdgeInsets.only(right: 15),
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           constraints: const BoxConstraints(),

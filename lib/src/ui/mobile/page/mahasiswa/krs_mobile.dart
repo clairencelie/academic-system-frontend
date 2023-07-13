@@ -71,42 +71,35 @@ class _MobileKRSPageState extends State<MobileKRSPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const HeaderKrsMobile(),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          MobileStudentDetail(
-                            mahasiswa: widget.user as Student,
-                            transkripLengkap: tranksripLengkap,
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return MobileKrsHistoryPage(
-                                      student: (widget.user as Student),
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                        color: Colors.blue, width: 1),
+                          Container(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return MobileKrsHistoryPage(
+                                        student: (widget.user as Student),
+                                      );
+                                    },
                                   ),
-                                ),
-                                child: const Text(
-                                  'Histori Pengisian KRS',
-                                  style: TextStyle(
-                                    fontSize: 18,
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                          color: Colors.blue, width: 1),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Histori Pengisian KRS',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -120,15 +113,19 @@ class _MobileKRSPageState extends State<MobileKRSPage> {
                               if (state is AlreadyFillKrs) {
                                 return Padding(
                                   padding: const EdgeInsets.all(15),
-                                  child: Center(
-                                    child: Text(
-                                      state.message,
-                                      textAlign: TextAlign.justify,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color:
-                                            Color.fromARGB(255, 189, 189, 189),
+                                  child: SizedBox(
+                                    height: MediaQuery.of(context).size.height /
+                                        2.5,
+                                    child: Center(
+                                      child: Text(
+                                        state.message,
+                                        textAlign: TextAlign.justify,
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color.fromARGB(
+                                              255, 189, 189, 189),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -153,7 +150,6 @@ class _MobileKRSPageState extends State<MobileKRSPage> {
                                         builder: (context, state) {
                                           if (state
                                               is TagihanPerkuliahanLoaded) {
-                                            // Cek apakah sudah memenuhi syarat pengisian KRS
                                             var listTagihan = state.listTagihan;
 
                                             var tunggakanSemester = listTagihan
@@ -195,11 +191,25 @@ class _MobileKRSPageState extends State<MobileKRSPage> {
 
                                             if (tunggakanSemester.isEmpty &&
                                                 tunggakanDPKrs.isEmpty) {
-                                              return MobileListMatkulKRS(
-                                                user: (widget.user as Student),
-                                                tranksripLengkap:
-                                                    tranksripLengkap,
-                                                krsSchedule: krsSchedule,
+                                              return Column(
+                                                children: [
+                                                  MobileStudentDetail(
+                                                    mahasiswa:
+                                                        widget.user as Student,
+                                                    transkripLengkap:
+                                                        tranksripLengkap,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  MobileListMatkulKRS(
+                                                    user: (widget.user
+                                                        as Student),
+                                                    tranksripLengkap:
+                                                        tranksripLengkap,
+                                                    krsSchedule: krsSchedule,
+                                                  ),
+                                                ],
                                               );
                                             }
                                             return SizedBox(
@@ -226,13 +236,20 @@ class _MobileKRSPageState extends State<MobileKRSPage> {
                                           );
                                         },
                                       )
-                                    : const Text(
-                                        'Pengisian KRS untuk semester selanjutnya belum dimulai',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
+                                    : SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                4,
+                                        child: const Center(
+                                          child: Text(
+                                            'Pengisian KRS Untuk Semester Selanjutnya Belum Dimulai',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                         ),
                                       );
                               } else if (state is KrsLoading) {
@@ -244,13 +261,18 @@ class _MobileKRSPageState extends State<MobileKRSPage> {
                                   ),
                                 );
                               }
-                              return const Text(
-                                'Pengisian KRS untuk semester selanjutnya belum dimulai',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+                              return SizedBox(
+                                height: MediaQuery.of(context).size.height / 4,
+                                child: const Center(
+                                  child: Text(
+                                    'Pengisian KRS Untuk Semester Selanjutnya Belum Dimulai',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               );
                             },
@@ -285,7 +307,7 @@ class HeaderKrsMobile extends StatelessWidget {
     return Row(
       children: [
         IconButton(
-          padding: const EdgeInsets.only(right: 15),
+          // padding: const EdgeInsets.only(right: 15),
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           constraints: const BoxConstraints(),

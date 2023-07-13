@@ -1,3 +1,4 @@
+import 'package:academic_system/src/model/academic.dart';
 import 'package:academic_system/src/model/administrator.dart';
 import 'package:academic_system/src/model/lecturer.dart';
 import 'package:academic_system/src/model/student.dart';
@@ -89,10 +90,10 @@ class FeaturesMenu extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 15, 10, 20),
-      child: user is Administrator
+      child: user is Administrator || user is Academic || user is Lecturer
           ? Wrap(
               direction: Axis.horizontal,
-              spacing: 40,
+              spacing: 30,
               runSpacing: 30,
               children: (user is Student)
                   ? studentFeatures

@@ -1,7 +1,6 @@
 import 'package:academic_system/src/bloc/krs/krs_bloc.dart';
 import 'package:academic_system/src/bloc/krs_management/krs_management_bloc.dart';
 import 'package:academic_system/src/bloc/mata_kuliah/mata_kuliah_bloc.dart';
-import 'package:academic_system/src/helper/date_converter.dart';
 import 'package:academic_system/src/model/new_kartu_rencana_studi.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
 import 'package:academic_system/src/model/learning_subject.dart';
@@ -154,14 +153,6 @@ class _MobileListMatkulKRSState extends State<MobileListMatkulKRS> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              // TODO: Jadwal Pengisian KRS
-              // Text(
-              //   '${DateConverter.convertToDartDateFormat(widget.krsSchedule.tanggalMulai)} - ${DateConverter.convertToDartDateFormat(widget.krsSchedule.tanggalSelesai)}',
-              //   style: const TextStyle(
-              //     fontSize: 20,
-              //     fontWeight: FontWeight.bold,
-              //   ),
-              // ),
               const SizedBox(
                 height: 20,
               ),
@@ -182,7 +173,6 @@ class _MobileListMatkulKRSState extends State<MobileListMatkulKRS> {
                   });
                 },
               ),
-
               const SizedBox(
                 height: 20,
               ),
@@ -341,9 +331,9 @@ class _MobileListMatkulKRSState extends State<MobileListMatkulKRS> {
                             : () {
                                 maxSks > totalSks
                                     ? showDialogPeringatanPengajuanKRS(
-                                        context, maxSksFromTranskrip)
+                                        context, maxSks.toString())
                                     : showDialogKonfirmasiPengajuanKRS(
-                                        context, maxSksFromTranskrip);
+                                        context, maxSks.toString());
                               },
                     child: const Text(
                       'Ajukan KRS',
@@ -363,7 +353,7 @@ class _MobileListMatkulKRSState extends State<MobileListMatkulKRS> {
   }
 
   Future<dynamic> showDialogKonfirmasiPengajuanKRS(
-      BuildContext context, String maxSksFromTranskrip) {
+      BuildContext context, String maxSks) {
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -431,7 +421,7 @@ class _MobileListMatkulKRSState extends State<MobileListMatkulKRS> {
                   ips: ips,
                   ipk: widget.tranksripLengkap.transkripNilai.ipk,
                   kreditDiambil: totalSks.toString(),
-                  bebanSksMaks: maxSksFromTranskrip,
+                  bebanSksMaks: maxSks,
                   waktuPengisian: date,
                   tahunAkademik: widget.krsSchedule.tahunAkademik,
                 );

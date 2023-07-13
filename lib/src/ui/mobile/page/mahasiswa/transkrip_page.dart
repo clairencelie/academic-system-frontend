@@ -142,11 +142,25 @@ class RincianTranskrip extends StatelessWidget {
         const SizedBox(
           height: 20,
         ),
-        ListKhs(
-          transkripRinci: transkripRinci,
-          totalSemester: totalSemester,
-          mahasiswa: mahasiswa,
-        ),
+        transkripRinci.khs.isEmpty
+            ? SizedBox(
+                height: MediaQuery.of(context).size.height / 3.5,
+                child: const Center(
+                  child: Text(
+                    'Anda belum memiliki KHS',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              )
+            : ListKhs(
+                transkripRinci: transkripRinci,
+                totalSemester: totalSemester,
+                mahasiswa: mahasiswa,
+              ),
       ],
     );
   }

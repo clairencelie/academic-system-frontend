@@ -313,18 +313,37 @@ class KrsManagementList extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      filterTahunAkademikKrs[index].nama,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    Row(
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            filterTahunAkademikKrs[index].nama,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            filterTahunAkademikKrs[index].commit == '1'
+                                ? "Sudah Dikunci"
+                                : "Belum Dikunci",
+                            textAlign: TextAlign.end,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     Text(
                       filterTahunAkademikKrs[index].nim,
                       style: const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(
@@ -357,6 +376,7 @@ class KrsManagementList extends StatelessWidget {
                           : "Belum diapprove",
                       textAlign: TextAlign.end,
                       style: const TextStyle(
+                        fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
                     ),
