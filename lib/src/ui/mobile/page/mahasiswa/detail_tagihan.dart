@@ -7,8 +7,8 @@ import 'package:academic_system/src/model/rincian_tagihan.dart';
 import 'package:academic_system/src/model/student.dart';
 import 'package:academic_system/src/model/tagihan_perkuliahan.dart';
 import 'package:academic_system/src/repository/transaksi_repository.dart';
+import 'package:academic_system/src/ui/mobile/component/custom_widget/timer_va_mobile.dart';
 import 'package:academic_system/src/ui/web/component/custom_widget/info_dialog.dart';
-import 'package:academic_system/src/ui/web/component/custom_widget/timer_va.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
@@ -527,86 +527,85 @@ class ShowVANumber extends StatelessWidget {
       color: const Color.fromARGB(255, 239, 243, 255),
       child: Column(
         children: [
+          const Text(
+            'Anda sedang memiliki transaksi aktif',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
+          const SizedBox(
+            child: Text(
+              'Harap melakukan refresh status pembayaran jika sudah berhasil melakukan transfer melalui nomor virtual akun yang diberikan.',
+              textAlign: TextAlign.justify,
+              style: TextStyle(
+                fontSize: 14,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 15,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              const Text(
+                'No. Virtual Akun:',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Row(
                 children: [
-                  const Text(
-                    'Anda sedang memiliki transaksi aktif',
-                    style: TextStyle(
-                      fontSize: 19,
+                  Text(
+                    transaksiPending[0].noVA,
+                    style: const TextStyle(
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
-                    child: const Text(
-                      'Harap melakukan refresh status pembayaran jika sudah berhasil melakukan transfer melalui nomor virtual akun yang diberikan.',
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TimerVA(
-                      targetUnixTime:
-                          DateTime.parse(transaksiPending[0].waktuKedaluwarsa)
-                                  .millisecondsSinceEpoch ~/
-                              1000),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const Text(
-                    'No. Virtual Akun:',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        transaksiPending[0].noVA,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                  IconButton(
+                    padding: const EdgeInsets.only(left: 5),
+                    constraints: const BoxConstraints(),
+                    onPressed: () async {
+                      await Clipboard.setData(
+                        ClipboardData(
+                          text: transaksiPending[0].noVA,
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () async {
-                          await Clipboard.setData(
-                            ClipboardData(
-                              text: transaksiPending[0].noVA,
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.copy),
-                      ),
-                    ],
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.copy,
+                      size: 18,
+                    ),
                   ),
                 ],
               ),
             ],
           ),
+          const SizedBox(
+            height: 15,
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: MobileTimerVA(
+                targetUnixTime:
+                    DateTime.parse(transaksiPending[0].waktuKedaluwarsa)
+                            .millisecondsSinceEpoch ~/
+                        1000),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
           Container(
             margin: const EdgeInsets.only(top: 15),
             alignment: Alignment.centerRight,
             child: SizedBox(
-              width: 230,
+              width: MediaQuery.of(context).size.width,
               height: 50,
               child: ElevatedButton(
                 style: ButtonStyle(

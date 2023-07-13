@@ -1,4 +1,5 @@
 import 'package:academic_system/app.dart';
+import 'package:academic_system/src/bloc/all_schedule/all_schedule_bloc.dart';
 import 'package:academic_system/src/bloc/auth/auth_bloc.dart';
 import 'package:academic_system/src/bloc/dosen/dosen_bloc.dart';
 import 'package:academic_system/src/bloc/histori_transaksi/histori_transaksi_bloc.dart';
@@ -166,6 +167,11 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => SchedulePdfBloc(
+              repository: RepositoryProvider.of<ScheduleRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => AllScheduleBloc(
               repository: RepositoryProvider.of<ScheduleRepository>(context),
             ),
           ),

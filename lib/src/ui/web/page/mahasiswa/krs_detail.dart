@@ -53,7 +53,9 @@ class _KRSDetailPageState extends State<KRSDetailPage> {
                       const Text(
                         'List Mata Kuliah Dipilih',
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       BlocBuilder<ScheduleKrsBloc, ScheduleKrsState>(
                         builder: (context, state) {
@@ -68,19 +70,21 @@ class _KRSDetailPageState extends State<KRSDetailPage> {
                                               .parse(state
                                                   .krsSchedule.tanggalSelesai))
                                   ? null
-                                  : () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            return EditKRSPage(
-                                              krs: widget.krs,
-                                              student: widget.student,
-                                            );
-                                          },
-                                        ),
-                                      );
-                                    },
+                                  : widget.krs.approve == '1'
+                                      ? null
+                                      : () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) {
+                                                return EditKRSPage(
+                                                  krs: widget.krs,
+                                                  student: widget.student,
+                                                );
+                                              },
+                                            ),
+                                          );
+                                        },
                               child: const Text('Ubah pilihan mata kuliah'),
                             );
                           }

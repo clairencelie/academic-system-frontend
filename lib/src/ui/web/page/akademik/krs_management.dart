@@ -492,38 +492,6 @@ class _KrsManagementListState extends State<KrsManagementList> {
                                 ),
                               ),
                             ),
-                            // Expanded(
-                            //   flex: 1,
-                            //   child: ElevatedButton(
-                            //     style: ButtonStyle(
-                            //       backgroundColor:
-                            //           filterTahunAkademikKrs[index].approve ==
-                            //                       "0" ||
-                            //                   filterTahunAkademikKrs[index]
-                            //                           .commit ==
-                            //                       "1"
-                            //               ? null
-                            //               : MaterialStateColor.resolveWith(
-                            //                   (states) => mainColor),
-                            //     ),
-                            //     onPressed: filterTahunAkademikKrs[index]
-                            //                     .approve ==
-                            //                 "0" ||
-                            //             filterTahunAkademikKrs[index].commit ==
-                            //                 "1"
-                            //         ? null
-                            //         : () {
-                            //             // Call commit krs
-                            //             context.read<KrsManagementBloc>().add(
-                            //                   LockKrs(
-                            //                       idKrs: filterTahunAkademikKrs[
-                            //                               index]
-                            //                           .id),
-                            //                 );
-                            //           },
-                            //     child: const Text('Kunci KRS'),
-                            //   ),
-                            // ),
                           ],
                         ),
                       ),

@@ -1,3 +1,4 @@
+import 'package:academic_system/src/bloc/all_schedule/all_schedule_bloc.dart';
 import 'package:academic_system/src/bloc/pdf_export/schedule_pdf_bloc.dart';
 import 'package:academic_system/src/bloc/schedule/schedule_bloc.dart';
 import 'package:academic_system/src/model/krs_schedule.dart';
@@ -22,7 +23,7 @@ class _AllSchedulePageState extends State<AllSchedulePage> {
   @override
   void initState() {
     super.initState();
-    context.read<ScheduleBloc>().add(RequestAllSchedule(
+    context.read<AllScheduleBloc>().add(GetAllSchedule(
           tahunAkademik: widget.krsSchedule.tahunAkademik,
           semester: widget.krsSchedule.semester,
         ));
@@ -45,9 +46,9 @@ class _AllSchedulePageState extends State<AllSchedulePage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  BlocBuilder<ScheduleBloc, ScheduleState>(
+                  BlocBuilder<AllScheduleBloc, AllScheduleState>(
                     builder: (context, state) {
-                      if (state is ScheduleLoaded) {
+                      if (state is AllScheduleFound) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -79,9 +80,9 @@ class _AllSchedulePageState extends State<AllSchedulePage> {
                             ),
                           ],
                         );
-                      } else if (state is ScheduleEmpty) {
+                      } else if (state is AllScheduleEmpty) {
                         return const Text('Jadwal Kosong');
-                      } else if (state is ScheduleRequestFailed) {
+                      } else if (state is AllScheduleRequestFailed) {
                         return const Text(
                             'Gagal mendapatkan data jadwal perkuliahan');
                       }
