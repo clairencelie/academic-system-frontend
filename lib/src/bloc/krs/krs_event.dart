@@ -44,6 +44,25 @@ class GetKrsLengkap extends KrsEvent {
   List<Object> get props => [nim];
 }
 
+class GetKrsSmtIni extends KrsEvent {
+  final String nim;
+  final String tahunAkademik;
+  final String semester;
+
+  const GetKrsSmtIni({
+    required this.nim,
+    required this.tahunAkademik,
+    required this.semester,
+  });
+
+  @override
+  List<Object> get props => [
+        nim,
+        tahunAkademik,
+        semester,
+      ];
+}
+
 class GetAllKrs extends KrsEvent {}
 
 class GetTahunAkademik extends KrsEvent {}

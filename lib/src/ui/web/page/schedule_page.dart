@@ -86,7 +86,11 @@ class _ScheduleBodyState extends State<ScheduleBody> {
 
     if (widget.user is Student) {
       context.read<KrsBloc>().add(
-            GetKrsLengkap(nim: widget.user.id),
+            GetKrsSmtIni(
+              nim: widget.user.id,
+              tahunAkademik: widget.krsSchedule.tahunAkademik,
+              semester: (widget.user as Student).semester,
+            ),
           );
     }
   }
@@ -168,19 +172,11 @@ class _ScheduleBodyState extends State<ScheduleBody> {
         widget.user is Student
             ? BlocBuilder<KrsBloc, KrsState>(
                 builder: (context, state) {
-                  if (state is KrsFound) {
-                    var krsSmtIni = state.krsLengkap
-                        .where((element) =>
-                            element.tahunAkademik ==
-                                widget.krsSchedule.tahunAkademik &&
-                            element.semester ==
-                                (widget.user as Student).semester)
-                        .first;
-
+                  if (state is KrsSmtIniFound) {
                     return StudentWebDailyScheduleList(
-                      krsLengkap: krsSmtIni,
+                      krsLengkap: state.krsLengkap,
                     );
-                  } else if (state is KrsNotFound) {
+                  } else if (state is KrsSmtIniNotFound) {
                     return const SizedBox(
                       height: 200,
                       child: Center(

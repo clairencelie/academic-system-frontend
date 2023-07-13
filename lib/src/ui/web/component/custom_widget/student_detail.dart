@@ -30,9 +30,14 @@ class _StudentDetailState extends State<StudentDetail> {
                 .toList()[0]
                 .ips
             : widget.transkripLengkap.khs
-                .where((element) => element.semester == semesterSebelumnya)
-                .toList()[0]
-                .ips;
+                    .where((element) => element.semester == semesterSebelumnya)
+                    .toList()
+                    .isEmpty
+                ? '0'
+                : widget.transkripLengkap.khs
+                    .where((element) => element.semester == semesterSebelumnya)
+                    .toList()[0]
+                    .ips;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

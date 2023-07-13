@@ -45,3 +45,14 @@ class KrsFound extends KrsState {
 }
 
 class KrsNotFound extends KrsState {}
+
+class KrsSmtIniFound extends KrsState {
+  final KartuRencanaStudiLengkap krsLengkap;
+
+  const KrsSmtIniFound({required this.krsLengkap});
+
+  @override
+  List<Object> get props => [krsLengkap];
+}
+
+class KrsSmtIniNotFound extends KrsState {}

@@ -428,8 +428,7 @@ class _ListMatkulKRSState extends State<ListMatkulKRS> {
                                                     .transkripNilai.ipk,
                                                 kreditDiambil:
                                                     totalSks.toString(),
-                                                bebanSksMaks:
-                                                    maxSksFromTranskrip,
+                                                bebanSksMaks: maxSks.toString(),
                                                 waktuPengisian: date,
                                                 tahunAkademik: widget
                                                     .krsSchedule.tahunAkademik,

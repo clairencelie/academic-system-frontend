@@ -65,6 +65,27 @@ class KrsBloc extends Bloc<KrsEvent, KrsState> {
       }
     });
 
+    on<GetKrsSmtIni>((event, emit) async {
+      emit(KrsLoading());
+      final List<KartuRencanaStudiLengkap> krsLengkap =
+          await repository.getKrsLengkap(event.nim);
+      if (krsLengkap.isNotEmpty) {
+        try {
+          KartuRencanaStudiLengkap krsSmtIni = krsLengkap
+              .where((element) =>
+                  element.tahunAkademik == event.tahunAkademik &&
+                  element.semester == event.semester)
+              .first;
+
+          emit(KrsSmtIniFound(krsLengkap: krsSmtIni));
+        } catch (e) {
+          emit(KrsSmtIniNotFound());
+        }
+      } else {
+        emit(KrsSmtIniNotFound());
+      }
+    });
+
     on<GetAllKrs>((event, emit) async {
       emit(KrsLoading());
       final List<KartuRencanaStudiLengkap> krsLengkap =
