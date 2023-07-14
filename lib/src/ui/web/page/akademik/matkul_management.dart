@@ -216,7 +216,11 @@ class _MatkulManagementBodyState extends State<MatkulManagementBody> {
                       krsSchedule: widget.krsSchedule,
                     );
                   }
-                  return Container();
+                  return Container(
+                    alignment: Alignment.center,
+                    height: MediaQuery.of(context).size.height / 2,
+                    child: const Center(child: CircularProgressIndicator()),
+                  );
                 },
               )
             ],
@@ -238,7 +242,7 @@ class _MatkulManagementBodyState extends State<MatkulManagementBody> {
         return Container(
           alignment: Alignment.center,
           height: MediaQuery.of(context).size.height / 2,
-          child: const CircularProgressIndicator(),
+          child: const Center(child: CircularProgressIndicator()),
         );
       },
     );
@@ -627,7 +631,11 @@ class ListMataKuliah extends StatelessWidget {
         } else if (state is UserNotFound) {
           return const Text('Data dosen tidak ditemukan');
         }
-        return const CircularProgressIndicator();
+        return Container(
+          alignment: Alignment.center,
+          height: MediaQuery.of(context).size.height / 2,
+          child: const Center(child: CircularProgressIndicator()),
+        );
       },
     );
   }

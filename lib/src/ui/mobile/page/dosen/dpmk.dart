@@ -219,6 +219,7 @@ class ListMatkulDosen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String tahunAkd = tahunAkademik.split(" ").toList()[0];
     final String semester = tahunAkademik.split(" ").toList()[1];
     List<MatkulDosen> filteredMatkul = semester == "genap"
         ? matkulDosen
@@ -228,9 +229,13 @@ class ListMatkulDosen extends StatelessWidget {
             .where((matkul) => int.tryParse(matkul.kelas[1])! % 2 == 1)
             .toList();
 
+    List<MatkulDosen> filteredMatkulTahunAkademik = filteredMatkul
+        .where((element) => element.tahunAkademik == tahunAkd)
+        .toList();
+
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: filteredMatkul.length,
+      itemCount: filteredMatkulTahunAkademik.length,
       shrinkWrap: true,
       itemBuilder: (context, index) {
         return Column(
@@ -243,8 +248,9 @@ class ListMatkulDosen extends StatelessWidget {
                     builder: (context) {
                       return MobileDPMKDetailPage(
                         idDosen: idDosen,
-                        idMataKuliah: filteredMatkul[index].idMataKuliah,
-                        namaMataKuliah: filteredMatkul[index].nama,
+                        idMataKuliah:
+                            filteredMatkulTahunAkademik[index].idMataKuliah,
+                        namaMataKuliah: filteredMatkulTahunAkademik[index].nama,
                         tahunAkademik: tahunAkademik,
                       );
                     },
@@ -274,7 +280,7 @@ class ListMatkulDosen extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            filteredMatkul[index].nama,
+                            filteredMatkulTahunAkademik[index].nama,
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
@@ -283,7 +289,8 @@ class ListMatkulDosen extends StatelessWidget {
                         ),
                         Expanded(
                           child: Text(
-                            filteredMatkul[index].idMataKuliahMaster,
+                            filteredMatkulTahunAkademik[index]
+                                .idMataKuliahMaster,
                             textAlign: TextAlign.end,
                             style: const TextStyle(
                               fontSize: 18,
@@ -297,7 +304,7 @@ class ListMatkulDosen extends StatelessWidget {
                       height: 10,
                     ),
                     Text(
-                      filteredMatkul[index].kelas,
+                      filteredMatkulTahunAkademik[index].kelas,
                       textAlign: TextAlign.end,
                       style: const TextStyle(
                         fontSize: 16,
@@ -307,7 +314,7 @@ class ListMatkulDosen extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      '${filteredMatkul[index].jumlahSks} SKS',
+                      '${filteredMatkulTahunAkademik[index].jumlahSks} SKS',
                       textAlign: TextAlign.end,
                       style: const TextStyle(
                         fontSize: 16,

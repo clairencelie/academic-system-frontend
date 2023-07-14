@@ -180,7 +180,16 @@ class _KRSManagementPageState extends State<KRSManagementPage> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Text('Total krs yang sudah diajukan: $count'),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  'Total KRS yang sudah diajukan: $count',
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                              ),
                               const SizedBox(
                                 height: 20,
                               ),
@@ -381,6 +390,22 @@ class _KrsManagementListState extends State<KrsManagementList> {
     return BlocBuilder<UserBloc, UserState>(
       builder: (context, state) {
         if (state is LecturerFound) {
+          if (filterTahunAkademikKrs.isEmpty) {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 2.25,
+              child: const Center(
+                child: Text(
+                  'Belum ada mahasiswa yang mengajukan KRS',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            );
+          }
+
           return ListView.builder(
             itemCount: filterTahunAkademikKrs.length,
             shrinkWrap: true,

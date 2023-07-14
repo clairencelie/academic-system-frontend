@@ -587,11 +587,17 @@ class _DetailTagihanPageState extends State<DetailTagihanPage> {
                       ],
                     );
                   }
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const HeaderDetailTagihan(),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 1.25,
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    ],
                   );
                 },
               ),

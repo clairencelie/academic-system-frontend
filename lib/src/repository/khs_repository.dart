@@ -38,7 +38,7 @@ class KhsRepository {
 
       List<String> matkulLulus = (jsonResponse['nilai'] as List)
           .where((item) => item['status'] == 'lulus')
-          .map((item) => item['id_mata_kuliah'].toString())
+          .map((item) => item['id_mata_kuliah_master'].toString())
           .toList();
 
       Map<String, dynamic> map = {

@@ -67,7 +67,8 @@ class _MobileMatkulPerSemesterState extends State<MobileMatkulPerSemester> {
               child: Container(
                 decoration: BoxDecoration(
                   color: (semester <= userSemester)
-                      ? widget.matkulLulus.contains(widget.matkul[index].id)
+                      ? widget.matkulLulus
+                              .contains(widget.matkul[index].idMatkul)
                           ? const Color.fromARGB(255, 201, 247, 225)
                           : (widget.totalSks +
                                       int.tryParse(
@@ -119,7 +120,8 @@ class _MobileMatkulPerSemesterState extends State<MobileMatkulPerSemester> {
                   //             : const Color.fromARGB(255, 244, 218, 218)
                   //     : const Color.fromARGB(255, 230, 230, 230),
                   onTap: (semester <= (userSemester + 1))
-                      ? (widget.matkulLulus.contains(widget.matkul[index].id))
+                      ? (widget.matkulLulus
+                              .contains(widget.matkul[index].idMatkul))
                           ? null
                           : (widget.totalSks +
                                       int.tryParse(

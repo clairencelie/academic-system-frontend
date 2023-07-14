@@ -139,7 +139,9 @@ class _MobileListMatkulKRSState extends State<MobileListMatkulKRS> {
             semesterList.length,
             (semesterIndex) => userLearningSubjects
                 .where((matkul) =>
-                    matkul.grade.contains('${semesterList[semesterIndex]}'))
+                    matkul.grade.contains('${semesterList[semesterIndex]}') &&
+                    matkul.tahunAkademik == widget.krsSchedule.tahunAkademik &&
+                    matkul.semester == widget.krsSchedule.semester)
                 .toList(),
           );
 
@@ -319,10 +321,15 @@ class _MobileListMatkulKRSState extends State<MobileListMatkulKRS> {
                               (states) =>
                                   const Color.fromARGB(255, 214, 214, 214),
                             )
-                          : MaterialStateColor.resolveWith(
-                              (states) =>
-                                  const Color.fromARGB(255, 11, 39, 118),
-                            ),
+                          : penasehatAkademik == null
+                              ? MaterialStateColor.resolveWith(
+                                  (states) =>
+                                      const Color.fromARGB(255, 214, 214, 214),
+                                )
+                              : MaterialStateColor.resolveWith(
+                                  (states) =>
+                                      const Color.fromARGB(255, 11, 39, 118),
+                                ),
                     ),
                     onPressed: learningSubIds.isEmpty
                         ? null

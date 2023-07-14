@@ -33,7 +33,8 @@ class ScheduleKrsBloc extends Bloc<ScheduleKrsEvent, ScheduleKrsState> {
           event.tanggalMulai, event.tanggalSelesai);
 
       if (message == 'set jadwal krs berhasil') {
-        emit(ScheduleKrsUpdateSuccess(message: message));
+        emit(const ScheduleKrsUpdateSuccess(
+            message: 'Jadwal KRS Berhasil Diset.'));
       } else {
         emit(ScheduleKrsUpdateFailed(message: message));
       }

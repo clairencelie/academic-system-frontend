@@ -73,7 +73,7 @@ class _MatkulPerSemesterState extends State<MatkulPerSemester> {
               padding: const EdgeInsets.only(bottom: 10),
               child: ListTile(
                 tileColor: (semester <= userSemester)
-                    ? widget.matkulLulus.contains(widget.matkul[index].id)
+                    ? widget.matkulLulus.contains(widget.matkul[index].idMatkul)
                         ? const Color.fromARGB(255, 201, 247, 225)
                         : (widget.totalSks +
                                     int.tryParse(
@@ -83,7 +83,8 @@ class _MatkulPerSemesterState extends State<MatkulPerSemester> {
                             : const Color.fromARGB(255, 244, 218, 218)
                     : const Color.fromARGB(255, 244, 218, 218),
                 onTap: (semester <= (userSemester + 1))
-                    ? (widget.matkulLulus.contains(widget.matkul[index].id))
+                    ? (widget.matkulLulus
+                            .contains(widget.matkul[index].idMatkul))
                         ? null
                         : (widget.totalSks +
                                     int.tryParse(
@@ -125,7 +126,8 @@ class _MatkulPerSemesterState extends State<MatkulPerSemester> {
                 selected: isSelected,
                 trailing: isSelected
                     ? const Icon(Icons.check_box_rounded)
-                    : (widget.matkulLulus.contains(widget.matkul[index].id))
+                    : (widget.matkulLulus
+                            .contains(widget.matkul[index].idMatkul))
                         ? const Icon(Icons.check_circle)
                         : userSemester < semester
                             ? const SizedBox()

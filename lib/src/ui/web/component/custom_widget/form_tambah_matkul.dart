@@ -194,7 +194,13 @@ class _FormTambahMatkulState extends State<FormTambahMatkul> {
         } else if (state is MasterMataKuliahNotFound) {
           return const Text('Mata kuliah master gagal didapatkan.');
         }
-        return const CircularProgressIndicator();
+        return Container(
+          alignment: Alignment.center,
+          height: 100,
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
       },
     );
   }

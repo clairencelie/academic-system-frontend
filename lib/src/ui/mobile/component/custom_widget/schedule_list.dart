@@ -78,6 +78,38 @@ class _ScheduleBodyState extends State<ScheduleBody> {
               krsLengkap: state.krsLengkap,
               krsSchedule: widget.krsSchedule,
             );
+          } else if (state is KrsSmtIniNotFound) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(
+                  height: 5,
+                ),
+                const Text(
+                  'Jadwal Hari Ini',
+                  style: TextStyle(
+                    fontSize: 19,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 2.25,
+                    child: const Center(
+                      child: Text(
+                        'Anda Belum Melakukan Pengisian KRS',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
           }
         } else if (widget.user is Lecturer) {
           return MobileScheduleList(

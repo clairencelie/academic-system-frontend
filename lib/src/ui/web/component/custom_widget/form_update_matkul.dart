@@ -243,8 +243,12 @@ class _DosenChoiceState extends State<DosenChoice> {
             ),
           );
         }
-        return const Center(
-          child: CircularProgressIndicator(),
+        return Container(
+          alignment: Alignment.center,
+          height: 100,
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
         );
       },
     );

@@ -173,6 +173,7 @@ class ListMatkulDosen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String tahunAkd = tahunAkademik.split(" ").toList()[0];
     final String semester = tahunAkademik.split(" ").toList()[1];
     List<MatkulDosen> filteredMatkul = semester == "genap"
         ? matkulDosen
@@ -182,10 +183,14 @@ class ListMatkulDosen extends StatelessWidget {
             .where((matkul) => int.tryParse(matkul.kelas[1])! % 2 == 1)
             .toList();
 
+    List<MatkulDosen> filteredMatkulTahunAkademik = filteredMatkul
+        .where((element) => element.tahunAkademik == tahunAkd)
+        .toList();
+
     return Expanded(
       child: SingleChildScrollView(
         child: ListView.builder(
-          itemCount: filteredMatkul.length,
+          itemCount: filteredMatkulTahunAkademik.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
             return Column(
@@ -200,10 +205,12 @@ class ListMatkulDosen extends StatelessWidget {
                           builder: (context) {
                             return DPMKDetailPage(
                               idDosen: idDosen,
-                              idMataKuliah: filteredMatkul[index].idMataKuliah,
-                              namaMataKuliah: filteredMatkul[index].nama,
+                              idMataKuliah: filteredMatkulTahunAkademik[index]
+                                  .idMataKuliah,
+                              namaMataKuliah:
+                                  filteredMatkulTahunAkademik[index].nama,
                               tahunAkademik: tahunAkademik,
-                              kelas: filteredMatkul[index].kelas,
+                              kelas: filteredMatkulTahunAkademik[index].kelas,
                             );
                           },
                         ),
@@ -230,7 +237,8 @@ class ListMatkulDosen extends StatelessWidget {
                           Expanded(
                             flex: 1,
                             child: Text(
-                              filteredMatkul[index].idMataKuliahMaster,
+                              filteredMatkulTahunAkademik[index]
+                                  .idMataKuliahMaster,
                               style: const TextStyle(
                                 fontSize: 16,
                               ),
@@ -239,7 +247,7 @@ class ListMatkulDosen extends StatelessWidget {
                           Expanded(
                             flex: 2,
                             child: Text(
-                              filteredMatkul[index].nama,
+                              filteredMatkulTahunAkademik[index].nama,
                               style: const TextStyle(
                                 fontSize: 16,
                               ),
@@ -248,7 +256,7 @@ class ListMatkulDosen extends StatelessWidget {
                           Expanded(
                             flex: 1,
                             child: Text(
-                              filteredMatkul[index].kelas,
+                              filteredMatkulTahunAkademik[index].kelas,
                               style: const TextStyle(
                                 fontSize: 16,
                               ),
@@ -257,7 +265,7 @@ class ListMatkulDosen extends StatelessWidget {
                           Expanded(
                             flex: 1,
                             child: Text(
-                              filteredMatkul[index].jumlahSks,
+                              filteredMatkulTahunAkademik[index].jumlahSks,
                               style: const TextStyle(
                                 fontSize: 16,
                               ),
