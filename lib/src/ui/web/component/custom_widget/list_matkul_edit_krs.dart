@@ -103,7 +103,9 @@ class _ListMatkulEditKRSState extends State<ListMatkulEditKRS> {
             semesterList.length,
             (semesterIndex) => userLearningSubjects
                 .where((matkul) =>
-                    matkul.grade.contains('${semesterList[semesterIndex]}'))
+                    matkul.grade.contains('${semesterList[semesterIndex]}') &&
+                    matkul.tahunAkademik == widget.krsSchedule.tahunAkademik &&
+                    matkul.semester == widget.krsSchedule.semester)
                 .toList(),
           );
 
@@ -290,72 +292,82 @@ class _ListMatkulEditKRSState extends State<ListMatkulEditKRS> {
                                     const Color.fromARGB(255, 11, 39, 118),
                               ),
                       ),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text(
-                                'Konfirmasi',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 0, 32, 96),
-                                ),
-                              ),
-                              content: const Text(
-                                'Pastikan pilihan mata kuliah anda sudah sesuai.',
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text(
-                                    'Cek kembali',
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 0, 32, 96),
+                      onPressed: learningSubIds.isEmpty
+                          ? null
+                          : () {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                      'Konfirmasi',
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 0, 32, 96),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    NewKartuRencanaStudi krs =
-                                        NewKartuRencanaStudi(
-                                      nim: widget.user.id,
-                                      idDosen: widget.krs.idDosen,
-                                      semester: widget.user.semester,
-                                      jurusan: widget.user.major,
-                                      ips: widget.krs.ips,
-                                      ipk: widget.krs.ipk,
-                                      kreditDiambil: totalSks.toString(),
-                                      bebanSksMaks: maxSks.toString(),
-                                      waktuPengisian: widget.krs.waktuPengisian,
-                                      tahunAkademik:
-                                          widget.krsSchedule.tahunAkademik,
-                                    );
-
-                                    context.read<KrsManagementBloc>().add(
-                                          UpdateKrs(
-                                            idKrs: widget.krs.id,
-                                            krs: krs,
-                                            mataKuliahDiambil: learningSubIds,
+                                    content: const Text(
+                                      'Pastikan pilihan mata kuliah anda sudah sesuai.',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text(
+                                          'Cek kembali',
+                                          style: TextStyle(
+                                            color:
+                                                Color.fromARGB(255, 0, 32, 96),
                                           ),
-                                        );
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              MaterialStateColor.resolveWith(
+                                            (states) => const Color.fromARGB(
+                                                255, 11, 39, 118),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          NewKartuRencanaStudi krs =
+                                              NewKartuRencanaStudi(
+                                            nim: widget.user.id,
+                                            idDosen: widget.krs.idDosen,
+                                            semester: widget.user.semester,
+                                            jurusan: widget.user.major,
+                                            ips: widget.krs.ips,
+                                            ipk: widget.krs.ipk,
+                                            kreditDiambil: totalSks.toString(),
+                                            bebanSksMaks: maxSks.toString(),
+                                            waktuPengisian:
+                                                widget.krs.waktuPengisian,
+                                            tahunAkademik: widget
+                                                .krsSchedule.tahunAkademik,
+                                          );
 
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text(
-                                    'Ajukan Perubahan KRS',
-                                    style: TextStyle(
-                                      color: Color.fromARGB(255, 0, 32, 96),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
+                                          context.read<KrsManagementBloc>().add(
+                                                UpdateKrs(
+                                                  idKrs: widget.krs.id,
+                                                  krs: krs,
+                                                  mataKuliahDiambil:
+                                                      learningSubIds,
+                                                ),
+                                              );
+
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text(
+                                          'Ajukan Perubahan KRS',
+                                          style: TextStyle(),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
                       child: const Text('Ajukan Perubahan KRS'),
                     ),
                   ),

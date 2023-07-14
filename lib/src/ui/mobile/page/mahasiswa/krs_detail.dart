@@ -188,10 +188,20 @@ class ButtonPengajuanPerubahanKrs extends StatelessWidget {
             height: 50,
             width: MediaQuery.of(context).size.width,
             child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: krs.commit == '1' || krs.approve == '1'
+                    ? MaterialStateColor.resolveWith(
+                        (states) => const Color.fromARGB(255, 221, 221, 221),
+                      )
+                    : MaterialStateColor.resolveWith(
+                        (states) => const Color.fromARGB(255, 11, 39, 118),
+                      ),
+              ),
               onPressed: krs.commit == '1' ||
                       DateFormat('dd-MM-yyyy').parse(formattedDateNow).isAfter(
                           DateFormat('dd-MM-yyyy')
-                              .parse(state.krsSchedule.tanggalSelesai))
+                              .parse(state.krsSchedule.tanggalSelesai)) ||
+                      krs.approve == '1'
                   ? null
                   : () {
                       Navigator.push(

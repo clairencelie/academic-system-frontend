@@ -34,119 +34,122 @@ class _TagihanPembayaranState extends State<TagihanPembayaran> {
     Student student = widget.user as Student;
 
     return Scaffold(
-      body: Center(
-        child: FractionallySizedBox(
-          widthFactor: 0.9,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'List Tagihan Pembayaran Kuliah',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Nama : ${student.name}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                        Text(
-                          'NIM : ${student.id}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                        Text(
-                          'Semester : ${student.semester}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: FractionallySizedBox(
+            widthFactor: 0.9,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'List Tagihan Pembayaran Kuliah',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
-                    TextButton(
-                      onPressed: () {
-                        // Navigate to histori transaksi
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return WebHistoriTransakasi(
-                                  mahasiswa: widget.user as Student);
-                            },
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(color: Colors.blue, width: 1),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Nama : ${student.name}',
+                            style: const TextStyle(
+                              fontSize: 18,
                             ),
                           ),
-                          child: const Text(
-                            'Histori Transaksi',
-                            style: TextStyle(
+                          Text(
+                            'NIM : ${student.id}',
+                            style: const TextStyle(
                               fontSize: 18,
-                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            'Semester : ${student.semester}',
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          // Navigate to histori transaksi
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return WebHistoriTransakasi(
+                                    mahasiswa: widget.user as Student);
+                              },
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              border: Border(
+                                bottom:
+                                    BorderSide(color: Colors.blue, width: 1),
+                              ),
+                            ),
+                            child: const Text(
+                              'Histori Transaksi',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Divider(),
-                const HeaderListTagihan(),
-                const Divider(),
-                BlocBuilder<TagihanPerkuliahanBloc, TagihanPerkuliahanState>(
-                  builder: (context, state) {
-                    if (state is TagihanPerkuliahanLoading) {
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Divider(),
+                  const HeaderListTagihan(),
+                  const Divider(),
+                  BlocBuilder<TagihanPerkuliahanBloc, TagihanPerkuliahanState>(
+                    builder: (context, state) {
+                      if (state is TagihanPerkuliahanLoading) {
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height / 2,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      } else if (state is TagihanPerkuliahanLoaded) {
+                        // List Tagihan
+                        return ListTagihanPerkuliahan(
+                          listTagihan: state.listTagihan,
+                          student: student,
+                        );
+                      } else if (state is TagihanPerkuliahanNotFound) {
+                        return const Text(
+                            'Anda belum memiliki tagihan pembayaran perkuliahan');
+                      }
+
+                      // Else
                       return SizedBox(
-                        height: MediaQuery.of(context).size.height / 2,
+                        height: MediaQuery.of(context).size.height / 2.5,
                         child: const Center(
                           child: CircularProgressIndicator(),
                         ),
                       );
-                    } else if (state is TagihanPerkuliahanLoaded) {
-                      // List Tagihan
-                      return ListTagihanPerkuliahan(
-                        listTagihan: state.listTagihan,
-                        student: student,
-                      );
-                    } else if (state is TagihanPerkuliahanNotFound) {
-                      return const Text(
-                          'Anda belum memiliki tagihan pembayaran perkuliahan');
-                    }
-
-                    // Else
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height / 2.5,
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  },
-                )
-              ],
+                    },
+                  )
+                ],
+              ),
             ),
           ),
         ),
