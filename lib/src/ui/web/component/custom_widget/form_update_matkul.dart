@@ -22,6 +22,8 @@ class FormUpdateMatkul extends StatefulWidget {
 }
 
 class _FormUpdateMatkulState extends State<FormUpdateMatkul> {
+  final formKey = GlobalKey<FormState>();
+
   final TextEditingController idDosen = TextEditingController();
   final TextEditingController kelas = TextEditingController();
 
@@ -34,128 +36,134 @@ class _FormUpdateMatkulState extends State<FormUpdateMatkul> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text('Kode Matkul: ${widget.matkul.idMatkul}'),
-        const SizedBox(
-          height: 10,
-        ),
-        Text('Nama Matkul: ${widget.matkul.name}'),
-        const SizedBox(
-          height: 10,
-        ),
-        const Text('Dosen Pengajar:'),
-        DosenChoice(dosenId: idDosen),
-        const SizedBox(
-          height: 10,
-        ),
-        const Text('Kelas:'),
-        GradeChoice(kelas: kelas),
-        const SizedBox(
-          height: 20,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            SizedBox(
-              width: 100,
-              height: 45,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateColor.resolveWith((states) => Colors.red),
+    return Form(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      key: formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text('Kode Matkul: ${widget.matkul.idMatkul}'),
+          const SizedBox(
+            height: 10,
+          ),
+          Text('Nama Matkul: ${widget.matkul.name}'),
+          const SizedBox(
+            height: 10,
+          ),
+          const Text('Dosen Pengajar:'),
+          DosenChoice(dosenId: idDosen),
+          const SizedBox(
+            height: 10,
+          ),
+          const Text('Kelas:'),
+          GradeChoice(kelas: kelas),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              SizedBox(
+                width: 100,
+                height: 45,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateColor.resolveWith((states) => Colors.red),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Batal'),
                 ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Batal'),
               ),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            SizedBox(
-              width: 100,
-              height: 45,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateColor.resolveWith(
-                      (states) => const Color.fromARGB(255, 53, 230, 112)),
-                ),
-                onPressed: () {
-                  LearningSubject matkulUpdate = LearningSubject(
-                    id: widget.matkul.id,
-                    idMatkul: widget.matkul.idMatkul,
-                    lecturerId: idDosen.text,
-                    name: widget.matkul.name,
-                    credit: widget.matkul.credit,
-                    grade: kelas.text,
-                    type: widget.matkul.type,
-                    tahunAkademik: widget.matkul.tahunAkademik,
-                    semester: widget.matkul.semester,
-                  );
-
-                  context
-                      .read<MatkulManagementBloc>()
-                      .add(UpdateMataKuliah(matkulBaru: matkulUpdate));
-                },
-                child: const Text('Update'),
+              const SizedBox(
+                width: 20,
               ),
-            ),
-            BlocListener<MatkulManagementBloc, MatkulManagementState>(
-              listener: (context, state) {
-                if (state is MatkulUpdateSuccess) {
-                  showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text('Informasi'),
-                        content: const Text('Mata kuliah berhasil diupdate'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              context
-                                  .read<MataKuliahBloc>()
-                                  .add(GetMataKuliah());
-                            },
-                            child: const Text('Tutup'),
-                          )
-                        ],
+              SizedBox(
+                width: 100,
+                height: 45,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateColor.resolveWith(
+                        (states) => const Color.fromARGB(255, 53, 230, 112)),
+                  ),
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      LearningSubject matkulUpdate = LearningSubject(
+                        id: widget.matkul.id,
+                        idMatkul: widget.matkul.idMatkul,
+                        lecturerId: idDosen.text,
+                        name: widget.matkul.name,
+                        credit: widget.matkul.credit,
+                        grade: kelas.text,
+                        type: widget.matkul.type,
+                        tahunAkademik: widget.matkul.tahunAkademik,
+                        semester: widget.matkul.semester,
                       );
-                    },
-                  );
-                } else if (state is MatkulUpdateFailed) {
-                  showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text('Informasi'),
-                        content: const Text('Mata kuliah gagal diupdate'),
-                        actions: [
-                          TextButton(
+
+                      context
+                          .read<MatkulManagementBloc>()
+                          .add(UpdateMataKuliah(matkulBaru: matkulUpdate));
+                    }
+                  },
+                  child: const Text('Update'),
+                ),
+              ),
+              BlocListener<MatkulManagementBloc, MatkulManagementState>(
+                listener: (context, state) {
+                  if (state is MatkulUpdateSuccess) {
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Informasi'),
+                          content: const Text('Mata kuliah berhasil diupdate'),
+                          actions: [
+                            TextButton(
                               onPressed: () {
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
+                                context
+                                    .read<MataKuliahBloc>()
+                                    .add(GetMataKuliah());
                               },
-                              child: const Text('Tutup'))
-                        ],
-                      );
-                    },
-                  );
-                }
-              },
-              child: const SizedBox(),
-            )
-          ],
-        ),
-      ],
+                              child: const Text('Tutup'),
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  } else if (state is MatkulUpdateFailed) {
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Informasi'),
+                          content: const Text('Mata kuliah gagal diupdate'),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Tutup'))
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
+                child: const SizedBox(),
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

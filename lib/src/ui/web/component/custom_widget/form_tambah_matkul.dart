@@ -22,6 +22,8 @@ class FormTambahMatkul extends StatefulWidget {
 }
 
 class _FormTambahMatkulState extends State<FormTambahMatkul> {
+  final formKey = GlobalKey<FormState>();
+
   TextEditingController matkul = TextEditingController();
   TextEditingController namaMatkul = TextEditingController();
   TextEditingController jenisMatkul = TextEditingController();
@@ -45,151 +47,158 @@ class _FormTambahMatkulState extends State<FormTambahMatkul> {
         if (state is MasterMataKuliahFound) {
           List<MasterMatkul> listMasterMatkul = state.listMasterMatkul;
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text(
-                'Mata Kuliah',
-                style: TextStyle(fontSize: 14),
-              ),
-              MatkulChoice(matkul: matkul),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                'Dosen Pengajar',
-                style: TextStyle(fontSize: 14),
-              ),
-              DosenChoice(dosenId: idDosen),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                'Kelas',
-                style: TextStyle(fontSize: 14),
-              ),
-              GradeChoice(kelas: kelas),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    width: 100,
-                    height: 45,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateColor.resolveWith(
-                            (states) => Colors.red),
+          return Form(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text(
+                  'Mata Kuliah',
+                  style: TextStyle(fontSize: 14),
+                ),
+                MatkulChoice(matkul: matkul),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text(
+                  'Dosen Pengajar',
+                  style: TextStyle(fontSize: 14),
+                ),
+                DosenChoice(dosenId: idDosen),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text(
+                  'Kelas',
+                  style: TextStyle(fontSize: 14),
+                ),
+                GradeChoice(kelas: kelas),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      height: 45,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateColor.resolveWith(
+                              (states) => Colors.red),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Batal'),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Batal'),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  SizedBox(
-                    width: 100,
-                    height: 45,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateColor.resolveWith(
-                            (states) =>
-                                const Color.fromARGB(255, 53, 230, 112)),
-                      ),
-                      onPressed: () {
-                        String namaMatkul = listMasterMatkul
-                            .where((element) =>
-                                element.idMataKuliahMaster == matkul.text)
-                            .first
-                            .nama;
-
-                        String jenisMatkul = listMasterMatkul
-                            .where((element) =>
-                                element.idMataKuliahMaster == matkul.text)
-                            .first
-                            .jenis;
-
-                        int jumlahSks = listMasterMatkul
-                            .where((element) =>
-                                element.idMataKuliahMaster == matkul.text)
-                            .first
-                            .jumlahSKS;
-
-                        MatkulBaru matkulBaru = MatkulBaru(
-                          idMataKuliahMaster: matkul.text,
-                          idDosen: idDosen.text,
-                          namaMataKuliah: namaMatkul,
-                          jumlahSks: jumlahSks.toString(),
-                          kelas: kelas.text,
-                          jenis: jenisMatkul,
-                          tahunAkademik: widget.krsSchedule.tahunAkademik,
-                          semester: widget.krsSchedule.semester,
-                        );
-
-                        context
-                            .read<MatkulManagementBloc>()
-                            .add(TambahMataKuliah(matkulBaru: matkulBaru));
-                      },
-                      child: const Text('Tambah'),
+                    const SizedBox(
+                      width: 20,
                     ),
-                  ),
-                  BlocListener<MatkulManagementBloc, MatkulManagementState>(
-                    listener: (context, state) {
-                      if (state is CreateMatkulSuccess) {
-                        showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Informasi'),
-                              content:
-                                  const Text('Mata kuliah berhasil ditambah'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                    context
-                                        .read<MataKuliahBloc>()
-                                        .add(GetMataKuliah());
-                                  },
-                                  child: const Text('Tutup'),
-                                )
-                              ],
+                    SizedBox(
+                      width: 100,
+                      height: 45,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateColor.resolveWith(
+                              (states) =>
+                                  const Color.fromARGB(255, 53, 230, 112)),
+                        ),
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            String namaMatkul = listMasterMatkul
+                                .where((element) =>
+                                    element.idMataKuliahMaster == matkul.text)
+                                .first
+                                .nama;
+
+                            String jenisMatkul = listMasterMatkul
+                                .where((element) =>
+                                    element.idMataKuliahMaster == matkul.text)
+                                .first
+                                .jenis;
+
+                            int jumlahSks = listMasterMatkul
+                                .where((element) =>
+                                    element.idMataKuliahMaster == matkul.text)
+                                .first
+                                .jumlahSKS;
+
+                            MatkulBaru matkulBaru = MatkulBaru(
+                              idMataKuliahMaster: matkul.text,
+                              idDosen: idDosen.text,
+                              namaMataKuliah: namaMatkul,
+                              jumlahSks: jumlahSks.toString(),
+                              kelas: kelas.text,
+                              jenis: jenisMatkul,
+                              tahunAkademik: widget.krsSchedule.tahunAkademik,
+                              semester: widget.krsSchedule.semester,
                             );
-                          },
-                        );
-                      } else if (state is CreateMatkulFailed) {
-                        showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Informasi'),
-                              content: const Text('Mata kuliah gagal ditambah'),
-                              actions: [
-                                TextButton(
+
+                            context
+                                .read<MatkulManagementBloc>()
+                                .add(TambahMataKuliah(matkulBaru: matkulBaru));
+                          }
+                        },
+                        child: const Text('Tambah'),
+                      ),
+                    ),
+                    BlocListener<MatkulManagementBloc, MatkulManagementState>(
+                      listener: (context, state) {
+                        if (state is CreateMatkulSuccess) {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Informasi'),
+                                content:
+                                    const Text('Mata kuliah berhasil ditambah'),
+                                actions: [
+                                  TextButton(
                                     onPressed: () {
                                       Navigator.pop(context);
                                       Navigator.pop(context);
+                                      context
+                                          .read<MataKuliahBloc>()
+                                          .add(GetMataKuliah());
                                     },
-                                    child: const Text('Tutup'))
-                              ],
-                            );
-                          },
-                        );
-                      }
-                    },
-                    child: Container(),
-                  )
-                ],
-              ),
-            ],
+                                    child: const Text('Tutup'),
+                                  )
+                                ],
+                              );
+                            },
+                          );
+                        } else if (state is CreateMatkulFailed) {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Informasi'),
+                                content:
+                                    const Text('Mata kuliah gagal ditambah'),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Tutup'))
+                                ],
+                              );
+                            },
+                          );
+                        }
+                      },
+                      child: Container(),
+                    )
+                  ],
+                ),
+              ],
+            ),
           );
         } else if (state is MasterMataKuliahNotFound) {
           return const Text('Mata kuliah master gagal didapatkan.');
